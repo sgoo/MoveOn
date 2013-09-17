@@ -1,4 +1,4 @@
-moveon
+MoveOn
 ======
 
 VTL+ implementation
