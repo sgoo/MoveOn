@@ -1,4 +1,3 @@
-
-public class DumbCar extends Car{
-
+public class DumbCar extends Car {
+	
 }
