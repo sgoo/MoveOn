@@ -3,7 +3,7 @@ package MoveOn;
 import java.util.ArrayList;
 
 public class Simulator {
-	
+
 	private ArrayList<Car> cars;
 
 	public Simulator() {
@@ -18,9 +18,9 @@ public class Simulator {
 		addCar(40, Direction.W);
 		addCar(60, Direction.N);
 	}
-	
-	public void addCar(int dist, Direction d){
-		Car c = new Car(dist,d);
+
+	public void addCar(int dist, Direction d) {
+		Car c = new Car(dist, d);
 		d.addCar(c);
 		cars.add(c);
 	}
@@ -28,15 +28,19 @@ public class Simulator {
 	public void simulate() {
 		for (int i = 0;; i++) {
 			// tick all cars, and let us know what each is up to.
-			for (Car car : cars) {
-				car.tick(i);
+			
+			for (int j = 0; j < cars.size(); j++) {
+				if (!cars.get(j).tick(i)) {
+					cars.remove(j);
+					j--;
+				}
 			}
 			System.out.println(Direction.N);
 			System.out.println(Direction.S);
 			System.out.println(Direction.E);
 			System.out.println(Direction.W);
 			System.out.println();
-					try {
+			try {
 				Thread.sleep(250);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
