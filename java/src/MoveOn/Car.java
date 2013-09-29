@@ -32,4 +32,8 @@ public class Car implements Tickable {
 			// If the light is green go to Xing state
 		}
 	}
+	@Override
+	public String toString() {
+		return String.format("%s %d", direction.toString(), distanceFromIntersection);
+	}
 }
