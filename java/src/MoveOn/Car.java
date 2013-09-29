@@ -12,38 +12,28 @@ public class Car implements Tickable {
 	 */
 	public static final int SPEED = 1;
 
+	private static int CAR_COUNT = 0;
+	
+	private int carId;
+	
 	protected int distanceFromIntersection;
 	protected Direction direction;
 
 	public Car(int dist, Direction direction) {
 		this.distanceFromIntersection = dist;
 		this.direction = direction;
+		carId = CAR_COUNT++;
 	}
 
-	@Override
-	public void tick(int ticks) {
-		// TODO: Check if there is a car in front
-		if (distanceFromIntersection > 0) {
-			distanceFromIntersection -= SPEED;
-			if (distanceFromIntersection < 0){
-				distanceFromIntersection = 0;
-			}
-		} else {
-			// If the light is green go to Xing state
-		}
+	public int getCarId() {
+		return carId;
 	}
-	@Override
-	public String toString() {
-		return String.format("%s %d", direction.toString(), distanceFromIntersection);
-	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((direction == null) ? 0 : direction.hashCode());
-		result = prime * result + distanceFromIntersection;
+		result = prime * result + carId;
 		return result;
 	}
 
@@ -56,12 +46,27 @@ public class Car implements Tickable {
 		if (getClass() != obj.getClass())
 			return false;
 		Car other = (Car) obj;
-		if (direction != other.direction)
-			return false;
-		if (distanceFromIntersection != other.distanceFromIntersection)
+		if (carId != other.carId)
 			return false;
 		return true;
 	}
+
+	@Override
+	public void tick(int ticks) {
+		// TODO: Check if there is a car in front
+		if (distanceFromIntersection > 0 && direction.canAdvance(this)) {
+			distanceFromIntersection -= SPEED;
+			if (distanceFromIntersection < 0){
+				distanceFromIntersection = 0;
+			}
+		} else {
+			// If the light is green go to Xing state
+		}
+	}
 	
+	@Override
+	public String toString() {
+		return String.format("%s %d", direction.toString(), distanceFromIntersection);
+	}	
 	
 }
