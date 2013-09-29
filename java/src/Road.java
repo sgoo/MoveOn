@@ -1,38 +1,31 @@
-public enum Road {
+import java.util.LinkedList;
+import java.util.Queue;
 
-	//	public static enum Direction {
-	//		N(new Road()), S(new Road()), E(new Road()), W(new Road());
-	//
-	//		public Road road;
-	//
-	//		Direction(Road r) {
-	//			this.road = r;
-	//		}
-	//
-	//		
-	//	}
-	N, S, E, W;
-	public static Road get(char d) {
-		switch (d) {
-		case 'N':
-			return N;
-		case 'S':
-			return S;
-		case 'E':
-			return E;
-		default:
-			return W;
-		}
+
+public class Road {
+	private String name;
+	private Road opposite;
+	
+	private Car[] carSpaces = new Car[5];
+	private Queue<Car> carsApproaching = new LinkedList<Car>();
+	
+	public Road(String name) {
+		this.name = name;
 	}
 
-	private Road() {
+	public Road getOpposite() {
+		return opposite;
 	}
 
-	public Light light;
-
-	Car[] cars = new Car[SimController.TICK_SPAN_LENGTH];
-	public int VTLCars = 0;
-	public int detectedCars = 0;
-	boolean pedestrianWaiting = false;
-
+	public void setOpposite(Road opposite) {
+		this.opposite = opposite;
+		this.opposite.opposite = this;
+	}
+	
+	
+	
+	
+	public String toString() {
+		return "";
+	}
 }

@@ -1,27 +1,19 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 
 public class Main {
-	public static void main(String[] args) throws Exception {
-
-		SimController controller = new SimController();
-
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-
-		// (direction) <space> (is VTL) <space> (time to arrive)
-		String line;
-		while ((line = in.readLine()) != null) {
-			char dir = line.charAt(0);
-			Road direction = Road.get(dir);
-			boolean isVTL = line.charAt(2) == 't';
-			int timeToArrive = Integer.parseInt(line.substring(4));
-
-			//			Road.Side side = direction.toString().charAt(0) == dir ? Road.Side.ONE : Road.Side.TWO;
-
-			controller.addCar(isVTL, timeToArrive, direction);
-
+	public static void main(String[] args) throws FileNotFoundException {
+		Controller controller = new Controller();
+		
+		Scanner in = new Scanner(new File("input.txt"));
+		while(in.hasNext()) {
+			int tick = in.nextInt();
+			boolean VTLEnabled = in.next().equals("vtl");
+			String direction = in.next();
+			controller.addCar(tick, VTLEnabled, direction);
 		}
-		controller.run();
-
+		
 	}
 }
