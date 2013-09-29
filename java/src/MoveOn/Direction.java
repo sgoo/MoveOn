@@ -29,16 +29,16 @@ public enum Direction {
 				sb.append(' ');
 			}
 			soFar += Car.CAR_LENGTH;
-			String id = car.getCarId() + "";
-			sb.append(id);
-			for (int i = id.length(); i < Car.CAR_LENGTH; i++) {
+			String carOut = car.getCarId() + "-" + car.distanceFromIntersection;
+			sb.append(carOut);
+			for (int i = carOut.length(); i < Car.CAR_LENGTH; i++) {
 				sb.append('-');
 			}
 		}
 		for (; soFar < Intersection.VTL_SPAN; soFar++) {
 			sb.append(' ');
 		}
-		
+
 		sb.append('|');
 		return sb.toString();
 	}
@@ -46,7 +46,7 @@ public enum Direction {
 	public boolean canAdvance(Car car) {
 		int index = cars.indexOf(car);
 		index--;
-		if(index<0){
+		if (index < 0) {
 			return true;
 		}
 		Car carInFront = cars.get(index);
