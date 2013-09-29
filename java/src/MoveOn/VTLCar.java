@@ -6,5 +6,4 @@ public class VTLCar extends Car {
 		super(dist, direction);
 	}
 	
-	
 }
