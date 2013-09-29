@@ -42,4 +42,14 @@ public enum Direction {
 		sb.append('|');
 		return sb.toString();
 	}
+
+	public boolean canAdvance(Car car) {
+		int index = cars.indexOf(car);
+		index--;
+		if(index<0){
+			return true;
+		}
+		Car carInFront = cars.get(index);
+		return carInFront.distanceFromIntersection + Car.CAR_LENGTH < car.distanceFromIntersection;
+	}
 }
