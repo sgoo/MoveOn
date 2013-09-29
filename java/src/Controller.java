@@ -35,7 +35,18 @@ public class Controller {
 
 	private Road roadEW;
 	
-	public Controller () throws InterruptedException {
+	private Car leader = null;
+	
+	private static Controller instance;
+	
+	public static Controller getInstance(){
+		if(instance == null){
+			instance = new Controller();
+		}
+		return instance;
+	}
+	
+	private Controller (){
 		// north-south road
 		roadNS = new Road("NS");
 		
@@ -46,7 +57,10 @@ public class Controller {
 			System.out.println("Tick " + tick + ":");
 			this.tick();
 			// tick ~~ 1s IRL
-			Thread.sleep(tickDuration);
+			try {
+				Thread.sleep(tickDuration);
+			} catch (InterruptedException e) {
+			}
 		}
 	}
 	
@@ -55,10 +69,8 @@ public class Controller {
 	 */
 	public void tick() {
 		produce();
-//		pickLeaderIfNotExist();
 //		changeLightsAsAppropriate();
 //		verify();
-		
 	}
 	
 	/**
@@ -66,7 +78,7 @@ public class Controller {
 	 * 
 	 * @param road
 	 */
-	public void produce() {
+	private void produce() {
 		// choose a whole lot of stuff
 		// Road.
 		Road selectedRoad = roadNS;
@@ -95,4 +107,16 @@ public class Controller {
 		System.out.println(roadNS.toString());
 		System.out.println(roadEW.toString());
 	}
+	
+	/**
+	 * Called by Cars
+	 */
+	public boolean requestLeadership(Car car) {
+		if(this.leader == null){
+			this.leader = car;
+			return true;
+		}
+		return false;
+	}
+	
 }
