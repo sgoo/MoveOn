@@ -2,8 +2,8 @@ public class VTLCar extends Car {
 
 	private boolean isLeader = false;
 
-	public VTLCar(int timeToArrive, Intersection intersection, SimController.Direction d) {
-		super(timeToArrive, intersection, d);
+	public VTLCar(int timeToArrive, Intersection intersection, Road r) {
+		super(timeToArrive, intersection, r);
 	}
 
 	public boolean isLeader() {
@@ -22,7 +22,9 @@ public class VTLCar extends Car {
 	@Override
 	public void activeTick(int ticks) {
 		if (ticks == approachAt) {
-			Intersection.Mode m = intersection.V2IApproach(this, direction);
+			Intersection.Mode m = intersection.V2IApproach(this, road);
 		}
+
+
 	}
 }

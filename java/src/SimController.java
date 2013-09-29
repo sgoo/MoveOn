@@ -2,23 +2,15 @@ import java.util.ArrayList;
 
 public class SimController {
 
-	ArrayList<Tickable> tickables = new ArrayList<Tickable>();
-
-	public enum Direction {
-		EW, NS;
-
-		public static Direction get(char d) {
-			return d == 'N' || d == 'S' ? NS : EW;
-		}
-	}
+	public static final int TICK_SPAN_LENGTH = 5;
 
 	ArrayList<Car> cars;
+	ArrayList<Tickable> tickables = new ArrayList<Tickable>();
 
 	Intersection intersection;
 
 	public SimController() {
 		intersection = new Intersection();
-
 	}
 
 	public void run() {
@@ -30,12 +22,12 @@ public class SimController {
 		}
 	}
 
-	public void addCar(boolean isVTL, int timeToArrive, Direction d) {
+	public void addCar(boolean isVTL, int timeToArrive, Road r) {
 		Car c;
 		if (isVTL) {
-			c = new VTLCar(timeToArrive, intersection, d);
+			c = new VTLCar(timeToArrive, intersection, r);
 		} else {
-			c = new DumbCar(timeToArrive, intersection, d);
+			c = new DumbCar(timeToArrive, intersection, r);
 		}
 		tickables.add(c);
 

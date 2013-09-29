@@ -1,19 +1,16 @@
 public class DumbCar extends Car {
 	int approachAt;
 
-	public DumbCar(int timeToArrive, Intersection intersection, SimController.Direction d) {
-		super(timeToArrive, intersection, d);
+	public DumbCar(int timeToArrive, Intersection intersection, Road r) {
+		super(timeToArrive, intersection, r);
 	}
 
 	@Override
 	public void activeTick(int ticks) {
 		if (ticks == approachAt) {
-			intersection.approachDetector(this, direction);
-		}else{
-			
+		} else {
+
 		}
-		
-		
 
 	}
 

@@ -2,26 +2,21 @@ public abstract class Car implements Tickable {
 	int approachAt;
 
 	public enum State {
-		SAFE, APPROACHING, CROSSING, LEAVING
+		SAFE, APPROACHING, WAITING, CROSSING, LEAVING
 	}
 
 	State state = State.SAFE;
 	Intersection intersection;
-	//	Road road;
-	//	Road.Side side;
-	SimController.Direction direction;
+	int queuePosition = SimController.TICK_SPAN_LENGTH;
+	int crossingStart;
 
-	//	public Car(int approachAt, Intersection intersection, Road r, Road.Side s) {
-	//		this.intersection = intersection;
-	//		this.approachAt = approachAt;
-	//		this.road = r;
-	//		this.side = s;
-	//	}
+	Road road;
+	Light light;
 
-	public Car(int timeToArrive, Intersection intersection, SimController.Direction d) {
+	public Car(int timeToArrive, Intersection intersection, Road r) {
 		this.approachAt = timeToArrive;
 		this.intersection = intersection;
-		this.direction = d;
+		this.road = r;
 	}
 
 	public State getState() {
@@ -38,12 +33,43 @@ public abstract class Car implements Tickable {
 	public void tick(int ticks) {
 		switch (state) {
 		case SAFE:
-			if (approachAt != ticks) {
+			if (approachAt == ticks) {
+				if (road.cars[queuePosition - 1] == null) {
+					intersection.approachDetector(this, road);
+					state = State.APPROACHING;
+					activeTick(ticks);
+				} else {
+					approachAt++;
+					break;
+				}
+			}
+			break;
+			
+		case APPROACHING:
+			if (intersection.currentMode == Intersection.Mode.Normal) {
+				if (queuePosition == 0) {
+					if (road.light.currentColor == Light.Color.Green) {
+						state = State.CROSSING;
+						crossingStart = ticks;
+						road.cars[queuePosition] = null;
+					}
+				} else {
+					if (road.cars[queuePosition - 1] == null) {
+						road.cars[queuePosition - 1] = this;
+						road.cars[queuePosition] = null;
+						queuePosition--;
+
+					}
+				}
 				break;
 			}
-			state = State.APPROACHING;
-		case APPROACHING:
+			activeTick(ticks);
+			break;
 		case CROSSING:
+			if (crossingStart + 3 == ticks) {
+				state = State.LEAVING;
+			}
+			break;
 		case LEAVING:
 			activeTick(ticks);
 		}

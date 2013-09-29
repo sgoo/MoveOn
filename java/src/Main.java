@@ -12,7 +12,7 @@ public class Main {
 		String line;
 		while ((line = in.readLine()) != null) {
 			char dir = line.charAt(0);
-			SimController.Direction direction = SimController.Direction.get(dir);
+			Road direction = Road.get(dir);
 			boolean isVTL = line.charAt(2) == 't';
 			int timeToArrive = Integer.parseInt(line.substring(4));
 
