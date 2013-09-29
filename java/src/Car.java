@@ -1,16 +1,13 @@
 public abstract class Car {
-	
+
 	public enum State {
-		NONE,
-		APPROACHING, // detected by the loop
-		CROSSING, // crossing in the intersection
-		LEAVING // finished crossing
+		SAFE, APPROACHING, CROSSING, LEAVING
 	}
 
-	State state = State.NONE; 
+	private State state = State.SAFE;
 	
-	public Car () {
-		
+	public Car() {
+
 	}
 
 	public State getState() {
