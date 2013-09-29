@@ -3,7 +3,7 @@ public class VTLCar extends Car {
 	private boolean isLeader = false;
 
 	public VTLCar() {
-
+		isLeader = Controller.getInstance().requestLeadership(this);
 	}
 
 	public boolean isLeader() {
