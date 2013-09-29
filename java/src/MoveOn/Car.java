@@ -13,9 +13,9 @@ public class Car implements Tickable {
 	public static final int SPEED = 1;
 
 	private static int CAR_COUNT = 0;
-	
+
 	private int carId;
-	
+
 	protected int distanceFromIntersection;
 	protected Direction direction;
 
@@ -28,7 +28,7 @@ public class Car implements Tickable {
 	public int getCarId() {
 		return carId;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -52,21 +52,34 @@ public class Car implements Tickable {
 	}
 
 	@Override
-	public void tick(int ticks) {
+	public boolean tick(int ticks) {
 		// TODO: Check if there is a car in front
 		if (distanceFromIntersection > 0 && direction.canAdvance(this)) {
 			distanceFromIntersection -= SPEED;
-			if (distanceFromIntersection < 0){
+			if (distanceFromIntersection < 0) {
 				distanceFromIntersection = 0;
 			}
-		} else {
+		} else if (distanceFromIntersection == 0 && direction.lights.isGreen()) {
+			distanceFromIntersection -= SPEED;
 			// If the light is green go to Xing state
+		} else if (distanceFromIntersection < 0) {
+			if (distanceFromIntersection < -(CAR_LENGTH
+					+ Intersection.INTERSECTION_SPAN - 1)) {
+				direction.removeCar(this);
+				return false;
+			} else {
+				distanceFromIntersection -= SPEED;
+			}
+
 		}
+
+		return true;
 	}
-	
+
 	@Override
 	public String toString() {
-		return String.format("%s %d", direction.toString(), distanceFromIntersection);
-	}	
-	
+		return String.format("%s %d", direction.toString(),
+				distanceFromIntersection);
+	}
+
 }
