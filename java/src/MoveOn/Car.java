@@ -12,8 +12,8 @@ public class Car implements Tickable {
 	 */
 	public static final int SPEED = 1;
 
-	public int distanceFromIntersection;
-	public Direction direction;
+	protected int distanceFromIntersection;
+	protected Direction direction;
 
 	public Car(int dist, Direction direction) {
 		this.distanceFromIntersection = dist;
@@ -36,4 +36,32 @@ public class Car implements Tickable {
 	public String toString() {
 		return String.format("%s %d", direction.toString(), distanceFromIntersection);
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((direction == null) ? 0 : direction.hashCode());
+		result = prime * result + distanceFromIntersection;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Car other = (Car) obj;
+		if (direction != other.direction)
+			return false;
+		if (distanceFromIntersection != other.distanceFromIntersection)
+			return false;
+		return true;
+	}
+	
+	
 }
