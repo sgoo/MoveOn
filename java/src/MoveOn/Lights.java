@@ -1,6 +1,11 @@
 package MoveOn;
 
 public class Lights {
+	
+	/**
+	 * Length of an orange light
+	 */
+	public static final int ORANGE_LENGTH = 2;
 
 	public Color currentColor;
 
