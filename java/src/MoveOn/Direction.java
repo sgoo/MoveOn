@@ -83,4 +83,13 @@ public enum Direction {
 		Car carInFront = cars.get(index);
 		return carInFront.distanceFromIntersection + Car.CAR_LENGTH < car.distanceFromIntersection;
 	}
+
+	public VTLCar getClosestVTLCar() {
+		for (Car car : cars) {
+			if (car instanceof VTLCar) {
+				return (VTLCar) car;
+			}
+		}
+		return null;
+	}
 }
