@@ -5,7 +5,7 @@ public class VTLPlusController implements Controller {
 	@Override
 	public boolean tick(int ticks) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override

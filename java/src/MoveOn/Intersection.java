@@ -29,31 +29,10 @@ public class Intersection implements Tickable {
 
 	public void setMode(Mode m, int tick) {
 
-		Direction[] green;
-		Direction[] red;
-
-		if (Direction.N.lights.currentColor == Direction.W.lights.currentColor) {
-			if (tick % 2 == 0) {
-				Direction.N.lights.currentColor = Lights.Color.G;
-				green = new Direction[] { Direction.N, Direction.S };
-				Direction.E.lights.currentColor = Lights.Color.R;
-				red = new Direction[] { Direction.E, Direction.W };
-			} else {
-				Direction.N.lights.currentColor = Lights.Color.R;
-				red = new Direction[] { Direction.N, Direction.S };
-				Direction.E.lights.currentColor = Lights.Color.G;
-				green = new Direction[] { Direction.E, Direction.W };
-			}
-		} else if (Direction.N.lights.isGreen()) {
-			green = new Direction[] { Direction.N, Direction.S };
-			red = new Direction[] { Direction.E, Direction.W };
-		} else {
-			red = new Direction[] { Direction.N, Direction.S };
-			green = new Direction[] { Direction.E, Direction.W };
-		}
+		
 
 		this.mode = m;
-		mode.c.init(tick, green, red);
+		mode.c.init(tick);
 	}
 
 	@Override

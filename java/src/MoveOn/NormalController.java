@@ -6,9 +6,28 @@ public class NormalController implements Controller {
 	private Direction[] red;
 
 	@Override
-	public void init(int currentTick, Direction[] green, Direction[] red) {
-		this.green = green;
-		this.red = red;
+	public void init(int currentTick) {
+
+		if (Direction.N.lights.currentColor == Direction.W.lights.currentColor) {
+			if (currentTick % 2 == 0) {
+				Direction.N.lights.currentColor = Lights.Color.G;
+				green = new Direction[] { Direction.N, Direction.S };
+				Direction.E.lights.currentColor = Lights.Color.R;
+				red = new Direction[] { Direction.E, Direction.W };
+			} else {
+				Direction.N.lights.currentColor = Lights.Color.R;
+				red = new Direction[] { Direction.N, Direction.S };
+				Direction.E.lights.currentColor = Lights.Color.G;
+				green = new Direction[] { Direction.E, Direction.W };
+			}
+		} else if (Direction.N.lights.isGreen()) {
+			green = new Direction[] { Direction.N, Direction.S };
+			red = new Direction[] { Direction.E, Direction.W };
+		} else {
+			red = new Direction[] { Direction.N, Direction.S };
+			green = new Direction[] { Direction.E, Direction.W };
+		}
+
 		nextChangeCounter = currentTick + 30;
 	}
 
