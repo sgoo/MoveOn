@@ -5,9 +5,11 @@ import java.util.ArrayList;
 public class Simulator {
 
 	private ArrayList<Car> cars;
+	private Intersection intersection;
 
 	public Simulator() {
 		cars = new ArrayList<Car>();
+		intersection = new Intersection();
 	}
 
 	public void initialize() {
@@ -27,8 +29,12 @@ public class Simulator {
 
 	public void simulate() {
 		for (int i = 0;; i++) {
-			// tick all cars, and let us know what each is up to.
+
+			intersection.tick(i);
 			
+
+			// tick all cars, and let us know what each is up to.
+
 			for (int j = 0; j < cars.size(); j++) {
 				if (!cars.get(j).tick(i)) {
 					cars.remove(j);
