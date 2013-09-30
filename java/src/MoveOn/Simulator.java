@@ -22,7 +22,7 @@ public class Simulator {
 	}
 
 	public void addCar(int dist, Direction d) {
-		Car c = new Car(dist, d);
+		Car c = new VTLCar(dist, d);
 		d.addCar(c);
 		cars.add(c);
 	}
@@ -31,7 +31,6 @@ public class Simulator {
 		for (int i = 0;; i++) {
 
 			intersection.tick(i);
-			
 
 			// tick all cars, and let us know what each is up to.
 
