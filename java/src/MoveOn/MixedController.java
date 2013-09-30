@@ -9,7 +9,7 @@ public class MixedController implements Controller{
 	}
 
 	@Override
-	public void init(int currentTick, Direction[] green, Direction[] red) {
+	public void init(int currentTick) {
 		// TODO Auto-generated method stub
 		
 	}
