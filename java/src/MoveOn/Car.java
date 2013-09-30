@@ -64,7 +64,7 @@ public class Car implements Tickable {
 			// If the light is green go to Xing state
 		} else if (distanceFromIntersection < 0) {
 			if (distanceFromIntersection < -(CAR_LENGTH
-					+ Intersection.INTERSECTION_SPAN - 1)) {
+					+ Intersection.INTERSECTION_SPAN - 2)) {
 				direction.removeCar(this);
 				return false;
 			} else {
