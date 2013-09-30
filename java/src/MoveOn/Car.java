@@ -70,9 +70,7 @@ public class Car implements Tickable {
 			} else {
 				distanceFromIntersection -= SPEED;
 			}
-
 		}
-
 		return true;
 	}
 
@@ -81,5 +79,4 @@ public class Car implements Tickable {
 		return String.format("%s %d", direction.toString(),
 				distanceFromIntersection);
 	}
-
 }
