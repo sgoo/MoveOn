@@ -18,9 +18,9 @@ public class Simulator {
 
 	private static final Charset ENCODING = StandardCharsets.UTF_8;
 
-	private static final String VTL = "VTL";
+	public static final String VTL = "VTL";
 
-	private static final String NORMAL = "NORMAL";
+	public static final String NORMAL = "NORMAL";
 
 	private static final String TESTFOLDER = "TestFiles\\";
 
