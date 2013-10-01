@@ -1,4 +1,4 @@
-package MoveOn;
+package moveon;
 
 public class NormalController implements Controller {
 	private int nextChangeCounter = 0;

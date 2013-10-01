@@ -1,4 +1,4 @@
-package MoveOn;
+package moveon;
 
 public class Lights {
 

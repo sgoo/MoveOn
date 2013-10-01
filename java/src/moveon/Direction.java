@@ -1,4 +1,4 @@
-package MoveOn;
+package moveon;
 
 import java.util.ArrayList;
 
@@ -36,10 +36,8 @@ public enum Direction {
 		Car car;
 		int soFar = 0;
 
-		for (; cars.size() > carsPrinted
-				&& (car = cars.get(carsPrinted)).distanceFromIntersection < 0; carsPrinted++) {
-			String carOut = car.getCarId() + "-"
-					+ (-car.distanceFromIntersection);
+		for (; cars.size() > carsPrinted && (car = cars.get(carsPrinted)).distanceFromIntersection < 0; carsPrinted++) {
+			String carOut = car.getCarId() + "-" + (-car.distanceFromIntersection);
 			sb.append(carOut);
 			soFar += Car.CAR_LENGTH;
 			for (int i = carOut.length(); i < Car.CAR_LENGTH; i++) {
@@ -60,11 +58,7 @@ public enum Direction {
 				sb.append(' ');
 			}
 			soFar += Car.CAR_LENGTH;
-			String carOut = car.getCarId() + "-" + car.distanceFromIntersection;
-			sb.append(carOut);
-			for (int i = carOut.length(); i < Car.CAR_LENGTH; i++) {
-				sb.append('-');
-			}
+			sb.append(car);
 		}
 		for (; soFar < Intersection.VTL_SPAN; soFar++) {
 			sb.append(' ');

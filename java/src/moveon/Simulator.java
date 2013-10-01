@@ -1,4 +1,4 @@
-package MoveOn;
+package moveon;
 
 import java.util.ArrayList;
 
@@ -14,11 +14,12 @@ public class Simulator {
 
 	public void initialize() {
 		addCar(10, Direction.N);
-		addCar(15, Direction.N);
-		addCar(30, Direction.S);
-		addCar(30, Direction.E);
+		addCar(16, Direction.N);
+		addCar(31, Direction.S);
+		addCar(31, Direction.E);
 		addCar(40, Direction.W);
 		addCar(60, Direction.N);
+		addCar(64, Direction.E);
 	}
 
 	public void addCar(int dist, Direction d) {

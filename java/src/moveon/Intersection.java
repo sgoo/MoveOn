@@ -1,4 +1,4 @@
-package MoveOn;
+package moveon;
 
 public class Intersection implements Tickable {
 	public final static int VTL_SPAN = 100;
@@ -9,8 +9,7 @@ public class Intersection implements Tickable {
 	Controller normalController = new NormalController();
 
 	public enum Mode {
-		NORMAL(new NormalController()), VTLPLUS(new VTLPlusController()), MIXED(
-				new MixedController());
+		NORMAL(new NormalController()), VTLPLUS(new VTLPlusController()), MIXED(new MixedController());
 		private final Controller c;
 
 		Mode(Controller c) {

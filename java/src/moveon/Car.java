@@ -1,4 +1,4 @@
-package MoveOn;
+package moveon;
 
 public class Car implements Tickable {
 
@@ -63,8 +63,7 @@ public class Car implements Tickable {
 			distanceFromIntersection -= SPEED;
 			// If the light is green go to Xing state
 		} else if (distanceFromIntersection < 0) {
-			if (distanceFromIntersection < -(CAR_LENGTH
-					+ Intersection.INTERSECTION_SPAN - 2)) {
+			if (distanceFromIntersection < -(CAR_LENGTH + Intersection.INTERSECTION_SPAN - 2)) {
 				direction.removeCar(this);
 				return false;
 			} else {
@@ -76,7 +75,12 @@ public class Car implements Tickable {
 
 	@Override
 	public String toString() {
-		return String.format("%s %d", direction.toString(),
-				distanceFromIntersection);
+		StringBuilder sb = new StringBuilder();
+		String carOut = getCarId() + "-" + distanceFromIntersection;
+		sb.append(carOut);
+		for (int i = carOut.length(); i < CAR_LENGTH; i++) {
+			sb.append('-');
+		}
+		return sb.toString();
 	}
 }
