@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import moveon.cars.Car;
 import moveon.simulation.Direction;
 import moveon.simulation.Simulator;
 
@@ -18,12 +19,15 @@ public class KeyInput extends JFrame implements ActionListener,
 		KeyEventDispatcher {
 
 	private static final long serialVersionUID = 1L;
+	private static final String CAR_TYPE_LBL = "";
+
 	private Simulator s;
+
+	private boolean isVtlCar = false;
 
 	public KeyInput(Simulator s) {
 		super("Car Creator");
 		this.s = s;
-
 		init();
 	}
 
@@ -32,6 +36,7 @@ public class KeyInput extends JFrame implements ActionListener,
 	JButton SButton;
 	JButton EButton;
 	JButton WButton;
+	JButton carTypeButton;
 	JButton pauseButton;
 
 	private void init() {
@@ -47,13 +52,14 @@ public class KeyInput extends JFrame implements ActionListener,
 		WButton.addActionListener(this);
 		pauseButton = new JButton("Pause");
 		pauseButton.addActionListener(this);
-
+		carTypeButton = new JButton(CAR_TYPE_LBL + Simulator.NORMAL);
+		carTypeButton.addActionListener(this);
 		KeyboardFocusManager manager = KeyboardFocusManager
 				.getCurrentKeyboardFocusManager();
 		manager.addKeyEventDispatcher(this);
 
 		setLayout(layout);
-		add(new JLabel());
+		add(carTypeButton);
 		add(NButton);
 		add(new JLabel());
 		add(WButton);
@@ -71,15 +77,17 @@ public class KeyInput extends JFrame implements ActionListener,
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == NButton) {
-			s.addCar(100, Direction.N);
+			addCar(100, Direction.N);
 		} else if (e.getSource() == SButton) {
-			s.addCar(100, Direction.S);
+			addCar(100, Direction.S);
 		} else if (e.getSource() == EButton) {
-			s.addCar(100, Direction.E);
+			addCar(100, Direction.E);
 		} else if (e.getSource() == WButton) {
-			s.addCar(100, Direction.W);
+			addCar(100, Direction.W);
 		} else if (e.getSource() == pauseButton) {
 			changePause();
+		} else if (e.getSource() == carTypeButton) {
+			changeCarType();
 		}
 	}
 
@@ -102,6 +110,9 @@ public class KeyInput extends JFrame implements ActionListener,
 		case 'A':
 			d = Direction.W;
 			break;
+		case 'Q':
+			changeCarType();
+			return true;
 		case ' ':
 			changePause();
 			return true;
@@ -110,9 +121,13 @@ public class KeyInput extends JFrame implements ActionListener,
 			return false;
 		}
 		if (Character.isUpperCase(e.getKeyChar())) {
-			s.addVTLCar(100, d);
+			isVtlCar = true;
+			carTypeButton.setText(Simulator.VTL);
+			addCar(100, d);
 		} else {
-			s.addCar(100, d);
+			isVtlCar = false;
+			carTypeButton.setText(Simulator.NORMAL);
+			addCar(100, d);
 		}
 		return false;
 	}
@@ -123,6 +138,23 @@ public class KeyInput extends JFrame implements ActionListener,
 			pauseButton.setText("Unpause");
 		} else {
 			pauseButton.setText("Pause");
+		}
+	}
+	
+	private void changeCarType(){
+		isVtlCar = !isVtlCar;
+		if(isVtlCar){
+			carTypeButton.setText(Simulator.VTL);
+		} else {
+			carTypeButton.setText(Simulator.NORMAL);
+		}
+	}
+	
+	private void addCar(int dist, Direction d){
+		if(isVtlCar){
+			s.addVTLCar(dist, d);
+		} else {
+			s.addCar(dist, d);
 		}
 	}
 
