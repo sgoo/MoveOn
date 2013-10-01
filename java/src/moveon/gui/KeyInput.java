@@ -80,7 +80,6 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 		if (e.getID() != KeyEvent.KEY_PRESSED) {
 			return false;
 		}
-		System.out.println(e);
 		Direction d = null;
 		switch (Character.toUpperCase(e.getKeyChar())) {
 		case 'W':
@@ -95,6 +94,8 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 		case 'A':
 			d = Direction.W;
 			break;
+		case ' ':
+			s.playPause();
 		}
 		if (d == null) {
 			return false;

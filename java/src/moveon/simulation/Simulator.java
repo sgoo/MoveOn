@@ -1,6 +1,8 @@
 package moveon.simulation;
 
 import java.util.ArrayList;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import moveon.cars.Car;
 import moveon.cars.VTLCar;
@@ -10,6 +12,8 @@ public class Simulator {
 
 	private ArrayList<Car> cars;
 	private Intersection intersection;
+
+	private boolean pause = false;
 
 	public Simulator() {
 		cars = new ArrayList<Car>();
@@ -41,6 +45,14 @@ public class Simulator {
 
 	public void simulate() {
 		for (int i = 0;; i++) {
+			try {
+				Thread.sleep(250);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			if (pause) {
+				continue;
+			}
 
 			intersection.tick(i);
 
@@ -57,11 +69,7 @@ public class Simulator {
 			System.out.println(Direction.E);
 			System.out.println(Direction.W);
 			System.out.println();
-			try {
-				Thread.sleep(250);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+
 		}
 	}
 
@@ -72,6 +80,10 @@ public class Simulator {
 		Simulator simulator = new Simulator();
 		simulator.initialize();
 		simulator.simulate();
+	}
+
+	public void playPause() {
+		pause = !pause;
 	}
 
 }
