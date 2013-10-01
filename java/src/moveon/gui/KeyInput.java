@@ -31,9 +31,10 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 	JButton SButton;
 	JButton EButton;
 	JButton WButton;
+	JButton pauseButton;
 
 	private void init() {
-		layout = new GridLayout(2, 3);
+		layout = new GridLayout(3, 3);
 
 		NButton = new JButton("North");
 		NButton.addActionListener(this);
@@ -43,6 +44,8 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 		EButton.addActionListener(this);
 		WButton = new JButton("West");
 		WButton.addActionListener(this);
+		pauseButton = new JButton("Pause");
+		pauseButton.addActionListener(this);
 
 		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
 		manager.addKeyEventDispatcher(this);
@@ -54,8 +57,11 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 		add(WButton);
 		add(SButton);
 		add(EButton);
+		add(new JLabel());
+		add(pauseButton);
+		add(new JLabel());
 
-		setSize(300, 200);
+		setSize(300, 250);
 		setVisible(true);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 	}
@@ -70,6 +76,8 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 			s.addCar(100, Direction.E);
 		} else if (e.getSource() == WButton) {
 			s.addCar(100, Direction.W);
+		} else if (e.getSource() == pauseButton) {
+			s.playPause();
 		}
 
 	}

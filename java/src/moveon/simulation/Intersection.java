@@ -26,7 +26,7 @@ public class Intersection implements Tickable {
 
 	public Intersection() {
 		// TODO: switch to VTLPLUS
-		setMode(Mode.VTLPLUS, 0);
+		setMode(Mode.NORMAL, 0);
 	}
 
 	public void setMode(Mode m, int tick) {
@@ -37,6 +37,14 @@ public class Intersection implements Tickable {
 
 	@Override
 	public boolean tick(int ticks) {
+		if ((Direction.N.hasNonVTLCars() || Direction.S.hasNonVTLCars()) && (Direction.W.hasNonVTLCars() || Direction.E.hasNonVTLCars())) {
+			setMode(Mode.NORMAL, ticks);
+		} else if (!(Direction.N.hasNonVTLCars() || Direction.S.hasNonVTLCars() || Direction.W.hasNonVTLCars() || Direction.E.hasNonVTLCars())) {
+			setMode(Mode.VTLPLUS, ticks);
+		} else {
+			setMode(Mode.MIXED, ticks);
+		}
+
 		mode.c.tick(ticks);
 		return true;
 	}
