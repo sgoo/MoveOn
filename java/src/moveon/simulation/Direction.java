@@ -57,8 +57,10 @@ public enum Direction {
 		Car car;
 		int soFar = 0;
 
-		for (; cars.size() > carsPrinted && (car = cars.get(carsPrinted)).distanceFromIntersection < 0; carsPrinted++) {
-			String carOut = car.getCarId() + "-" + (-car.distanceFromIntersection);
+		for (; cars.size() > carsPrinted
+				&& (car = cars.get(carsPrinted)).distanceFromIntersection < 0; carsPrinted++) {
+			String carOut = car.getCarId() + "-"
+					+ (-car.distanceFromIntersection);
 			sb.append(carOut);
 			soFar += Car.CAR_LENGTH;
 			for (int i = carOut.length(); i < Car.CAR_LENGTH; i++) {
@@ -105,6 +107,18 @@ public enum Direction {
 				return (VTLCar) car;
 			}
 		}
+		return null;
+	}
+
+	public static Direction getDirFromStr(String string) {
+		if (string.equals("N"))
+			return Direction.N;
+		if (string.equals("E"))
+			return Direction.E;
+		if (string.equals("S"))
+			return Direction.S;
+		if (string.equals("W"))
+			return Direction.W;
 		return null;
 	}
 }
