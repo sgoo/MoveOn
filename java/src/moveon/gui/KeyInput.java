@@ -55,10 +55,10 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 		add(NButton);
 		add(new JLabel());
 		add(WButton);
-		add(SButton);
+		add(pauseButton);
 		add(EButton);
 		add(new JLabel());
-		add(pauseButton);
+		add(SButton);
 		add(new JLabel());
 
 		setSize(300, 250);
