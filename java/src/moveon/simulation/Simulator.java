@@ -53,7 +53,9 @@ public class Simulator {
 			}
 
 			intersection.tick(i);
-
+			
+			System.out.println(intersection.mode);
+			
 			// tick all cars, and let us know what each is up to.
 
 			for (int j = 0; j < cars.size(); j++) {

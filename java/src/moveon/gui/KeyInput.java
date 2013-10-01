@@ -95,6 +95,7 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 			break;
 		case ' ':
 			s.playPause();
+			return true;
 		}
 		if (d == null) {
 			return false;

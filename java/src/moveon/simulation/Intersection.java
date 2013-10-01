@@ -12,8 +12,6 @@ public class Intersection implements Tickable {
 	public final static int ORANGE_TIME = Car.CAR_LENGTH + INTERSECTION_SPAN;
 	public final static int GREEN_TIME = 30;
 
-	Controller normalController = new NormalController();
-
 	public enum Mode {
 		NORMAL(new NormalController()), VTLPLUS(new VTLPlusController()), MIXED(new MixedController());
 		private final Controller c;
@@ -24,7 +22,7 @@ public class Intersection implements Tickable {
 
 	}
 
-	private Mode mode;
+	public Mode mode;
 
 	public Intersection() {
 		// TODO: switch to VTLPLUS
