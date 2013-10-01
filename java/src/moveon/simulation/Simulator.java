@@ -13,11 +13,13 @@ public class Simulator {
 
 	private boolean pause = false;
 	private int tickTimeMillis;
+	private boolean generateRandomCars;
 
 	public Simulator() {
 		cars = new ArrayList<Car>();
 		intersection = new Intersection();
 		new KeyInput(this);
+		setGenerateRandomCars(true);
 	}
 
 	public void initialize() {
@@ -65,28 +67,29 @@ public class Simulator {
 					j--;
 				}
 			}
-			// 75% of the time add a new car
-			if (Math.random() < 0.15) {
-				// randomly choose direction
-				double randomChoice = Math.random();
+			if (isGenerateRandomCars()) {
+				// 75% of the time add a new car
+				if (Math.random() < 0.15) {
+					// randomly choose direction
+					double randomChoice = Math.random();
 
-				Direction randomDirection;
+					Direction randomDirection;
 
-				if (randomChoice < 0.25)
-					randomDirection = Direction.N;
-				else if (randomChoice >= 0.25 && randomChoice < 0.5)
-					randomDirection = Direction.S;
-				else if (randomChoice >= 0.5 && randomChoice < 0.75)
-					randomDirection = Direction.E;
-				else
-					/* (randomChoice >= 0.75 && randomChoice < 1.0) */randomDirection = Direction.W;
+					if (randomChoice < 0.25)
+						randomDirection = Direction.N;
+					else if (randomChoice >= 0.25 && randomChoice < 0.5)
+						randomDirection = Direction.S;
+					else if (randomChoice >= 0.5 && randomChoice < 0.75)
+						randomDirection = Direction.E;
+					else
+						/* (randomChoice >= 0.75 && randomChoice < 1.0) */randomDirection = Direction.W;
 
-				// Randomly coose VTL or Non-VTL
-				if (Math.random() < 0.5)
-					addVTLCar(100, randomDirection);
-				else
-					addCar(100, randomDirection);
-
+					// Randomly coose VTL or Non-VTL
+					if (Math.random() < 0.5)
+						addVTLCar(100, randomDirection);
+					else
+						addCar(100, randomDirection);
+				}
 			}
 
 			System.out.println(Direction.N);
@@ -117,6 +120,14 @@ public class Simulator {
 
 	public void setTickTimeMillis(int tickTimeMillis) {
 		this.tickTimeMillis = tickTimeMillis;
+	}
+
+	public boolean isGenerateRandomCars() {
+		return generateRandomCars;
+	}
+
+	public void setGenerateRandomCars(boolean generateRandomCars) {
+		this.generateRandomCars = generateRandomCars;
 	}
 
 }
