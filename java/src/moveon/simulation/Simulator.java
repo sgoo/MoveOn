@@ -55,9 +55,9 @@ public class Simulator {
 			}
 
 			intersection.tick(i);
-			
+
 			System.out.println(intersection.mode);
-			
+
 			// tick all cars, and let us know what each is up to.
 			for (int j = 0; j < cars.size(); j++) {
 				if (!cars.get(j).tick(i)) {
@@ -66,10 +66,29 @@ public class Simulator {
 				}
 			}
 			// 75% of the time add a new car
-			if(Math.random() < 0.75){
-				addCar(100, Direction.N);
+			if (Math.random() < 0.15) {
+				// randomly choose direction
+				double randomChoice = Math.random();
+
+				Direction randomDirection;
+
+				if (randomChoice < 0.25)
+					randomDirection = Direction.N;
+				else if (randomChoice >= 0.25 && randomChoice < 0.5)
+					randomDirection = Direction.S;
+				else if (randomChoice >= 0.5 && randomChoice < 0.75)
+					randomDirection = Direction.E;
+				else
+					/* (randomChoice >= 0.75 && randomChoice < 1.0) */randomDirection = Direction.W;
+
+				// Randomly coose VTL or Non-VTL
+				if (Math.random() < 0.5)
+					addVTLCar(100, randomDirection);
+				else
+					addCar(100, randomDirection);
+
 			}
-			
+
 			System.out.println(Direction.N);
 			System.out.println(Direction.S);
 			System.out.println(Direction.E);
