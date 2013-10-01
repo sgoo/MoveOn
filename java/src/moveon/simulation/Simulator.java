@@ -1,12 +1,28 @@
 package moveon.simulation;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import moveon.cars.Car;
 import moveon.cars.VTLCar;
+import moveon.exceptions.CarFileFormatException;
 import moveon.gui.KeyInput;
 
 public class Simulator {
+
+	private static final Charset ENCODING = StandardCharsets.UTF_8;
+
+	private static final String VTL = "VTL";
+
+	private static final String NORMAL = "NORMAL";
+
+	private static final String TESTFOLDER = "TestFiles\\";
 
 	private ArrayList<Car> cars;
 	private Intersection intersection;
@@ -27,6 +43,10 @@ public class Simulator {
 		addCar(40, Direction.W);
 		addCar(60, Direction.N);
 		addCar(64, Direction.E);
+	}
+
+	public void initialize(String filename) throws IOException, CarFileFormatException {
+		readCarsFromFile(filename);
 	}
 
 	public void addCar(int dist, Direction d) {
@@ -53,9 +73,9 @@ public class Simulator {
 			}
 
 			intersection.tick(i);
-			
+
 			System.out.println(intersection.mode);
-			
+
 			// tick all cars, and let us know what each is up to.
 
 			for (int j = 0; j < cars.size(); j++) {
@@ -75,10 +95,12 @@ public class Simulator {
 
 	/**
 	 * @param args
+	 * @throws CarFileFormatException 
+	 * @throws IOException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException, CarFileFormatException {
 		Simulator simulator = new Simulator();
-		simulator.initialize();
+		simulator.initialize(TESTFOLDER + "Test1");
 		simulator.simulate();
 	}
 
@@ -86,4 +108,39 @@ public class Simulator {
 		pause = !pause;
 	}
 
+	public boolean isPaused() {
+		return pause;
+	}
+	
+	/**
+	 * Read a file and add the cars represented in it
+	 * 
+	 * @param fileName
+	 * @return
+	 * @throws IOException
+	 * @throws CarFileFormatException
+	 */
+	private void readCarsFromFile(String fileName) throws IOException,
+			CarFileFormatException {
+		Path path = Paths.get(fileName);
+		BufferedReader reader = Files.newBufferedReader(path, ENCODING);
+		// line format TIME DIRECTION CAR_TYPE
+		String line = null;
+		while ((line = reader.readLine()) != null) {
+			String[] parts = line.split(",");
+			if (parts.length != 3) {
+				throw new CarFileFormatException();
+			}
+			int dist = Integer.parseInt(parts[0]);
+			Direction direction = Direction.getDirFromStr(parts[1]);
+			if (direction == null) {
+				throw new CarFileFormatException();
+			}
+			if (parts[2].equals(VTL)) {
+				addVTLCar(dist, direction);
+			} else if (parts[2].equals(NORMAL)) {
+				addCar(dist, direction);
+			}
+		}
+	}
 }
