@@ -27,7 +27,8 @@ public class VTLCar extends Car {
 		String car = super.toString();
 		if (leader) {
 			return car.substring(0, 4) + "L";
+		} else {
+			return car.substring(0, 4) + "V";
 		}
-		return car;
 	}
 }

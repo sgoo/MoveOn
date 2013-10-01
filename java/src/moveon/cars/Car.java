@@ -80,7 +80,8 @@ public class Car implements Tickable {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		String carOut = getCarId() + "-" + distanceFromIntersection;
+		String carOut = distanceFromIntersection + "";
+		// String carOut = getCarId() + "-" + distanceFromIntersection;
 		sb.append(carOut);
 		for (int i = carOut.length(); i < CAR_LENGTH; i++) {
 			sb.append('-');

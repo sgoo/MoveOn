@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import moveon.cars.Car;
 import moveon.cars.VTLCar;
+import moveon.gui.CarCreator;
 
 public class Simulator {
 
@@ -13,6 +14,7 @@ public class Simulator {
 	public Simulator() {
 		cars = new ArrayList<Car>();
 		intersection = new Intersection();
+		CarCreator cc = new CarCreator(this);
 	}
 
 	public void initialize() {
@@ -26,6 +28,12 @@ public class Simulator {
 	}
 
 	public void addCar(int dist, Direction d) {
+		Car c = new Car(dist, d);
+		d.addCar(c);
+		cars.add(c);
+	}
+
+	public void addVTLCar(int dist, Direction d) {
 		Car c = new VTLCar(dist, d);
 		d.addCar(c);
 		cars.add(c);
@@ -65,4 +73,5 @@ public class Simulator {
 		simulator.initialize();
 		simulator.simulate();
 	}
+
 }
