@@ -1,8 +1,6 @@
 package moveon.simulation;
 
 import java.util.ArrayList;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import moveon.cars.Car;
 import moveon.cars.VTLCar;
@@ -18,7 +16,7 @@ public class Simulator {
 	public Simulator() {
 		cars = new ArrayList<Car>();
 		intersection = new Intersection();
-		KeyInput cc = new KeyInput(this);
+		new KeyInput(this);
 	}
 
 	public void initialize() {
