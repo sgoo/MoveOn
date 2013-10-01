@@ -2,58 +2,42 @@ package moveon.controllers;
 
 import moveon.simulation.Direction;
 import moveon.simulation.Intersection;
+import moveon.simulation.Intersection.Mode;
 import moveon.simulation.Lights;
-import moveon.simulation.Lights.Color;
 
-public class NormalController implements Controller {
+public class NormalController extends Controller {
 	private int nextChangeCounter = 0;
-	private Direction[] green;
-	private Direction[] red;
 
 	@Override
 	public void init(int currentTick) {
 
 		if (Direction.N.lights.currentColor == Direction.W.lights.currentColor) {
 			if (currentTick % 2 == 0) {
-				Direction.N.lights.currentColor = Lights.Color.G;
-				green = new Direction[] { Direction.N, Direction.S };
-				Direction.E.lights.currentColor = Lights.Color.R;
-				red = new Direction[] { Direction.E, Direction.W };
+				nsGreenEWRed();
 			} else {
-				Direction.N.lights.currentColor = Lights.Color.R;
-				red = new Direction[] { Direction.N, Direction.S };
-				Direction.E.lights.currentColor = Lights.Color.G;
-				green = new Direction[] { Direction.E, Direction.W };
+				nsRedEWGreen();
 			}
 		} else if (Direction.N.lights.isGreen()) {
-			green = new Direction[] { Direction.N, Direction.S };
-			red = new Direction[] { Direction.E, Direction.W };
+			nsGreenEWRed();
 		} else {
-			red = new Direction[] { Direction.N, Direction.S };
-			green = new Direction[] { Direction.E, Direction.W };
+			nsRedEWGreen();
 		}
 
-		nextChangeCounter = currentTick + 30;
+		nextChangeCounter = currentTick + Intersection.GREEN_TIME + Intersection.ORANGE_TIME;
 	}
 
 	@Override
-	public boolean tick(int ticks) {
+	public Mode tick(int ticks) {
 		if (nextChangeCounter == ticks) {
-			if (green[0].lights.isGreen()) {
-				green[0].lights.switchColor();
-
-				nextChangeCounter = ticks + Intersection.ORANGE_TIME;
+			if (Direction.N.lights.isGreen()) {
+				nsRedEWGreen();
 			} else {
-				green[1].lights.switchColor();
-				red[1].lights.switchColor();
-
-				Direction[] tmp = green;
-				green = red;
-				red = tmp;
-				nextChangeCounter = ticks + Intersection.GREEN_TIME;
+				nsGreenEWRed();
 			}
+			nextChangeCounter = ticks + Intersection.GREEN_TIME + Intersection.ORANGE_TIME;
 		}
-		return true;
+		progressLights(ticks);
+		return null;
 	}
 
 }

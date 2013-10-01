@@ -4,20 +4,17 @@ import moveon.cars.Car;
 import moveon.cars.VTLCar;
 import moveon.simulation.Direction;
 import moveon.simulation.Intersection;
+import moveon.simulation.Intersection.Mode;
 import moveon.simulation.Lights;
 import moveon.simulation.Lights.Color;
 
-public class VTLPlusController implements Controller {
-
-	private Color[] desiredState; // NS, EW
-	private int lastLightChange = 0;
+public class VTLPlusController extends Controller {
 
 	public VTLPlusController() {
-		desiredState = new Color[] { Color.G, Color.G };
 	}
 
 	@Override
-	public boolean tick(int ticks) {
+	public Mode tick(int ticks) {
 		VTLCar closestN = Direction.N.getClosestVTLCar();
 		VTLCar closestS = Direction.S.getClosestVTLCar();
 		VTLCar closestE = Direction.E.getClosestVTLCar();
@@ -69,59 +66,11 @@ public class VTLPlusController implements Controller {
 		progressLights(ticks);
 		// Advance to desired state
 
-		return true;
+		return null;
 	}
 
 	@Override
 	public void init(int currentTick) {
-
-	}
-
-	private void nsGreenEWRed() {
-		desiredState[0] = Color.G;
-		desiredState[1] = Color.R;
-	}
-
-	private void nsRedEWGreen() {
-		desiredState[0] = Color.R;
-		desiredState[1] = Color.G;
-	}
-
-	private void allGreen() {
-		desiredState[0] = Color.G;
-		desiredState[1] = Color.G;
-	}
-
-	private void progressLights(int tickNumber) {
-		if (Direction.N.lights.currentColor != desiredState[0]) {
-			switch (Direction.N.lights.currentColor) {
-			case R:
-			case G:
-				Direction.N.lights.switchColor();
-				lastLightChange = tickNumber;
-				break;
-			case O:
-				if (tickNumber - lastLightChange > Intersection.ORANGE_TIME) {
-					Direction.N.lights.switchColor();
-				}
-				break;
-			}
-		}
-
-		if (Direction.E.lights.currentColor != desiredState[1]) {
-			switch (Direction.E.lights.currentColor) {
-			case R:
-			case G:
-				Direction.E.lights.switchColor();
-				lastLightChange = tickNumber;
-				break;
-			case O:
-				if (tickNumber - lastLightChange > Intersection.ORANGE_TIME) {
-					Direction.E.lights.switchColor();
-				}
-				break;
-			}
-		}
 
 	}
 }

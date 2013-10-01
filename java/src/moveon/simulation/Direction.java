@@ -30,6 +30,24 @@ public enum Direction {
 		cars.remove(car);
 	}
 
+	public boolean hasVTLCars() {
+		for (Car c : cars) {
+			if (c instanceof VTLCar) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean hasNonVTLCars() {
+		for (Car c : cars) {
+			if (!(c instanceof VTLCar)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
