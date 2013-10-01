@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import moveon.cars.Car;
 import moveon.cars.VTLCar;
-import moveon.gui.CarCreator;
+import moveon.gui.KeyInput;
 
 public class Simulator {
 
@@ -14,7 +14,7 @@ public class Simulator {
 	public Simulator() {
 		cars = new ArrayList<Car>();
 		intersection = new Intersection();
-		CarCreator cc = new CarCreator(this);
+		KeyInput cc = new KeyInput(this);
 	}
 
 	public void initialize() {

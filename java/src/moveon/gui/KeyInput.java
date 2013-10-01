@@ -15,12 +15,12 @@ import javax.swing.JLabel;
 import moveon.simulation.Direction;
 import moveon.simulation.Simulator;
 
-public class CarCreator extends JFrame implements ActionListener, KeyEventDispatcher {
+public class KeyInput extends JFrame implements ActionListener, KeyEventDispatcher {
 
 	private static final long serialVersionUID = 1L;
 	private Simulator s;
 
-	public CarCreator(Simulator s) {
+	public KeyInput(Simulator s) {
 		super("Car Creator");
 		this.s = s;
 
