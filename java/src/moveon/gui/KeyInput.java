@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.Timer;
 
 import moveon.simulation.Direction;
 import moveon.simulation.Simulator;
@@ -22,7 +23,6 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 	public KeyInput(Simulator s) {
 		super("Car Creator");
 		this.s = s;
-
 		init();
 	}
 
@@ -32,6 +32,7 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 	JButton EButton;
 	JButton WButton;
 	JButton pauseButton;
+	private Timer timer;
 
 	private void init() {
 		layout = new GridLayout(3, 3);
@@ -64,6 +65,7 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 		setSize(300, 250);
 		setVisible(true);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		
 	}
 
 	@Override
@@ -78,7 +80,8 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 			s.addCar(100, Direction.W);
 		} else if (e.getSource() == pauseButton) {
 			s.playPause();
-		}
+		
+		} 
 
 	}
 
