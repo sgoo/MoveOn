@@ -1,4 +1,6 @@
-package moveon;
+package moveon.cars;
+
+import moveon.simulation.Direction;
 
 public class VTLCar extends Car {
 

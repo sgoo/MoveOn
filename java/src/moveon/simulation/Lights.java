@@ -1,4 +1,4 @@
-package moveon;
+package moveon.simulation;
 
 public class Lights {
 

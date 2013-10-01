@@ -1,6 +1,9 @@
-package moveon;
+package moveon.simulation;
 
 import java.util.ArrayList;
+
+import moveon.cars.Car;
+import moveon.cars.VTLCar;
 
 public class Simulator {
 

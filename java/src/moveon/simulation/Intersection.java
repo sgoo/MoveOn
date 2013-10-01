@@ -1,4 +1,9 @@
-package moveon;
+package moveon.simulation;
+
+import moveon.controllers.Controller;
+import moveon.controllers.MixedController;
+import moveon.controllers.NormalController;
+import moveon.controllers.VTLPlusController;
 
 public class Intersection implements Tickable {
 	public final static int VTL_SPAN = 100;

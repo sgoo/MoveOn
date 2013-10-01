@@ -1,4 +1,8 @@
-package moveon;
+package moveon.cars;
+
+import moveon.simulation.Direction;
+import moveon.simulation.Intersection;
+import moveon.simulation.Tickable;
 
 public class Car implements Tickable {
 
@@ -16,7 +20,7 @@ public class Car implements Tickable {
 
 	private int carId;
 
-	protected int distanceFromIntersection;
+	public int distanceFromIntersection;
 	protected Direction direction;
 
 	public Car(int dist, Direction direction) {

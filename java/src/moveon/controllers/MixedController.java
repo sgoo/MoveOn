@@ -1,13 +1,18 @@
-package moveon;
+package moveon.controllers;
 
-import moveon.Lights.Color;
+import moveon.cars.Car;
+import moveon.cars.VTLCar;
+import moveon.simulation.Direction;
+import moveon.simulation.Intersection;
+import moveon.simulation.Lights;
+import moveon.simulation.Lights.Color;
 
-public class VTLPlusController implements Controller {
+public class MixedController implements Controller {
 
 	private Color[] desiredState; // NS, EW
 	private int lastLightChange = 0;
 
-	public VTLPlusController() {
+	public MixedController() {
 		desiredState = new Color[] { Color.G, Color.G };
 	}
 

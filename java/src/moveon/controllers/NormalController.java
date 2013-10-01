@@ -1,4 +1,9 @@
-package moveon;
+package moveon.controllers;
+
+import moveon.simulation.Direction;
+import moveon.simulation.Intersection;
+import moveon.simulation.Lights;
+import moveon.simulation.Lights.Color;
 
 public class NormalController implements Controller {
 	private int nextChangeCounter = 0;
