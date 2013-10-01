@@ -1,5 +1,6 @@
 package moveon.simulation;
 
+import moveon.cars.Car;
 import moveon.controllers.Controller;
 import moveon.controllers.MixedController;
 import moveon.controllers.NormalController;
@@ -8,7 +9,7 @@ import moveon.controllers.VTLPlusController;
 public class Intersection implements Tickable {
 	public final static int VTL_SPAN = 100;
 	public final static int INTERSECTION_SPAN = 1;
-	public final static int ORANGE_TIME = 2;
+	public final static int ORANGE_TIME = Car.CAR_LENGTH + INTERSECTION_SPAN;
 	public final static int GREEN_TIME = 30;
 
 	Controller normalController = new NormalController();
@@ -19,7 +20,6 @@ public class Intersection implements Tickable {
 
 		Mode(Controller c) {
 			this.c = c;
-
 		}
 
 	}
@@ -28,7 +28,7 @@ public class Intersection implements Tickable {
 
 	public Intersection() {
 		// TODO: switch to VTLPLUS
-		setMode(Mode.NORMAL, 0);
+		setMode(Mode.VTLPLUS, 0);
 	}
 
 	public void setMode(Mode m, int tick) {

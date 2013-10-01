@@ -3,7 +3,6 @@ package moveon.controllers;
 import moveon.simulation.Direction;
 import moveon.simulation.Intersection;
 import moveon.simulation.Intersection.Mode;
-import moveon.simulation.Lights;
 
 public class NormalController extends Controller {
 	private int nextChangeCounter = 0;

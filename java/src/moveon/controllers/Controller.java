@@ -37,6 +37,11 @@ public abstract class Controller {
 		if (Direction.N.lights.currentColor != desiredState[0]) {
 			switch (Direction.N.lights.currentColor) {
 			case R:
+				// changing to G-G is allowed in VTLPlus mode so we can shift sometimes when the light isn't red
+				// check if we should wait for the other light to shift into red before changing
+				if (desiredState[1] == Color.R && Direction.E.lights.currentColor != Color.R) {
+					break;
+				}
 			case G:
 				Direction.N.lights.switchColor();
 				lastLightChange = tickNumber;
@@ -52,6 +57,11 @@ public abstract class Controller {
 		if (Direction.E.lights.currentColor != desiredState[1]) {
 			switch (Direction.E.lights.currentColor) {
 			case R:
+				// changing to G-G is allowed in VTLPlus mode so we can shift sometimes when the light isn't red
+				// check if we should wait for the other light to shift into red before changing
+				if (desiredState[0] == Color.R && Direction.N.lights.currentColor != Color.R) {
+					break;
+				}
 			case G:
 				Direction.E.lights.switchColor();
 				lastLightChange = tickNumber;

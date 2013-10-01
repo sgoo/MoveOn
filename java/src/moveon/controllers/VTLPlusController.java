@@ -3,10 +3,7 @@ package moveon.controllers;
 import moveon.cars.Car;
 import moveon.cars.VTLCar;
 import moveon.simulation.Direction;
-import moveon.simulation.Intersection;
 import moveon.simulation.Intersection.Mode;
-import moveon.simulation.Lights;
-import moveon.simulation.Lights.Color;
 
 public class VTLPlusController extends Controller {
 
@@ -43,7 +40,6 @@ public class VTLPlusController extends Controller {
 				closestE.setLeader(true);
 				closestN.setLeader(false);
 			} else if (closestN.getDistance() == closestE.getDistance()) {
-				System.out.println("A");
 				if (!closestN.isLeader() && !closestE.isLeader()) {
 					if (ticks % 2 == 0) {
 						closestN.setLeader(true);
