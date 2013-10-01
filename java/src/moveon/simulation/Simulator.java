@@ -12,6 +12,7 @@ public class Simulator {
 	private Intersection intersection;
 
 	private boolean pause = false;
+	private int tickTimeMillis;
 
 	public Simulator() {
 		cars = new ArrayList<Car>();
@@ -44,7 +45,8 @@ public class Simulator {
 	public void simulate() {
 		for (int i = 0;; i++) {
 			try {
-				Thread.sleep(250);
+				setTickTimeMillis(250);
+				Thread.sleep(getTickTimeMillis());
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -57,13 +59,17 @@ public class Simulator {
 			System.out.println(intersection.mode);
 			
 			// tick all cars, and let us know what each is up to.
-
 			for (int j = 0; j < cars.size(); j++) {
 				if (!cars.get(j).tick(i)) {
 					cars.remove(j);
 					j--;
 				}
 			}
+			// 75% of the time add a new car
+			if(Math.random() < 0.75){
+				addCar(100, Direction.N);
+			}
+			
 			System.out.println(Direction.N);
 			System.out.println(Direction.S);
 			System.out.println(Direction.E);
@@ -84,6 +90,14 @@ public class Simulator {
 
 	public void playPause() {
 		pause = !pause;
+	}
+
+	public int getTickTimeMillis() {
+		return tickTimeMillis;
+	}
+
+	public void setTickTimeMillis(int tickTimeMillis) {
+		this.tickTimeMillis = tickTimeMillis;
 	}
 
 }
