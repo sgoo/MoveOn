@@ -14,7 +14,8 @@ import javax.swing.JLabel;
 import moveon.simulation.Direction;
 import moveon.simulation.Simulator;
 
-public class KeyInput extends JFrame implements ActionListener, KeyEventDispatcher {
+public class KeyInput extends JFrame implements ActionListener,
+		KeyEventDispatcher {
 
 	private static final long serialVersionUID = 1L;
 	private Simulator s;
@@ -47,7 +48,8 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 		pauseButton = new JButton("Pause");
 		pauseButton.addActionListener(this);
 
-		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		KeyboardFocusManager manager = KeyboardFocusManager
+				.getCurrentKeyboardFocusManager();
 		manager.addKeyEventDispatcher(this);
 
 		setLayout(layout);
@@ -77,9 +79,8 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 		} else if (e.getSource() == WButton) {
 			s.addCar(100, Direction.W);
 		} else if (e.getSource() == pauseButton) {
-			s.playPause();
+			changePause();
 		}
-
 	}
 
 	@Override
@@ -102,7 +103,7 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 			d = Direction.W;
 			break;
 		case ' ':
-			s.playPause();
+			changePause();
 			return true;
 		}
 		if (d == null) {
@@ -114,6 +115,15 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 			s.addCar(100, d);
 		}
 		return false;
+	}
+
+	private void changePause() {
+		s.playPause();
+		if (s.isPaused()) {
+			pauseButton.setText("Unpause");
+		} else {
+			pauseButton.setText("Pause");
+		}
 	}
 
 }
