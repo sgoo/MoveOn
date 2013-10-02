@@ -5,6 +5,11 @@ import moveon.cars.VTLCar;
 import moveon.simulation.Direction;
 import moveon.simulation.Intersection.Mode;
 
+/**
+ * Controller used when only VTL cars are present
+ * @author Jourdan Harvey, Scott Goodhew, Mike Little, Roy Lin
+ *
+ */
 public class VTLPlusController extends Controller {
 
 	public VTLPlusController() {

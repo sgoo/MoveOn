@@ -23,10 +23,18 @@ public class VTLCar extends Car {
 		return distanceFromIntersection;
 	}
 
+	/**
+	 * Find out whether this car can be the leader
+	 * @return
+	 */
 	public boolean isLeader() {
 		return leader;
 	}
 
+	/**
+	 * Set this car to be the leader
+	 * @param leader
+	 */
 	public void setLeader(boolean leader) {
 		this.leader = leader;
 	}
