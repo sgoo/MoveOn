@@ -1,6 +1,7 @@
 package moveon.simulation;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -22,7 +23,7 @@ public class Simulator {
 
 	public static final String NORMAL = "NORMAL";
 
-	private static final String TESTFOLDER = "TestFiles\\";
+	private static final String TESTFOLDER = "TestFiles" + File.separator;
 
 	private ArrayList<Car> cars;
 	private Intersection intersection;

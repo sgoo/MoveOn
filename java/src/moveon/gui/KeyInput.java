@@ -15,8 +15,7 @@ import moveon.cars.Car;
 import moveon.simulation.Direction;
 import moveon.simulation.Simulator;
 
-public class KeyInput extends JFrame implements ActionListener,
-		KeyEventDispatcher {
+public class KeyInput extends JFrame implements ActionListener, KeyEventDispatcher {
 
 	private static final long serialVersionUID = 1L;
 	private static final String CAR_TYPE_LBL = "";
@@ -54,8 +53,7 @@ public class KeyInput extends JFrame implements ActionListener,
 		pauseButton.addActionListener(this);
 		carTypeButton = new JButton(CAR_TYPE_LBL + Simulator.NORMAL);
 		carTypeButton.addActionListener(this);
-		KeyboardFocusManager manager = KeyboardFocusManager
-				.getCurrentKeyboardFocusManager();
+		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
 		manager.addKeyEventDispatcher(this);
 
 		setLayout(layout);
@@ -140,18 +138,18 @@ public class KeyInput extends JFrame implements ActionListener,
 			pauseButton.setText("Pause");
 		}
 	}
-	
-	private void changeCarType(){
+
+	private void changeCarType() {
 		isVtlCar = !isVtlCar;
-		if(isVtlCar){
+		if (isVtlCar) {
 			carTypeButton.setText(Simulator.VTL);
 		} else {
 			carTypeButton.setText(Simulator.NORMAL);
 		}
 	}
-	
-	private void addCar(int dist, Direction d){
-		if(isVtlCar){
+
+	private void addCar(int dist, Direction d) {
+		if (isVtlCar) {
 			s.addVTLCar(dist, d);
 		} else {
 			s.addCar(dist, d);
