@@ -1,8 +1,11 @@
 package moveon.gui;
 
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -10,13 +13,16 @@ import java.awt.event.KeyEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.Timer;
 
-import moveon.cars.Car;
 import moveon.simulation.Direction;
+import moveon.simulation.SimulationListener;
 import moveon.simulation.Simulator;
 
-public class KeyInput extends JFrame implements ActionListener, KeyEventDispatcher {
+public class KeyInput extends JFrame implements ActionListener,
+		KeyEventDispatcher, SimulationListener {
 
 	private static final long serialVersionUID = 1L;
 	private static final String CAR_TYPE_LBL = "";
@@ -31,18 +37,22 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 		init();
 	}
 
-	GridLayout layout;
+	LayoutManager layout;
 	JButton NButton;
 	JButton SButton;
 	JButton EButton;
 	JButton WButton;
 	JButton carTypeButton;
 	JButton pauseButton;
+	JTextArea display;
 	private Timer timer;
 
 	private void init() {
-		layout = new GridLayout(3, 3);
+		layout = new BorderLayout();
 
+		JPanel controls = new JPanel(new GridLayout(4, 3));
+		
+		display =  new JTextArea(5, 50);
 		NButton = new JButton("North");
 		NButton.addActionListener(this);
 		SButton = new JButton("South");
@@ -55,24 +65,39 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 		pauseButton.addActionListener(this);
 		carTypeButton = new JButton(CAR_TYPE_LBL + Simulator.NORMAL);
 		carTypeButton.addActionListener(this);
-		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		KeyboardFocusManager manager = KeyboardFocusManager
+				.getCurrentKeyboardFocusManager();
 		manager.addKeyEventDispatcher(this);
 
 		setLayout(layout);
-		add(carTypeButton);
-		add(NButton);
-		add(new JLabel());
-		add(WButton);
-		add(pauseButton);
-		add(EButton);
-		add(new JLabel());
-		add(SButton);
-		add(new JLabel());
 
-		setSize(300, 250);
+		//Controls Top row
+		controls.add(new JLabel());
+		controls.add(NButton, BorderLayout.PAGE_START);
+		controls.add(new JLabel());
+		
+		//Controls second row
+		controls.add(WButton, BorderLayout.LINE_START);
+		controls.add(new JLabel());
+		controls.add(EButton, BorderLayout.LINE_END);
+		
+		//Controls third Row
+		controls.add(new JLabel());
+		controls.add(SButton, BorderLayout.PAGE_END);
+		controls.add(new JLabel());
+
+		//Controls bottom row
+		controls.add(carTypeButton);
+		controls.add(new JLabel());
+		controls.add(pauseButton, BorderLayout.CENTER);
+		
+		add(controls, BorderLayout.LINE_START);
+		add(display, BorderLayout.LINE_END);
+
+		setSize(1000, 250);
 		setVisible(true);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		
+
 	}
 
 	@Override
@@ -157,6 +182,12 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 		} else {
 			s.addCar(dist, d);
 		}
+	}
+
+	@Override
+	public void simulationUpdated(String simulationState) {
+		display.setText(simulationState);
+		
 	}
 
 }
