@@ -32,11 +32,18 @@ public class Simulator {
 	private int tickTimeMillis;
 	private boolean generateRandomCars;
 
+	private ArrayList<SimulationListener> simListeners;
+
+	private KeyInput gui;
+
 	public Simulator() {
 		cars = new ArrayList<Car>();
 		intersection = new Intersection();
-		new KeyInput(this);
+		gui = new KeyInput(this);
 		setGenerateRandomCars(true);
+		simListeners = new ArrayList<SimulationListener>();
+		simListeners.add(gui);
+		simListeners.add(new SimulationConsoleOutputer());
 	}
 
 	public void initialize() {
@@ -66,6 +73,7 @@ public class Simulator {
 	}
 
 	public void simulate() {
+		
 		for (int i = 0;; i++) {
 			try {
 				setTickTimeMillis(250);
@@ -78,9 +86,9 @@ public class Simulator {
 			}
 
 			intersection.tick(i);
-
-			System.out.println(intersection.mode);
-
+			StringBuilder sb = new StringBuilder();
+		
+			sb.append(intersection.mode + "\n");
 
 			// tick all cars, and let us know what each is up to.
 
@@ -115,12 +123,15 @@ public class Simulator {
 						addCar(100, randomDirection);
 				}
 			}
-
-			System.out.println(Direction.N);
-			System.out.println(Direction.S);
-			System.out.println(Direction.E);
-			System.out.println(Direction.W);
-			System.out.println();
+			sb.append(Direction.N + "\n");
+			sb.append(Direction.S + "\n");
+			sb.append(Direction.E + "\n");
+			sb.append(Direction.W + "\n");
+			sb.append("\n");
+			
+			for (SimulationListener listener : simListeners) {
+				listener.simulationUpdated(sb.toString());
+			}
 
 		}
 	}
