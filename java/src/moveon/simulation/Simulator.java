@@ -36,11 +36,19 @@ public class Simulator {
 
 	private KeyInput gui;
 
+	private boolean generateRandomNormalCars;
+
+	private boolean generateRandomVTLCars;
+
 	public Simulator() {
 		cars = new ArrayList<Car>();
 		intersection = new Intersection();
 		gui = new KeyInput(this);
-		setGenerateRandomCars(true);
+
+		generateRandomCars = true;
+		generateRandomVTLCars = true;
+		generateRandomNormalCars = true;
+
 		simListeners = new ArrayList<SimulationListener>();
 		simListeners.add(gui);
 		simListeners.add(new SimulationConsoleOutputer());
@@ -56,7 +64,8 @@ public class Simulator {
 		addCar(64, Direction.E);
 	}
 
-	public void initialize(String filename) throws IOException, CarFileFormatException {
+	public void initialize(String filename) throws IOException,
+			CarFileFormatException {
 		readCarsFromFile(filename);
 	}
 
@@ -73,7 +82,7 @@ public class Simulator {
 	}
 
 	public void simulate() {
-		
+
 		for (int i = 0;; i++) {
 			try {
 				setTickTimeMillis(250);
@@ -87,7 +96,7 @@ public class Simulator {
 
 			intersection.tick(i);
 			StringBuilder sb = new StringBuilder();
-		
+
 			sb.append(intersection.mode + "\n");
 
 			// tick all cars, and let us know what each is up to.
@@ -99,7 +108,7 @@ public class Simulator {
 					j--;
 				}
 			}
-			if (isGenerateRandomCars()) {
+			if (generateRandomCars) {
 				// 75% of the time add a new car
 				if (Math.random() < 0.15) {
 					// randomly choose direction
@@ -116,11 +125,20 @@ public class Simulator {
 					else
 						/* (randomChoice >= 0.75 && randomChoice < 1.0) */randomDirection = Direction.W;
 
-					// Randomly coose VTL or Non-VTL
-					if (Math.random() < 0.5)
-						addVTLCar(100, randomDirection);
-					else
+					// Randomly choose VTL or Non-VTL
+					if (generateRandomNormalCars && generateRandomVTLCars) {
+						if (Math.random() < 0.5)
+							addVTLCar(100, randomDirection);
+						else
+							addCar(100, randomDirection);
+					} else if (generateRandomNormalCars
+							&& !generateRandomVTLCars) {
 						addCar(100, randomDirection);
+					} else if (!generateRandomNormalCars
+							&& generateRandomVTLCars) {
+
+						addVTLCar(100, randomDirection);
+					}
 				}
 			}
 			sb.append(Direction.N + "\n");
@@ -128,7 +146,7 @@ public class Simulator {
 			sb.append(Direction.E + "\n");
 			sb.append(Direction.W + "\n");
 			sb.append("\n");
-			
+
 			for (SimulationListener listener : simListeners) {
 				listener.simulationUpdated(sb.toString());
 			}
@@ -138,10 +156,11 @@ public class Simulator {
 
 	/**
 	 * @param args
-	 * @throws CarFileFormatException 
-	 * @throws IOException 
+	 * @throws CarFileFormatException
+	 * @throws IOException
 	 */
-	public static void main(String[] args) throws IOException, CarFileFormatException {
+	public static void main(String[] args) throws IOException,
+			CarFileFormatException {
 		Simulator simulator = new Simulator();
 		simulator.initialize(TESTFOLDER + "Test1");
 		simulator.simulate();
@@ -170,7 +189,7 @@ public class Simulator {
 	public boolean isPaused() {
 		return pause;
 	}
-	
+
 	/**
 	 * Read a file and add the cars represented in it
 	 * 
@@ -201,5 +220,19 @@ public class Simulator {
 				addCar(dist, direction);
 			}
 		}
+	}
+
+	public void toggleRandom() {
+		generateRandomCars = !generateRandomCars;
+
+	}
+
+	public void toggleRandomVTLCars() {
+		generateRandomVTLCars = !generateRandomVTLCars;
+	}
+
+	public void toggleRandomNormalCars() {
+		generateRandomNormalCars = !generateRandomNormalCars;
+
 	}
 }

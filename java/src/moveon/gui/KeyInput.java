@@ -2,6 +2,7 @@ package moveon.gui;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
@@ -10,7 +11,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -46,13 +49,18 @@ public class KeyInput extends JFrame implements ActionListener,
 	JButton pauseButton;
 	JTextArea display;
 	private Timer timer;
+	private JCheckBox toggleRandom;
+	private JCheckBox toggleVTLCars;
+	private JCheckBox toggleNormalCars;
 
 	private void init() {
 		layout = new BorderLayout();
 
 		JPanel controls = new JPanel(new GridLayout(4, 3));
-		
-		display =  new JTextArea(5, 50);
+
+		display = new JTextArea(5, 50);
+		display.setFont(new Font("Monaco", Font.PLAIN, 12));
+
 		NButton = new JButton("North");
 		NButton.addActionListener(this);
 		SButton = new JButton("South");
@@ -71,28 +79,43 @@ public class KeyInput extends JFrame implements ActionListener,
 
 		setLayout(layout);
 
-		//Controls Top row
+		// Controls Top row
 		controls.add(new JLabel());
 		controls.add(NButton, BorderLayout.PAGE_START);
 		controls.add(new JLabel());
-		
-		//Controls second row
+
+		// Controls second row
 		controls.add(WButton, BorderLayout.LINE_START);
 		controls.add(new JLabel());
 		controls.add(EButton, BorderLayout.LINE_END);
-		
-		//Controls third Row
+
+		// Controls third Row
 		controls.add(new JLabel());
 		controls.add(SButton, BorderLayout.PAGE_END);
 		controls.add(new JLabel());
 
-		//Controls bottom row
+		// Controls bottom row
 		controls.add(carTypeButton);
-		controls.add(new JLabel());
 		controls.add(pauseButton, BorderLayout.CENTER);
-		
+
+		// Checkboxes
+		JPanel checkboxPanel = new JPanel();
+		checkboxPanel.setLayout(new BoxLayout(checkboxPanel, BoxLayout.Y_AXIS));
+		toggleRandom = new JCheckBox("Generate cars randomly", true);
+		toggleVTLCars = new JCheckBox("Generate VTL cars", true);
+		toggleNormalCars = new JCheckBox("Generate normal cars", true);
+
+		toggleRandom.addActionListener(this);
+		toggleVTLCars.addActionListener(this);
+		toggleNormalCars.addActionListener(this);
+		checkboxPanel.add(toggleRandom);
+		checkboxPanel.add(toggleVTLCars);
+		checkboxPanel.add(toggleNormalCars);
+
+		controls.add(checkboxPanel);
+
 		add(controls, BorderLayout.LINE_START);
-		add(display, BorderLayout.LINE_END);
+		add(display, BorderLayout.CENTER);
 
 		setSize(1000, 250);
 		setVisible(true);
@@ -114,6 +137,12 @@ public class KeyInput extends JFrame implements ActionListener,
 			changePause();
 		} else if (e.getSource() == carTypeButton) {
 			changeCarType();
+		} else if (e.getSource() == toggleRandom) {
+			s.toggleRandom();
+		} else if (e.getSource() == toggleNormalCars) {
+			s.toggleRandomNormalCars();
+		} else if (e.getSource() == toggleVTLCars) {
+			s.toggleRandomVTLCars();
 		}
 	}
 
@@ -187,7 +216,7 @@ public class KeyInput extends JFrame implements ActionListener,
 	@Override
 	public void simulationUpdated(String simulationState) {
 		display.setText(simulationState);
-		
+
 	}
 
 }
