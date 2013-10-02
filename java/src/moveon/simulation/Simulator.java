@@ -29,11 +29,14 @@ public class Simulator {
 	private Intersection intersection;
 
 	private boolean pause = false;
+	private int tickTimeMillis;
+	private boolean generateRandomCars;
 
 	public Simulator() {
 		cars = new ArrayList<Car>();
 		intersection = new Intersection();
 		new KeyInput(this);
+		setGenerateRandomCars(true);
 	}
 
 	public void initialize() {
@@ -65,7 +68,8 @@ public class Simulator {
 	public void simulate() {
 		for (int i = 0;; i++) {
 			try {
-				Thread.sleep(250);
+				setTickTimeMillis(250);
+				Thread.sleep(getTickTimeMillis());
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -77,14 +81,41 @@ public class Simulator {
 
 			System.out.println(intersection.mode);
 
+
 			// tick all cars, and let us know what each is up to.
 
+			// tick all cars, and let us know what each is up to.
 			for (int j = 0; j < cars.size(); j++) {
 				if (!cars.get(j).tick(i)) {
 					cars.remove(j);
 					j--;
 				}
 			}
+			if (isGenerateRandomCars()) {
+				// 75% of the time add a new car
+				if (Math.random() < 0.15) {
+					// randomly choose direction
+					double randomChoice = Math.random();
+
+					Direction randomDirection;
+
+					if (randomChoice < 0.25)
+						randomDirection = Direction.N;
+					else if (randomChoice >= 0.25 && randomChoice < 0.5)
+						randomDirection = Direction.S;
+					else if (randomChoice >= 0.5 && randomChoice < 0.75)
+						randomDirection = Direction.E;
+					else
+						/* (randomChoice >= 0.75 && randomChoice < 1.0) */randomDirection = Direction.W;
+
+					// Randomly coose VTL or Non-VTL
+					if (Math.random() < 0.5)
+						addVTLCar(100, randomDirection);
+					else
+						addCar(100, randomDirection);
+				}
+			}
+
 			System.out.println(Direction.N);
 			System.out.println(Direction.S);
 			System.out.println(Direction.E);
@@ -107,6 +138,22 @@ public class Simulator {
 
 	public void playPause() {
 		pause = !pause;
+	}
+
+	public int getTickTimeMillis() {
+		return tickTimeMillis;
+	}
+
+	public void setTickTimeMillis(int tickTimeMillis) {
+		this.tickTimeMillis = tickTimeMillis;
+	}
+
+	public boolean isGenerateRandomCars() {
+		return generateRandomCars;
+	}
+
+	public void setGenerateRandomCars(boolean generateRandomCars) {
+		this.generateRandomCars = generateRandomCars;
 	}
 
 	public boolean isPaused() {
