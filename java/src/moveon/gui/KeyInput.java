@@ -10,6 +10,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.Timer;
 
 import moveon.cars.Car;
 import moveon.simulation.Direction;
@@ -38,6 +39,7 @@ public class KeyInput extends JFrame implements ActionListener,
 	JButton WButton;
 	JButton carTypeButton;
 	JButton pauseButton;
+	private Timer timer;
 
 	private void init() {
 		layout = new GridLayout(3, 3);
@@ -72,6 +74,7 @@ public class KeyInput extends JFrame implements ActionListener,
 		setSize(300, 250);
 		setVisible(true);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		
 	}
 
 	@Override
