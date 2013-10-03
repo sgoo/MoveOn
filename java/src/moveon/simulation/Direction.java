@@ -134,7 +134,6 @@ public enum Direction {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 
-		// TODO print cars that are crossing
 		int carsPrinted = 0;
 		Car car;
 		int soFar = 0;
