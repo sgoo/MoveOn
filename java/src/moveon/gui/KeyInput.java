@@ -1,7 +1,6 @@
 package moveon.gui;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.KeyEventDispatcher;
@@ -18,14 +17,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.Timer;
 
 import moveon.simulation.Direction;
 import moveon.simulation.SimulationListener;
 import moveon.simulation.Simulator;
 
-public class KeyInput extends JFrame implements ActionListener,
-		KeyEventDispatcher, SimulationListener {
+public class KeyInput extends JFrame implements ActionListener, KeyEventDispatcher, SimulationListener {
 
 	private static final long serialVersionUID = 1L;
 	private static final String CAR_TYPE_LBL = "";
@@ -48,7 +45,6 @@ public class KeyInput extends JFrame implements ActionListener,
 	JButton carTypeButton;
 	JButton pauseButton;
 	JTextArea display;
-	private Timer timer;
 	private JCheckBox toggleRandom;
 	private JCheckBox toggleVTLCars;
 	private JCheckBox toggleNormalCars;
@@ -58,7 +54,7 @@ public class KeyInput extends JFrame implements ActionListener,
 
 		JPanel controls = new JPanel(new GridLayout(4, 3));
 
-		display = new JTextArea(5, 50);
+		display = new JTextArea(5, 115);
 		display.setFont(new Font("Courier", Font.PLAIN, 12));
 
 		NButton = new JButton("North");
@@ -73,8 +69,7 @@ public class KeyInput extends JFrame implements ActionListener,
 		pauseButton.addActionListener(this);
 		carTypeButton = new JButton(CAR_TYPE_LBL + Simulator.NORMAL);
 		carTypeButton.addActionListener(this);
-		KeyboardFocusManager manager = KeyboardFocusManager
-				.getCurrentKeyboardFocusManager();
+		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
 		manager.addKeyEventDispatcher(this);
 
 		setLayout(layout);
@@ -117,9 +112,11 @@ public class KeyInput extends JFrame implements ActionListener,
 		add(controls, BorderLayout.LINE_START);
 		add(display, BorderLayout.CENTER);
 
-		setSize(1000, 250);
+		// sizes the window correctly
+		pack();
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
 		setVisible(true);
-		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
 	}
 
