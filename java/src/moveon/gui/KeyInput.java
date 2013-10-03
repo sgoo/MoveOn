@@ -59,7 +59,7 @@ public class KeyInput extends JFrame implements ActionListener,
 		JPanel controls = new JPanel(new GridLayout(4, 3));
 
 		display = new JTextArea(5, 50);
-		display.setFont(new Font("Monaco", Font.PLAIN, 12));
+		display.setFont(new Font("Courier", Font.PLAIN, 12));
 
 		NButton = new JButton("North");
 		NButton.addActionListener(this);
