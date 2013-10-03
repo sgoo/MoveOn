@@ -15,30 +15,42 @@ import moveon.cars.VTLCar;
 import moveon.exceptions.CarFileFormatException;
 import moveon.gui.KeyInput;
 
+/**
+ * The simulator. Contains the main method to run the simulator
+ * 
+ * @author Mike, Roy, Scott, Jourdan
+ * 
+ */
 public class Simulator {
 
 	private static final Charset ENCODING = StandardCharsets.UTF_8;
-
 	public static final String VTL = "VTL";
-
 	public static final String NORMAL = "NORMAL";
-
 	private static final String TESTFOLDER = "TestFiles" + File.separator;
 
 	private ArrayList<Car> cars;
 	private Intersection intersection;
-
 	private boolean pause = false;
 	private int tickTimeMillis;
 	private boolean generateRandomCars;
-
 	private ArrayList<SimulationListener> simListeners;
-
 	private KeyInput gui;
-
 	private boolean generateRandomNormalCars;
-
 	private boolean generateRandomVTLCars;
+
+	/**
+	 * Main method to run the simulation
+	 * 
+	 * @param args
+	 * @throws CarFileFormatException
+	 * @throws IOException
+	 */
+	public static void main(String[] args) throws IOException,
+			CarFileFormatException {
+		Simulator simulator = new Simulator();
+		simulator.initialize(TESTFOLDER + "Test1");
+		simulator.simulate();
+	}
 
 	public Simulator() {
 		cars = new ArrayList<Car>();
@@ -57,13 +69,20 @@ public class Simulator {
 	public void initialize() {
 		addCar(10, Direction.N);
 		addCar(16, Direction.N);
-		addCar(31, Direction.S);
-		addCar(31, Direction.E);
+		addVTLCar(31, Direction.S);
+		addVTLCar(31, Direction.E);
 		addCar(40, Direction.W);
-		addCar(60, Direction.N);
+		addVTLCar(60, Direction.N);
 		addCar(64, Direction.E);
 	}
 
+	/**
+	 * Load cars from the given file
+	 * 
+	 * @param filename
+	 * @throws IOException
+	 * @throws CarFileFormatException
+	 */
 	public void initialize(String filename) throws IOException,
 			CarFileFormatException {
 		readCarsFromFile(filename);
@@ -98,9 +117,7 @@ public class Simulator {
 			StringBuilder sb = new StringBuilder();
 
 			sb.append(intersection.mode + "\n");
-
-			// tick all cars, and let us know what each is up to.
-
+			
 			// tick all cars, and let us know what each is up to.
 			for (int j = 0; j < cars.size(); j++) {
 				if (!cars.get(j).tick(i)) {
@@ -116,27 +133,28 @@ public class Simulator {
 
 					Direction randomDirection;
 
-					if (randomChoice < 0.25)
+					if (randomChoice < 0.25) {
 						randomDirection = Direction.N;
-					else if (randomChoice >= 0.25 && randomChoice < 0.5)
+					} else if (randomChoice >= 0.25 && randomChoice < 0.5) {
 						randomDirection = Direction.S;
-					else if (randomChoice >= 0.5 && randomChoice < 0.75)
+					} else if (randomChoice >= 0.5 && randomChoice < 0.75) {
 						randomDirection = Direction.E;
-					else
-						/* (randomChoice >= 0.75 && randomChoice < 1.0) */randomDirection = Direction.W;
-
+					} else {
+						/* (randomChoice >= 0.75 && randomChoice < 1.0) */
+						randomDirection = Direction.W;
+					}
 					// Randomly choose VTL or Non-VTL
 					if (generateRandomNormalCars && generateRandomVTLCars) {
-						if (Math.random() < 0.5)
+						if (Math.random() < 0.5) {
 							addVTLCar(100, randomDirection);
-						else
+						} else {
 							addCar(100, randomDirection);
+						}
 					} else if (generateRandomNormalCars
 							&& !generateRandomVTLCars) {
 						addCar(100, randomDirection);
 					} else if (!generateRandomNormalCars
 							&& generateRandomVTLCars) {
-
 						addVTLCar(100, randomDirection);
 					}
 				}
@@ -154,20 +172,12 @@ public class Simulator {
 		}
 	}
 
-	/**
-	 * @param args
-	 * @throws CarFileFormatException
-	 * @throws IOException
-	 */
-	public static void main(String[] args) throws IOException,
-			CarFileFormatException {
-		Simulator simulator = new Simulator();
-		simulator.initialize(TESTFOLDER + "Test1");
-		simulator.simulate();
-	}
-
 	public void playPause() {
 		pause = !pause;
+	}
+
+	public boolean isPaused() {
+		return pause;
 	}
 
 	public int getTickTimeMillis() {
@@ -186,12 +196,9 @@ public class Simulator {
 		this.generateRandomCars = generateRandomCars;
 	}
 
-	public boolean isPaused() {
-		return pause;
-	}
-
 	/**
-	 * Read a file and add the cars represented in it
+	 * Read a file and add the cars represented in it Format is:
+	 * TIME(int),DIRECTION(N,S,E,W),CAR_TYPE(VTL,NORMAL)
 	 * 
 	 * @param fileName
 	 * @return
@@ -224,7 +231,6 @@ public class Simulator {
 
 	public void toggleRandom() {
 		generateRandomCars = !generateRandomCars;
-
 	}
 
 	public void toggleRandomVTLCars() {
@@ -233,6 +239,5 @@ public class Simulator {
 
 	public void toggleRandomNormalCars() {
 		generateRandomNormalCars = !generateRandomNormalCars;
-
 	}
 }
