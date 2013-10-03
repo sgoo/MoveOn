@@ -117,9 +117,7 @@ public class Simulator {
 			StringBuilder sb = new StringBuilder();
 
 			sb.append(intersection.mode + "\n");
-
-			// tick all cars, and let us know what each is up to.
-
+			
 			// tick all cars, and let us know what each is up to.
 			for (int j = 0; j < cars.size(); j++) {
 				if (!cars.get(j).tick(i)) {
