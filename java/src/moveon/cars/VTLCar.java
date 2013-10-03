@@ -2,22 +2,39 @@ package moveon.cars;
 
 import moveon.simulation.Direction;
 
+/**
+ * VTLCar
+ * @author Jourdan Harvey, Scott Goodhew, Mike Little, Roy Lin
+ *
+ */
 public class VTLCar extends Car {
 
 	private boolean leader;
-
+	
 	public VTLCar(int dist, Direction direction) {
 		super(dist, direction);
 	}
-
+	
+	/**
+	 * VTL Cars are aware of their distance from the intersection
+	 * @return
+	 */
 	public int getDistance() {
 		return distanceFromIntersection;
 	}
 
+	/**
+	 * Find out whether this car can be the leader
+	 * @return
+	 */
 	public boolean isLeader() {
 		return leader;
 	}
 
+	/**
+	 * Set this car to be the leader
+	 * @param leader
+	 */
 	public void setLeader(boolean leader) {
 		this.leader = leader;
 	}
