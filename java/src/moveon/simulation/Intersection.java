@@ -25,8 +25,7 @@ public class Intersection implements Tickable {
 	public Mode mode;
 
 	public Intersection() {
-		// TODO: switch to VTLPLUS
-		setMode(Mode.NORMAL, 0);
+		setMode(Mode.VTLPLUS, 0);
 	}
 
 	public void setMode(Mode m, int tick) {
