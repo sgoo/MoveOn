@@ -111,6 +111,10 @@ public enum Direction {
 	}
 
 	public static Direction getDirFromStr(String string) {
+		if (string.length() == 0)
+			return null;
+		string = string.substring(0, 1);
+		string.toUpperCase();
 		if (string.equals("N"))
 			return Direction.N;
 		if (string.equals("E"))
