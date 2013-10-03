@@ -1,18 +1,23 @@
 package moveon.simulation;
 
+/**
+ * Represents a set of traffic lights
+ * @author Jourdan, Roy, Mike, Scott
+ *
+ */
 public class Lights {
 
 	public Color currentColor;
 
 	public Lights(Color start) {
 		currentColor = start;
-
 	}
 
 	public enum Color {
 		G, O, R
 	}
 
+	// Cycle the colour
 	public Color switchColor() {
 		switch (currentColor) {
 		case G:
