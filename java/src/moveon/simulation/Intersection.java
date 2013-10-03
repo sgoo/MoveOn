@@ -13,7 +13,8 @@ public class Intersection implements Tickable {
 	public final static int GREEN_TIME = 30;
 
 	public enum Mode {
-		NORMAL(new NormalController()), VTLPLUS(new VTLPlusController()), MIXED(new MixedController());
+		NORMAL(new NormalController()), VTLPLUS(new VTLPlusController()), MIXED(
+				new MixedController());
 		private final Controller c;
 
 		Mode(Controller c) {
@@ -25,8 +26,7 @@ public class Intersection implements Tickable {
 	public Mode mode;
 
 	public Intersection() {
-		// TODO: switch to VTLPLUS
-		setMode(Mode.NORMAL, 0);
+		setMode(Mode.VTLPLUS, 0);
 	}
 
 	public void setMode(Mode m, int tick) {
@@ -37,9 +37,11 @@ public class Intersection implements Tickable {
 
 	@Override
 	public boolean tick(int ticks) {
-		if ((Direction.N.hasNonVTLCars() || Direction.S.hasNonVTLCars()) && (Direction.W.hasNonVTLCars() || Direction.E.hasNonVTLCars())) {
+		if ((Direction.N.hasNonVTLCars() || Direction.S.hasNonVTLCars())
+				&& (Direction.W.hasNonVTLCars() || Direction.E.hasNonVTLCars())) {
 			setMode(Mode.NORMAL, ticks);
-		} else if (!(Direction.N.hasNonVTLCars() || Direction.S.hasNonVTLCars() || Direction.W.hasNonVTLCars() || Direction.E.hasNonVTLCars())) {
+		} else if (!(Direction.N.hasNonVTLCars() || Direction.S.hasNonVTLCars()
+				|| Direction.W.hasNonVTLCars() || Direction.E.hasNonVTLCars())) {
 			setMode(Mode.VTLPLUS, ticks);
 		} else {
 			setMode(Mode.MIXED, ticks);
