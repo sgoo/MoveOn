@@ -93,4 +93,9 @@ public abstract class Controller {
 			}
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return "";
+	}
 }
