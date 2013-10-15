@@ -1,22 +1,28 @@
 package moveon.gui;
 
+import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.Timer;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
-import moveon.cars.Car;
 import moveon.simulation.Direction;
+import moveon.simulation.SimulationListener;
 import moveon.simulation.Simulator;
 
-public class KeyInput extends JFrame implements ActionListener, KeyEventDispatcher {
+public class KeyInput extends JFrame implements ActionListener, KeyEventDispatcher, SimulationListener {
 
 	private static final long serialVersionUID = 1L;
 	private static final String CAR_TYPE_LBL = "";
@@ -31,17 +37,25 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 		init();
 	}
 
-	GridLayout layout;
+	LayoutManager layout;
 	JButton NButton;
 	JButton SButton;
 	JButton EButton;
 	JButton WButton;
 	JButton carTypeButton;
 	JButton pauseButton;
-	private Timer timer;
+	JTextArea display;
+	private JCheckBox toggleRandom;
+	private JCheckBox toggleVTLCars;
+	private JCheckBox toggleNormalCars;
 
 	private void init() {
-		layout = new GridLayout(3, 3);
+		layout = new BorderLayout();
+
+		JPanel controls = new JPanel(new GridLayout(4, 3));
+
+		display = new JTextArea(5, 115);
+		display.setFont(new Font("Courier", Font.PLAIN, 12));
 
 		NButton = new JButton("North");
 		NButton.addActionListener(this);
@@ -59,20 +73,51 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 		manager.addKeyEventDispatcher(this);
 
 		setLayout(layout);
-		add(carTypeButton);
-		add(NButton);
-		add(new JLabel());
-		add(WButton);
-		add(pauseButton);
-		add(EButton);
-		add(new JLabel());
-		add(SButton);
-		add(new JLabel());
 
-		setSize(300, 250);
-		setVisible(true);
-		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		// Controls Top row
+		controls.add(new JLabel());
+		controls.add(NButton, BorderLayout.PAGE_START);
+		controls.add(new JLabel());
+
+		// Controls second row
+		controls.add(WButton, BorderLayout.LINE_START);
+		controls.add(new JLabel());
+		controls.add(EButton, BorderLayout.LINE_END);
+
+		// Controls third Row
+		controls.add(new JLabel());
+		controls.add(SButton, BorderLayout.PAGE_END);
+		controls.add(new JLabel());
+
+		// Controls bottom row
+		controls.add(carTypeButton);
+		controls.add(pauseButton, BorderLayout.CENTER);
+
+		// Checkboxes
+		JPanel checkboxPanel = new JPanel();
+		checkboxPanel.setLayout(new BoxLayout(checkboxPanel, BoxLayout.Y_AXIS));
+		toggleRandom = new JCheckBox("Generate cars randomly", true);
+		toggleVTLCars = new JCheckBox("Generate VTL cars", true);
+		toggleNormalCars = new JCheckBox("Generate normal cars", true);
+
+		toggleRandom.addActionListener(this);
+		toggleVTLCars.addActionListener(this);
+		toggleNormalCars.addActionListener(this);
+		checkboxPanel.add(toggleRandom);
+		checkboxPanel.add(toggleVTLCars);
+		checkboxPanel.add(toggleNormalCars);
+
+		controls.add(checkboxPanel);
+
+		add(controls, BorderLayout.LINE_START);
+		add(display, BorderLayout.CENTER);
+
+		// sizes the window correctly
+		pack();
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
+		setVisible(true);
+
 	}
 
 	@Override
@@ -89,6 +134,12 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 			changePause();
 		} else if (e.getSource() == carTypeButton) {
 			changeCarType();
+		} else if (e.getSource() == toggleRandom) {
+			s.toggleRandom();
+		} else if (e.getSource() == toggleNormalCars) {
+			s.toggleRandomNormalCars();
+		} else if (e.getSource() == toggleVTLCars) {
+			s.toggleRandomVTLCars();
 		}
 	}
 
@@ -157,6 +208,12 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 		} else {
 			s.addCar(dist, d);
 		}
+	}
+
+	@Override
+	public void simulationUpdated(String simulationState) {
+		display.setText(simulationState);
+
 	}
 
 }

@@ -4,6 +4,11 @@ import moveon.simulation.Direction;
 import moveon.simulation.Intersection;
 import moveon.simulation.Intersection.Mode;
 
+/**
+ * Controller used when only non vtl cars are present
+ * 
+ * @author Jourdan Harvey, Scott Goodhew, Mike Little, Roy Lin
+ */
 public class NormalController extends Controller {
 	private int nextChangeCounter = 0;
 
@@ -37,6 +42,11 @@ public class NormalController extends Controller {
 		}
 		progressLights(ticks);
 		return null;
+	}
+
+	@Override
+	public String toString() {
+		return " " + nextChangeCounter;
 	}
 
 }
