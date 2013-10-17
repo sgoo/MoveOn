@@ -1,0 +1,29 @@
+
+@using jpf-ltl
+@using jpf-aprop
+@using moveon
+
+#target=moveon.controllers.MixedController
+#target=test.Test
+target=moveon.simulation.Simulator
+
+finite=true
+
+# You need this one to specify the appropriate listener
+listener=gov.nasa.jpf.ltl.ddfs.FiniteListener
+
+# You need this one to specify the search strategy
+#search.class=gov.nasa.jpf.ltl.ddfs.DDFSearch
+
+vm.tree_output=true
+vm.path_output=true
+
+
+# And you need these jpf-core options, too
+vm.storage.class=gov.nasa.jpf.vm.FullStateSet
+cg.enumerate_random=true
+search.properties = gov.nasa.jpf.vm.NotDeadlockedProperty
+
+listener+=,.aprop.listener.ContractVerifier
+
+
