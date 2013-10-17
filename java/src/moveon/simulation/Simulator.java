@@ -45,8 +45,7 @@ public class Simulator {
 	 * @throws CarFileFormatException
 	 * @throws IOException
 	 */
-	public static void main(String[] args) throws IOException,
-			CarFileFormatException {
+	public static void main(String[] args) throws IOException, CarFileFormatException, Exception {
 		Simulator simulator = new Simulator();
 		simulator.initialize(TESTFOLDER + "Test1");
 		simulator.simulate();
@@ -83,8 +82,7 @@ public class Simulator {
 	 * @throws IOException
 	 * @throws CarFileFormatException
 	 */
-	public void initialize(String filename) throws IOException,
-			CarFileFormatException {
+	public void initialize(String filename) throws IOException, CarFileFormatException {
 		readCarsFromFile(filename);
 	}
 
@@ -117,7 +115,7 @@ public class Simulator {
 			StringBuilder sb = new StringBuilder();
 
 			sb.append(intersection.mode + "\n");
-			
+
 			// tick all cars, and let us know what each is up to.
 			for (int j = 0; j < cars.size(); j++) {
 				if (!cars.get(j).tick(i)) {
@@ -150,11 +148,9 @@ public class Simulator {
 						} else {
 							addCar(100, randomDirection);
 						}
-					} else if (generateRandomNormalCars
-							&& !generateRandomVTLCars) {
+					} else if (generateRandomNormalCars && !generateRandomVTLCars) {
 						addCar(100, randomDirection);
-					} else if (!generateRandomNormalCars
-							&& generateRandomVTLCars) {
+					} else if (!generateRandomNormalCars && generateRandomVTLCars) {
 						addVTLCar(100, randomDirection);
 					}
 				}
@@ -205,8 +201,7 @@ public class Simulator {
 	 * @throws IOException
 	 * @throws CarFileFormatException
 	 */
-	private void readCarsFromFile(String fileName) throws IOException,
-			CarFileFormatException {
+	private void readCarsFromFile(String fileName) throws IOException, CarFileFormatException {
 		Path path = Paths.get(fileName);
 		BufferedReader reader = Files.newBufferedReader(path, ENCODING);
 		// line format TIME DIRECTION CAR_TYPE

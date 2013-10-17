@@ -50,8 +50,7 @@ public abstract class Controller {
 				// sometimes when the light isn't red
 				// check if we should wait for the other light to shift into red
 				// before changing
-				if (desiredState[1] == Color.R
-						&& Direction.E.lights.currentColor != Color.R) {
+				if (desiredState[1] == Color.R && Direction.E.lights.currentColor != Color.R) {
 					break;
 				}
 			case G:
@@ -75,8 +74,7 @@ public abstract class Controller {
 				// sometimes when the light isn't red
 				// check if we should wait for the other light to shift into red
 				// before changing
-				if (desiredState[0] == Color.R
-						&& Direction.N.lights.currentColor != Color.R) {
+				if (desiredState[0] == Color.R && Direction.N.lights.currentColor != Color.R) {
 					break;
 				}
 			case G:
@@ -93,7 +91,7 @@ public abstract class Controller {
 			}
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return "";
