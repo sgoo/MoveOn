@@ -1,19 +1,21 @@
 package moveon.simulation;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import gov.nasa.jpf.annotation.FilterField;
+import gov.nasa.jpf.annotation.Invariant;
+
+//import java.io.BufferedReader;
+//import java.io.File;
+//import java.io.IOException;
+//import java.nio.charset.Charset;
+//import java.nio.charset.StandardCharsets;
+//import java.nio.file.Files;
+//import java.nio.file.Path;
+//import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import moveon.cars.Car;
 import moveon.cars.VTLCar;
 import moveon.exceptions.CarFileFormatException;
-import moveon.gui.KeyInput;
 
 /**
  * The simulator. Contains the main method to run the simulator
@@ -21,20 +23,24 @@ import moveon.gui.KeyInput;
  * @author Mike, Roy, Scott, Jourdan
  * 
  */
+@Invariant("i > 10")
 public class Simulator {
 
-	private static final Charset ENCODING = StandardCharsets.UTF_8;
+	//	private static final Charset ENCODING = StandardCharsets.UTF_8;
 	public static final String VTL = "VTL";
 	public static final String NORMAL = "NORMAL";
-	private static final String TESTFOLDER = "TestFiles" + File.separator;
+	//	private static final String TESTFOLDER = "TestFiles" + File.separator;
 
+	int i = 11;
+
+	@FilterField
 	private ArrayList<Car> cars;
 	private Intersection intersection;
 	private boolean pause = false;
 	private int tickTimeMillis;
 	private boolean generateRandomCars;
 	private ArrayList<SimulationListener> simListeners;
-	private KeyInput gui;
+	//	private KeyInput gui;
 	private boolean generateRandomNormalCars;
 	private boolean generateRandomVTLCars;
 
@@ -43,48 +49,47 @@ public class Simulator {
 	 * 
 	 * @param args
 	 * @throws CarFileFormatException
-	 * @throws IOException
 	 */
-	public static void main(String[] args) throws IOException, CarFileFormatException, Exception {
+	public static void main(String[] args) throws CarFileFormatException, Exception {
 		Simulator simulator = new Simulator();
-		simulator.initialize(TESTFOLDER + "Test1");
+		// simulator.initialize(TESTFOLDER + "Test1");
+		simulator.initialize();
 		simulator.simulate();
 	}
 
 	public Simulator() {
 		cars = new ArrayList<Car>();
 		intersection = new Intersection();
-		gui = new KeyInput(this);
+		//		gui = new KeyInput(this);
 
 		generateRandomCars = true;
 		generateRandomVTLCars = true;
 		generateRandomNormalCars = true;
 
 		simListeners = new ArrayList<SimulationListener>();
-		simListeners.add(gui);
+		//		simListeners.add(gui);
 		simListeners.add(new SimulationConsoleOutputer());
 	}
 
 	public void initialize() {
-		addCar(10, Direction.N);
-		addCar(16, Direction.N);
+		addVTLCar(10, Direction.N);
+		addVTLCar(16, Direction.N);
 		addVTLCar(31, Direction.S);
 		addVTLCar(31, Direction.E);
-		addCar(40, Direction.W);
+		addVTLCar(40, Direction.W);
 		addVTLCar(60, Direction.N);
-		addCar(64, Direction.E);
+		addVTLCar(64, Direction.E);
 	}
 
 	/**
 	 * Load cars from the given file
 	 * 
 	 * @param filename
-	 * @throws IOException
 	 * @throws CarFileFormatException
 	 */
-	public void initialize(String filename) throws IOException, CarFileFormatException {
+	/*public void initialize(String filename) throws IOException, CarFileFormatException {
 		readCarsFromFile(filename);
-	}
+	}*/
 
 	public void addCar(int dist, Direction d) {
 		Car c = new Car(dist, d);
@@ -100,7 +105,7 @@ public class Simulator {
 
 	public void simulate() {
 
-		for (int i = 0;; i++) {
+		for (int i = 0; i < 1000; i++) {
 			try {
 				setTickTimeMillis(250);
 				Thread.sleep(getTickTimeMillis());
@@ -198,10 +203,9 @@ public class Simulator {
 	 * 
 	 * @param fileName
 	 * @return
-	 * @throws IOException
 	 * @throws CarFileFormatException
 	 */
-	private void readCarsFromFile(String fileName) throws IOException, CarFileFormatException {
+	/*private void readCarsFromFile(String fileName) throws IOException, CarFileFormatException {
 		Path path = Paths.get(fileName);
 		BufferedReader reader = Files.newBufferedReader(path, ENCODING);
 		// line format TIME DIRECTION CAR_TYPE
@@ -222,7 +226,7 @@ public class Simulator {
 				addCar(dist, direction);
 			}
 		}
-	}
+	}*/
 
 	public void toggleRandom() {
 		generateRandomCars = !generateRandomCars;

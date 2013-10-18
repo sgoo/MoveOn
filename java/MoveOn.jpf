@@ -4,10 +4,10 @@
 #@using moveon
 
 #target=moveon.controllers.MixedController
-target=test.Test
-#target=moveon.simulation.Simulator
+#target=test.Test
+target=moveon.simulation.Simulator
 
-#finite=true
+finite=true
 
 # You need this one to specify the appropriate listener
 #listener=gov.nasa.jpf.ltl.ddfs.FiniteListener

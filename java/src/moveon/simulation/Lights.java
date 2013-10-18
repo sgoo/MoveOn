@@ -2,8 +2,9 @@ package moveon.simulation;
 
 /**
  * Represents a set of traffic lights
+ * 
  * @author Jourdan, Roy, Mike, Scott
- *
+ * 
  */
 public class Lights {
 
@@ -14,7 +15,12 @@ public class Lights {
 	}
 
 	public enum Color {
-		G, O, R
+		G(0), O(1), R(2);
+		public int i;
+
+		Color(int i) {
+			this.i = i;
+		}
 	}
 
 	// Cycle the colour

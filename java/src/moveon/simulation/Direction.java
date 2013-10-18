@@ -109,8 +109,9 @@ public enum Direction {
 	}
 
 	/**
-	 * Static method to get the direction for a given string
-	 * e.g. north, North, n, N would return Direction.N
+	 * Static method to get the direction for a given string e.g. north, North,
+	 * n, N would return Direction.N
+	 * 
 	 * @param string
 	 * @return
 	 */
@@ -138,10 +139,8 @@ public enum Direction {
 		Car car;
 		int soFar = 0;
 
-		for (; cars.size() > carsPrinted
-				&& (car = cars.get(carsPrinted)).distanceFromIntersection < 0; carsPrinted++) {
-			String carOut = car.getCarId() + "-"
-					+ (-car.distanceFromIntersection);
+		for (; cars.size() > carsPrinted && (car = cars.get(carsPrinted)).distanceFromIntersection < 0; carsPrinted++) {
+			String carOut = car.getCarId() + "-" + (-car.distanceFromIntersection);
 			sb.append(carOut);
 			soFar += Car.CAR_LENGTH;
 			for (int i = carOut.length(); i < Car.CAR_LENGTH; i++) {
