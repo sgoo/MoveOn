@@ -23,15 +23,12 @@ import moveon.exceptions.CarFileFormatException;
  * @author Mike, Roy, Scott, Jourdan
  * 
  */
-@Invariant("i > 10")
 public class Simulator {
 
 	//	private static final Charset ENCODING = StandardCharsets.UTF_8;
 	public static final String VTL = "VTL";
 	public static final String NORMAL = "NORMAL";
 	//	private static final String TESTFOLDER = "TestFiles" + File.separator;
-
-	int i = 11;
 
 	@FilterField
 	private ArrayList<Car> cars;
