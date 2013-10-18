@@ -1,22 +1,27 @@
 package moveon.cars;
 
+import gov.nasa.jpf.annotation.Invariant;
 import moveon.simulation.Direction;
 
 /**
  * VTLCar
+ * 
  * @author Jourdan Harvey, Scott Goodhew, Mike Little, Roy Lin
- *
+ * 
  */
+@Invariant({ "beenLeader <= 30" })
 public class VTLCar extends Car {
 
 	private boolean leader;
-	
+	private int beenLeader = 0;
+
 	public VTLCar(int dist, Direction direction) {
 		super(dist, direction);
 	}
-	
+
 	/**
 	 * VTL Cars are aware of their distance from the intersection
+	 * 
 	 * @return
 	 */
 	public int getDistance() {
@@ -25,6 +30,7 @@ public class VTLCar extends Car {
 
 	/**
 	 * Find out whether this car can be the leader
+	 * 
 	 * @return
 	 */
 	public boolean isLeader() {
@@ -33,10 +39,19 @@ public class VTLCar extends Car {
 
 	/**
 	 * Set this car to be the leader
+	 * 
 	 * @param leader
 	 */
 	public void setLeader(boolean leader) {
 		this.leader = leader;
+		beenLeader = 0;
+	}
+
+	@Override
+	public boolean tick(int ticks) {
+		if (leader)
+			beenLeader++;
+		return super.tick(ticks);
 	}
 
 	@Override

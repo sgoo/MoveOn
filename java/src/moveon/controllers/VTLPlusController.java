@@ -11,7 +11,8 @@ import moveon.simulation.Intersection.Mode;
  *
  */
 public class VTLPlusController extends Controller {
-
+	//TODO change lights aleast every 30 seconds
+	
 	public VTLPlusController() {
 	}
 

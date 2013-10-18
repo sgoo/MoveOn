@@ -102,7 +102,10 @@ public class Simulator {
 
 	public void simulate() {
 
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 1000 || cars.size() != 0; i++) {
+			if (i > 1000) {
+				generateRandomCars = false;
+			}
 			try {
 				setTickTimeMillis(250);
 				Thread.sleep(getTickTimeMillis());

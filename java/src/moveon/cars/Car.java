@@ -1,14 +1,17 @@
 package moveon.cars;
 
+import gov.nasa.jpf.annotation.Invariant;
 import moveon.simulation.Direction;
 import moveon.simulation.Intersection;
 import moveon.simulation.Tickable;
 
 /**
  * Car represents a normal car (aka non VTL)
+ * 
  * @author Jourdan Harvey, Scott Goodhew, Mike Little, Roy Lin
- *
+ * 
  */
+@Invariant({ "distanceFromIntersection >= 0 || lightColor != 2" })
 public class Car implements Tickable {
 
 	/**
@@ -31,6 +34,9 @@ public class Car implements Tickable {
 
 	public int distanceFromIntersection;
 	protected Direction direction;
+
+	// for JPF
+	int lightColor;
 
 	/**
 	 * Constructor Increment the car count and set this to this cars id
@@ -89,8 +95,7 @@ public class Car implements Tickable {
 			// If the light is green go to crossing state
 		} else if (distanceFromIntersection < 0) {
 
-			if (distanceFromIntersection < -(CAR_LENGTH
-					+ Intersection.INTERSECTION_SPAN - 2)) {
+			if (distanceFromIntersection < -(CAR_LENGTH + Intersection.INTERSECTION_SPAN - 2)) {
 				// We have finished moving through the intersection so remove
 				// the car from the direction and return false so that the car
 				// is removed from the system
@@ -102,6 +107,8 @@ public class Car implements Tickable {
 				distanceFromIntersection -= SPEED;
 			}
 		}
+
+		lightColor = direction.lights.currentColor.i;
 		return true;
 	}
 
