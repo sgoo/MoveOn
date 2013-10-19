@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import moveon.cars.Car;
 import moveon.simulation.Intersection;
@@ -13,14 +14,15 @@ import moveon.simulation.SimulationListener;
 import moveon.simulation.Simulator;
 
 /**
- * Design uses a thread running waiting on a blocking queue that produces renders of the intersection into Bufferers. These are then rendered onto the screen
- * via a posted runnable
+ * Design uses a thread running waiting on a blocking queue that produces
+ * renders of the intersection into Bufferers. These are then rendered onto the
+ * screen via a posted runnable
  * 
  * @author Scott
  * 
  */
 
-public class NiceGui extends JFrame implements SimulationListener {
+public class NiceGui extends JPanel implements SimulationListener {
 	public static final int GUI_M_LENGTH = 3;
 
 	/**
@@ -32,7 +34,6 @@ public class NiceGui extends JFrame implements SimulationListener {
 	public NiceGui(Simulator sim) {
 		this.sim = sim;
 		sim.addSimListener(this);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setSize(700, 700);
 	}
 
@@ -44,12 +45,14 @@ public class NiceGui extends JFrame implements SimulationListener {
 
 	public static void main(String[] args) {
 		Simulator sim = new Simulator(true);
-
+		final JFrame window = new JFrame("Test");
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setSize(700, 700);
 		final NiceGui gui = new NiceGui(sim);
-
+		window.add(gui);
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				gui.setVisible(true);
+				window.setVisible(true);
 			}
 		});
 
@@ -60,10 +63,8 @@ public class NiceGui extends JFrame implements SimulationListener {
 
 	@Override
 	public void paint(Graphics g) {
-		System.out.println("Drawing");
 		if (currentImage != null) {
 			g.drawImage(currentImage, 0, 0, this);
-			System.out.println("Drawing2");
 		} else {
 			super.paint(g);
 		}
@@ -97,7 +98,6 @@ public class NiceGui extends JFrame implements SimulationListener {
 					break;
 				}
 			}
-			System.out.println("Invalidate!");
 			currentImage = img;
 			repaint();
 
