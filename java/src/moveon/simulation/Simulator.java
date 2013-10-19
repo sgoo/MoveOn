@@ -25,21 +25,23 @@ import moveon.exceptions.CarFileFormatException;
  */
 public class Simulator {
 
-	//	private static final Charset ENCODING = StandardCharsets.UTF_8;
+	// private static final Charset ENCODING = StandardCharsets.UTF_8;
 	public static final String VTL = "VTL";
 	public static final String NORMAL = "NORMAL";
-	//	private static final String TESTFOLDER = "TestFiles" + File.separator;
+	// private static final String TESTFOLDER = "TestFiles" + File.separator;
 
 	@FilterField
-	private ArrayList<Car> cars;
-	private Intersection intersection;
+	public ArrayList<Car> cars;
+	public Intersection intersection;
 	private boolean pause = false;
 	private int tickTimeMillis;
 	private boolean generateRandomCars;
 	private ArrayList<SimulationListener> simListeners;
-	//	private KeyInput gui;
+	// private KeyInput gui;
 	private boolean generateRandomNormalCars;
 	private boolean generateRandomVTLCars;
+
+	public static final int SIM_LENGTH = 4000;
 
 	/**
 	 * Main method to run the simulation
@@ -55,17 +57,26 @@ public class Simulator {
 	}
 
 	public Simulator() {
+		this(true);
+	}
+
+	public Simulator(boolean hasConsole) {
 		cars = new ArrayList<Car>();
 		intersection = new Intersection();
-		//		gui = new KeyInput(this);
+		// gui = new KeyInput(this);
 
 		generateRandomCars = true;
 		generateRandomVTLCars = true;
 		generateRandomNormalCars = true;
 
 		simListeners = new ArrayList<SimulationListener>();
-		//		simListeners.add(gui);
-		simListeners.add(new SimulationConsoleOutputer());
+		// simListeners.add(gui);
+		if (hasConsole)
+			simListeners.add(new SimulationConsoleOutputer());
+	}
+
+	public void addSimListener(SimulationListener l) {
+		simListeners.add(l);
 	}
 
 	public void initialize() {
@@ -102,8 +113,8 @@ public class Simulator {
 
 	public void simulate() {
 
-		for (int i = 0; i < 1000 || cars.size() != 0; i++) {
-			if (i > 1000) {
+		for (int i = 0; i < SIM_LENGTH || cars.size() != 0; i++) {
+			if (i > SIM_LENGTH) {
 				generateRandomCars = false;
 			}
 			try {
@@ -198,8 +209,7 @@ public class Simulator {
 	}
 
 	/**
-	 * Read a file and add the cars represented in it Format is:
-	 * TIME(int),DIRECTION(N,S,E,W),CAR_TYPE(VTL,NORMAL)
+	 * Read a file and add the cars represented in it Format is: TIME(int),DIRECTION(N,S,E,W),CAR_TYPE(VTL,NORMAL)
 	 * 
 	 * @param fileName
 	 * @return

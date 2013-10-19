@@ -33,7 +33,7 @@ public class Car implements Tickable {
 	private int carId;
 
 	public int distanceFromIntersection;
-	protected Direction direction;
+	public Direction direction;
 
 	// for JPF
 	int lightColor;

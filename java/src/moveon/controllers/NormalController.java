@@ -11,11 +11,11 @@ import moveon.simulation.Intersection.Mode;
  * @author Jourdan Harvey, Scott Goodhew, Mike Little, Roy Lin
  */
 
-//!N.Red -> E.Red
+// !N.Red -> E.Red
 // (!N.Red && E.Red) || !(!N.Red)
 
-//!E.Red -> N.Red 
-//(!E.Red && N.Red) || !(!E.Red)
+// !E.Red -> N.Red
+// (!E.Red && N.Red) || !(!E.Red)
 @Invariant({ "(running == 0) || ((NColor == 2) || (NColor != 2 && EColor == 2))" })
 public class NormalController extends Controller {
 
