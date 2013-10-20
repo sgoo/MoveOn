@@ -203,14 +203,14 @@ public class NiceGui extends JPanel implements SimulationListener {
 
 				int x, y;
 				if (d == Direction.S || d == Direction.W) {
-					x = 240;
+					x = 245;
 				} else {
-					x = 330;
+					x = 325;
 				}
 				if (d == Direction.W || d == Direction.N) {
-					y = 240;
+					y = 245;
 				} else {
-					y = 330;
+					y = 325;
 				}
 				if (d.pedsWaiting) {
 					g.drawImage(pedImage, x, y, null);
@@ -218,13 +218,13 @@ public class NiceGui extends JPanel implements SimulationListener {
 				if (d.isPedsCrossing(sim.tick)) {
 
 					if (d == Direction.S) {
-						y -= (330 - 240) * (sim.tick - d.pedsCrossing) / Direction.PED_CORSSING_TIME;
+						y -= (325 - 245) * (sim.tick - d.pedsCrossing) / Direction.PED_CORSSING_TIME;
 					} else if (d == Direction.N) {
-						y += (330 - 240) * (sim.tick - d.pedsCrossing) / Direction.PED_CORSSING_TIME;
+						y += (325 - 245) * (sim.tick - d.pedsCrossing) / Direction.PED_CORSSING_TIME;
 					} else if (d == Direction.E) {
-						x -= (330 - 240) * (sim.tick - d.pedsCrossing) / Direction.PED_CORSSING_TIME;
+						x -= (325 - 245) * (sim.tick - d.pedsCrossing) / Direction.PED_CORSSING_TIME;
 					} else if (d == Direction.W) {
-						x += (330 - 240) * (sim.tick - d.pedsCrossing) / Direction.PED_CORSSING_TIME;
+						x += (325 - 245) * (sim.tick - d.pedsCrossing) / Direction.PED_CORSSING_TIME;
 					}
 					g.drawImage(pedImage, x, y, null);
 				}
