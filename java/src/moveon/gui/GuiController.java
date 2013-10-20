@@ -2,14 +2,10 @@ package moveon.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.KeyEventDispatcher;
-import java.awt.KeyboardFocusManager;
-import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import moveon.simulation.Direction;
 import moveon.simulation.Simulator;
 
 public class GuiController extends JFrame {
@@ -33,7 +29,7 @@ public class GuiController extends JFrame {
 		this.simulator = simulator;
 		
 		// add main canvas
-		JPanel gui = new JPanel();
+		JPanel gui = new NiceGui(simulator);
 		gui.setPreferredSize(new Dimension(400, 500));
 		this.add(gui, BorderLayout.CENTER);
 		
