@@ -114,7 +114,7 @@ public class KeyInput extends JPanel implements ActionListener, KeyEventDispatch
 		bottomPanel.add(modeLabel);
 		bottomPanel.add(currentMode);
 
-		JLabel tickLabel = new JLabel("Current Tick: ");
+		JLabel tickLabel = new JLabel("Current Second: ");
 		currentTick = new JLabel("0");
 
 		bottomPanel.add(tickLabel);
@@ -222,7 +222,7 @@ public class KeyInput extends JPanel implements ActionListener, KeyEventDispatch
 	@Override
 	public void simulationUpdated(String simulationState) {
 		currentMode.setText(simulator.intersection.mode.toString() + ",");
-		currentTick.setText(simulator.tick + "");
+		currentTick.setText(simulator.tick / 8 + "");
 	}
 
 }
