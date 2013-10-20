@@ -38,6 +38,8 @@ public class Car implements Tickable {
 	// for JPF
 	int lightColor;
 
+	private boolean leftIntersection;
+
 	/**
 	 * Constructor Increment the car count and set this to this cars id
 	 * 
@@ -89,23 +91,26 @@ public class Car implements Tickable {
 			if (distanceFromIntersection < 0) {
 				distanceFromIntersection = 0;
 			}
-		} else if (distanceFromIntersection == 0 && direction.lights.isGreen()) {
-			// we have moved into the intersection
+		} else if (distanceFromIntersection == 0 && direction.lights.isGreen() || leftIntersection) {
+			// we have moved into the intersection or we are leaving the intersection
 			distanceFromIntersection -= SPEED;
 			// If the light is green go to crossing state
 		} else if (distanceFromIntersection < 0) {
-
+			
 			if (distanceFromIntersection < -(CAR_LENGTH + Intersection.INTERSECTION_SPAN - 2)) {
 				// We have finished moving through the intersection so remove
 				// the car from the direction and return false so that the car
 				// is removed from the system
 				direction.removeCar(this);
-
+				leftIntersection = true;
 				return false;
 			} else {
 				// keeping moving through the intersection
 				distanceFromIntersection -= SPEED;
 			}
+		}
+		if(leftIntersection && distanceFromIntersection < -100){
+			return false;
 		}
 
 		lightColor = direction.lights.currentColor.i;
