@@ -37,6 +37,7 @@ public class Simulator {
 	private boolean generateRandomNormalCars;
 	private boolean generateRandomVTLCars;
 	private boolean generateRandomPeople;
+	private boolean generateRandomPedestrians;
 
 	public static final int SIM_LENGTH = 4000;
 
@@ -119,6 +120,7 @@ public class Simulator {
 			}
 			try {
 				setTickTimeMillis(100);
+
 				Thread.sleep(getTickTimeMillis());
 			} catch (InterruptedException e) {
 				e.printStackTrace();
