@@ -83,7 +83,7 @@ public class NormalController extends Controller {
 
 	@Override
 	public String toString() {
-		return " " + nextChangeCounter;
+		return "";
 	}
 
 }

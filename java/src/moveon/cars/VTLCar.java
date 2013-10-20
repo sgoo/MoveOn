@@ -13,7 +13,7 @@ import moveon.simulation.Direction;
 public class VTLCar extends Car {
 
 	private boolean leader;
-	
+
 	// added for JPF
 	private int beenLeader = 0;
 
