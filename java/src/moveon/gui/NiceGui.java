@@ -289,17 +289,16 @@ public class NiceGui extends JPanel implements SimulationListener {
 			Graphics2D g = carMap.get(car).createGraphics();
 			g.setColor(color);
 
-			drawCircleForDirection(g, car.direction);
-
+			drawCircleForDirection(g, car);
 		}
 
 		return carMap.get(car);
 	}
 
-	private void drawCircleForDirection(Graphics2D g, Direction direction) {
+	private void drawCircleForDirection(Graphics2D g, Car car) {
 		int x = 0;
 		int y = 0;
-		switch (direction) {
+		switch (car.direction) {
 		case N:
 			x = 43;
 			y = 43;
@@ -318,6 +317,12 @@ public class NiceGui extends JPanel implements SimulationListener {
 			break;
 		}
 		g.fillOval(x, y, 10, 10);
+		
+		g.setColor(Color.blue);
+		if (((VTLCar) car).isLeader()) {
+			g.fillOval(x+2,y+2,6,6);
+		}
+		
 	}
 
 	private BufferedImage copyImage(BufferedImage bi) {
