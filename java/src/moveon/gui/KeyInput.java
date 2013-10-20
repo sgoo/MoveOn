@@ -37,6 +37,7 @@ public class KeyInput extends JPanel implements ActionListener, KeyEventDispatch
 	private JCheckBox toggleRandom;
 	private JCheckBox toggleVTLCars;
 	private JCheckBox toggleNormalCars;
+	private JCheckBox togglePedestrians;
 	
 	
 	
@@ -95,13 +96,16 @@ public class KeyInput extends JPanel implements ActionListener, KeyEventDispatch
 		toggleRandom = new JCheckBox("Generate cars randomly", true);
 		toggleVTLCars = new JCheckBox("Generate VTL cars", true);
 		toggleNormalCars = new JCheckBox("Generate normal cars", true);
+		togglePedestrians = new JCheckBox("Generate pedestrians", true);
 
 		toggleRandom.addActionListener(this);
 		toggleVTLCars.addActionListener(this);
 		toggleNormalCars.addActionListener(this);
+		togglePedestrians.addActionListener(this);
 		rightPanel.add(toggleRandom);
 		rightPanel.add(toggleVTLCars);
 		rightPanel.add(toggleNormalCars);
+		rightPanel.add(togglePedestrians);
 		
 		this.add(rightPanel, BorderLayout.LINE_END);
 		
@@ -131,6 +135,8 @@ public class KeyInput extends JPanel implements ActionListener, KeyEventDispatch
 			simulator.toggleRandomNormalCars();
 		} else if (e.getSource() == toggleVTLCars) {
 			simulator.toggleRandomVTLCars();
+		}else if(e.getSource() == togglePedestrians){
+			simulator.setGenerateRandomPeople(togglePedestrians.isSelected());
 		}
 	}
 
