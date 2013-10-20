@@ -1,5 +1,6 @@
 package moveon.gui;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
@@ -18,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import moveon.cars.Car;
+import moveon.cars.VTLCar;
 import moveon.simulation.Direction;
 import moveon.simulation.Intersection;
 import moveon.simulation.SimulationListener;
@@ -38,13 +40,15 @@ public class NiceGui extends JPanel implements SimulationListener {
 	public static final int PIX_PER_TICK = 8;
 
 	public static final int FRAME_SIZE = 72;
-	
-	public static final int CARS_IMAGE_COUNT = 13;
+
+	public static final int CARS_IMAGE_COUNT = 11;
+	public static final int VTL_CARS_IMAGE_COUNT = 11;
 
 	BufferedImage backgroundImage;
 	ArrayList<BufferedImage> carImages = new ArrayList<BufferedImage>();
+	ArrayList<BufferedImage> vtlCarImages = new ArrayList<BufferedImage>();
 	Map<String, BufferedImage> lightImages = new HashMap<String, BufferedImage>();
-	
+
 	/**
 	 * 
 	 */
@@ -63,23 +67,30 @@ public class NiceGui extends JPanel implements SimulationListener {
 		try {
 			// background image
 			backgroundImage = ImageIO.read(new File("res/background.png"));
-			
-			// cars
-			for(int i = 0 ; i < CARS_IMAGE_COUNT; i++) {
-				carImages.add(ImageIO.read(new File("res/Cars/" + (i+1) + ".png")));
-			}
-			
-			// lights
-			String[] lightNames = new String[] {
-					"EW_G", "EW_O", "EW_R", "NS_G", "NS_O", "NS_R",
-					"PED_EW_G", "PED_EW_R", "PED_EW_NULL", "PED_NS_G", "PED_NS_R", "PED_NS_NULL"
-			};
-			for(String lightName : lightNames) {
-				lightImages.put(lightName, ImageIO.read(new File("res/Lights/"+lightName+".png")));
-			}
-			
 
-			
+			// cars
+			for (int i = 0; i < CARS_IMAGE_COUNT; i++) {
+				carImages.add(ImageIO.read(new File("res/Cars/" + (i + 1)
+						+ ".png")));
+			}
+
+			// vtl cars
+			for (int i = 0; i < VTL_CARS_IMAGE_COUNT; i++) {
+				vtlCarImages.add(ImageIO.read(new File("res/VTLCars/" + (i + 1)
+						+ ".png")));
+			}
+
+			// lights
+			String[] lightNames = new String[] { "EW_G", "EW_O", "EW_R",
+					"NS_G", "NS_O", "NS_R", "PED_EW_G", "PED_EW_R",
+					"PED_EW_NULL", "PED_NS_G", "PED_NS_R", "PED_NS_NULL" };
+			for (String lightName : lightNames) {
+				lightImages.put(
+						lightName,
+						ImageIO.read(new File("res/Lights/" + lightName
+								+ ".png")));
+			}
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -120,16 +131,20 @@ public class NiceGui extends JPanel implements SimulationListener {
 	public class RenderThread extends Thread {
 		public void run() {
 
+			// ==================================================
 			// BACKGROUND IMAGE
+			// ==================================================
 			BufferedImage img = new BufferedImage(NiceGui.FRAME_SIZE
 					* NiceGui.PIX_PER_TICK, NiceGui.FRAME_SIZE
 					* NiceGui.PIX_PER_TICK, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g = img.createGraphics();
 			g.drawImage(backgroundImage, 0, 0, null);
 
+			// ==================================================
 			// TRAFFIC LIGHTS
+			// ==================================================
 			BufferedImage imageNS = null;
-			switch(Direction.N.lights.currentColor) {
+			switch (Direction.N.lights.currentColor) {
 			case R:
 				imageNS = lightImages.get("NS_R");
 				break;
@@ -140,10 +155,11 @@ public class NiceGui extends JPanel implements SimulationListener {
 				imageNS = lightImages.get("NS_G");
 				break;
 			}
-			g.drawImage(imageNS, 288-imageNS.getWidth()/2, 288-imageNS.getHeight()/2, null);
-			
+			g.drawImage(imageNS, 288 - imageNS.getWidth() / 2,
+					288 - imageNS.getHeight() / 2, null);
+
 			BufferedImage imageEW = null;
-			switch(Direction.E.lights.currentColor) {
+			switch (Direction.E.lights.currentColor) {
 			case R:
 				imageEW = lightImages.get("EW_R");
 				break;
@@ -154,73 +170,82 @@ public class NiceGui extends JPanel implements SimulationListener {
 				imageEW = lightImages.get("EW_G");
 				break;
 			}
-			g.drawImage(imageEW, 288-imageEW.getWidth()/2, 288-imageEW.getHeight()/2, null);
-		
-			// PEDESTRIAN LIGHTS
+			g.drawImage(imageEW, 288 - imageEW.getWidth() / 2,
+					288 - imageEW.getHeight() / 2, null);
+
+			// ==================================================
+			// PEDESTRIANS LIGHTS
+			// ==================================================
 			BufferedImage imagePedEW = null;
 			System.out.println(sim.tick);
-			if(Direction.E.hasPeds(sim.tick) || Direction.W.hasPeds(sim.tick)){
-				if(Direction.E.isPedsCrossing(sim.tick) || Direction.W.isPedsCrossing(sim.tick)){
+			if (Direction.E.hasPeds(sim.tick) || Direction.W.hasPeds(sim.tick)) {
+				if (Direction.E.isPedsCrossing(sim.tick)
+						|| Direction.W.isPedsCrossing(sim.tick)) {
 					imagePedEW = lightImages.get("PED_EW_G");
-				}else{
+				} else {
 					imagePedEW = lightImages.get("PED_EW_R");
 				}
-			}else{
+			} else {
 				imagePedEW = lightImages.get("PED_EW_NULL");
 			}
-			g.drawImage(imagePedEW, 288-imagePedEW.getWidth()/2, 288-imagePedEW.getHeight()/2, null);
-			
-			
+			g.drawImage(imagePedEW, 288 - imagePedEW.getWidth() / 2,
+					288 - imagePedEW.getHeight() / 2, null);
+
 			BufferedImage imagePedNS = null;
 			System.out.println(sim.tick);
-			if(Direction.N.hasPeds(sim.tick) || Direction.S.hasPeds(sim.tick)){
-				if(Direction.N.isPedsCrossing(sim.tick) || Direction.S.isPedsCrossing(sim.tick)){
+			if (Direction.N.hasPeds(sim.tick) || Direction.S.hasPeds(sim.tick)) {
+				if (Direction.N.isPedsCrossing(sim.tick)
+						|| Direction.S.isPedsCrossing(sim.tick)) {
 					imagePedNS = lightImages.get("PED_NS_G");
-				}else{
+				} else {
 					imagePedNS = lightImages.get("PED_NS_R");
 				}
-			}else{
+			} else {
 				imagePedNS = lightImages.get("PED_NS_NULL");
 			}
-			g.drawImage(imagePedNS, 288-imagePedNS.getWidth()/2, 288-imagePedNS.getHeight()/2, null);
+			g.drawImage(imagePedNS, 288 - imagePedNS.getWidth() / 2,
+					288 - imagePedNS.getHeight() / 2, null);
 
-			
-			// CARS
+			// ==================================================
+			// CARS AND VTL CARS
+			// ==================================================
 			for (Car c : sim.cars) {
-				int carSize = Car.CAR_LENGTH * GUI_M_LENGTH;
+				int x = 0, y = 0;
+				
+				int adjustedDistanceFromIntersection = c.distanceFromIntersection;
+				if (adjustedDistanceFromIntersection >= 0) adjustedDistanceFromIntersection += 1;
+				
 				switch (c.direction) {
 				case N:
-					g.drawImage(
-							getCarImage(c),
-							Intersection.VTL_SPAN * PIX_PER_TICK,
-							(Intersection.VTL_SPAN - 8 - c.distanceFromIntersection) * PIX_PER_TICK, null);
+					x = Intersection.VTL_SPAN * PIX_PER_TICK;
+					y = (Intersection.VTL_SPAN - 8 - adjustedDistanceFromIntersection)
+							* PIX_PER_TICK;
 					break;
-					
+
 				case S:
-					g.drawImage(
-							getCarImage(c),
-							Intersection.VTL_SPAN * PIX_PER_TICK,
-							(Intersection.VTL_SPAN + 8 + c.distanceFromIntersection) * PIX_PER_TICK, null);
+					x = Intersection.VTL_SPAN * PIX_PER_TICK;
+					y = (Intersection.VTL_SPAN + 8 + adjustedDistanceFromIntersection)
+							* PIX_PER_TICK;
 					break;
-					
+
 				case E:
-					g.drawImage(
-							getCarImage(c),
-							(Intersection.VTL_SPAN + 8 + c.distanceFromIntersection) * PIX_PER_TICK,
-							Intersection.VTL_SPAN * PIX_PER_TICK, null);
+					x = (Intersection.VTL_SPAN + 8 + adjustedDistanceFromIntersection)
+							* PIX_PER_TICK;
+					y = Intersection.VTL_SPAN * PIX_PER_TICK;
 					break;
+
 				case W:
-					g.drawImage(
-							getCarImage(c),
-							(Intersection.VTL_SPAN - 8 - c.distanceFromIntersection) * PIX_PER_TICK,
-							Intersection.VTL_SPAN * PIX_PER_TICK, null);
+					x = (Intersection.VTL_SPAN - 8 - adjustedDistanceFromIntersection)
+							* PIX_PER_TICK;
+					y = Intersection.VTL_SPAN * PIX_PER_TICK;
 					break;
-					
+
 				}
+
+				g.drawImage(getCarImage(c), x, y, null);
+
 			}
-			
-			
-			
+
 			currentImage = img;
 			repaint();
 
@@ -231,13 +256,68 @@ public class NiceGui extends JPanel implements SimulationListener {
 
 	private BufferedImage getCarImage(Car car) {
 		if (!carMap.containsKey(car)) {
-			BufferedImage image = copyImage(carImages
-					.get((int) (Math.random() * carImages.size())));
-			image = rotateImage(image, car.direction, image.getWidth(), image.getHeight());
+
+			BufferedImage image = null;
+			if (car instanceof VTLCar) {
+				image = copyImage(vtlCarImages
+						.get((int) (Math.random() * vtlCarImages.size())));
+
+			} else {
+				image = copyImage(carImages
+						.get((int) (Math.random() * carImages.size())));
+			}
+
+			image = rotateImage(image, car.direction, image.getWidth(),
+					image.getHeight());
+
 			carMap.put(car, image);
 		}
-		
+
+		if (car instanceof VTLCar) {
+			Color color = null;
+			switch (car.direction.lights.currentColor) {
+			case G:
+				color = Color.green;
+				break;
+			case O:
+				color = Color.orange;
+				break;
+			case R:
+				color = Color.red;
+				break;
+			}
+			Graphics2D g = carMap.get(car).createGraphics();
+			g.setColor(color);
+
+			drawCircleForDirection(g, car.direction);
+
+		}
+
 		return carMap.get(car);
+	}
+
+	private void drawCircleForDirection(Graphics2D g, Direction direction) {
+		int x = 0;
+		int y = 0;
+		switch (direction) {
+		case N:
+			x = 43;
+			y = 43;
+			break;
+		case S:
+			x = 11;
+			y = 11;
+			break;
+		case E:
+			x = 11;
+			y = 43;
+			break;
+		case W:
+			x = 43;
+			y = 11;
+			break;
+		}
+		g.fillOval(x, y, 10, 10);
 	}
 
 	private BufferedImage copyImage(BufferedImage bi) {
@@ -247,7 +327,20 @@ public class NiceGui extends JPanel implements SimulationListener {
 		return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
 	}
 
-	private BufferedImage rotateImage(BufferedImage image, Direction direction, int anchorX,  int anchorY) {
+	private BufferedImage rotateImage(BufferedImage image, Direction direction,
+			int anchorX, int anchorY) {
+
+		AffineTransform transform = getAffineTransform(direction, anchorX,
+				anchorY);
+
+		AffineTransformOp op = new AffineTransformOp(transform,
+				AffineTransformOp.TYPE_BILINEAR);
+
+		return op.filter(image, null);
+	}
+
+	private AffineTransform getAffineTransform(Direction direction,
+			int anchorX, int anchorY) {
 		double radians = 0;
 		switch (direction) {
 		case E:
@@ -261,10 +354,8 @@ public class NiceGui extends JPanel implements SimulationListener {
 
 		AffineTransform transform = new AffineTransform();
 		transform.rotate(radians, anchorX, anchorY);
-		
-		AffineTransformOp op = new AffineTransformOp(transform,
-				AffineTransformOp.TYPE_BILINEAR);
-		return op.filter(image, null);
+
+		return transform;
 	}
 
 }
