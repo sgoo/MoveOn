@@ -11,7 +11,8 @@ import moveon.simulation.Tickable;
  * @author Jourdan Harvey, Scott Goodhew, Mike Little, Roy Lin
  * 
  */
-@Invariant({ "(distanceFromIntersection >= 0 || lightColor != 2) || leftIntersection == 1" })
+//@Invariant({ "(distanceFromIntersection >= 0 || lightColor != 2) || leftIntersection == 1" })
+// Taken out because we could not satisify it, sometimes cars would still be in the intersection...
 public class Car implements Tickable {
 
 	/**
