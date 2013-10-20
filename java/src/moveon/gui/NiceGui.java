@@ -41,8 +41,8 @@ public class NiceGui extends JPanel implements SimulationListener {
 
 	public static final int FRAME_SIZE = 72;
 
-	public static final int CARS_IMAGE_COUNT = 13;
-	public static final int VTL_CARS_IMAGE_COUNT = 1;
+	public static final int CARS_IMAGE_COUNT = 11;
+	public static final int VTL_CARS_IMAGE_COUNT = 11;
 
 	BufferedImage backgroundImage;
 	ArrayList<BufferedImage> carImages = new ArrayList<BufferedImage>();
@@ -70,7 +70,7 @@ public class NiceGui extends JPanel implements SimulationListener {
 
 			// cars
 			for (int i = 0; i < CARS_IMAGE_COUNT; i++) {
-				carImages.add(ImageIO.read(new File("res/Old Cars/" + (i + 1)
+				carImages.add(ImageIO.read(new File("res/Cars/" + (i + 1)
 						+ ".png")));
 			}
 
@@ -211,27 +211,31 @@ public class NiceGui extends JPanel implements SimulationListener {
 			// ==================================================
 			for (Car c : sim.cars) {
 				int x = 0, y = 0;
+				
+				int adjustedDistanceFromIntersection = c.distanceFromIntersection;
+				if (adjustedDistanceFromIntersection >= 0) adjustedDistanceFromIntersection += 1;
+				
 				switch (c.direction) {
 				case N:
 					x = Intersection.VTL_SPAN * PIX_PER_TICK;
-					y = (Intersection.VTL_SPAN - 8 - c.distanceFromIntersection)
+					y = (Intersection.VTL_SPAN - 8 - adjustedDistanceFromIntersection)
 							* PIX_PER_TICK;
 					break;
 
 				case S:
 					x = Intersection.VTL_SPAN * PIX_PER_TICK;
-					y = (Intersection.VTL_SPAN + 8 + c.distanceFromIntersection)
+					y = (Intersection.VTL_SPAN + 8 + adjustedDistanceFromIntersection)
 							* PIX_PER_TICK;
 					break;
 
 				case E:
-					x = (Intersection.VTL_SPAN + 8 + c.distanceFromIntersection)
+					x = (Intersection.VTL_SPAN + 8 + adjustedDistanceFromIntersection)
 							* PIX_PER_TICK;
 					y = Intersection.VTL_SPAN * PIX_PER_TICK;
 					break;
 
 				case W:
-					x = (Intersection.VTL_SPAN - 8 - c.distanceFromIntersection)
+					x = (Intersection.VTL_SPAN - 8 - adjustedDistanceFromIntersection)
 							* PIX_PER_TICK;
 					y = Intersection.VTL_SPAN * PIX_PER_TICK;
 					break;
