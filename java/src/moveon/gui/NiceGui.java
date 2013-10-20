@@ -1,10 +1,12 @@
 package moveon.gui;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -25,6 +27,12 @@ import moveon.simulation.Simulator;
 public class NiceGui extends JPanel implements SimulationListener {
 	public static final int GUI_M_LENGTH = 3;
 
+	public static final int PIX_PER_TICK = 8;
+	
+	public static final int FRAME_SIZE = 72;
+	
+	BufferedImage backgroundImage;
+	
 	/**
 	 * 
 	 */
@@ -35,6 +43,16 @@ public class NiceGui extends JPanel implements SimulationListener {
 		this.sim = sim;
 		sim.addSimListener(this);
 		setSize(700, 700);
+		
+		initImages();
+	}
+	
+	private void initImages() {
+		try {
+			backgroundImage = ImageIO.read(new File("res/background.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -72,12 +90,17 @@ public class NiceGui extends JPanel implements SimulationListener {
 
 	public class RenderThread extends Thread {
 		public void run() {
-			int size = (2 * (Intersection.VTL_SPAN + Car.CAR_LENGTH) + Car.CAR_LENGTH) * GUI_M_LENGTH;
-			BufferedImage img = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
+			
+			//int size = (2 * (Intersection.VTL_SPAN + Car.CAR_LENGTH) + Car.CAR_LENGTH) * GUI_M_LENGTH;
+			
+			BufferedImage img = new BufferedImage(NiceGui.FRAME_SIZE * NiceGui.PIX_PER_TICK, NiceGui.FRAME_SIZE * NiceGui.PIX_PER_TICK, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g = img.createGraphics();
-			g.setColor(Color.BLACK);
-			g.fillRect(0, 0, size, size);
-			g.setColor(Color.RED);
+			
+			//g.setColor(Color.BLACK);
+			//g.fillRect(0, 0, size, size);
+			//g.setColor(Color.RED);
+			g.drawImage(backgroundImage, 0, 0, null);
+			
 			for (Car c : sim.cars) {
 				int carSize = Car.CAR_LENGTH * GUI_M_LENGTH;
 				switch (c.direction) {
