@@ -6,6 +6,7 @@ import moveon.controllers.Controller;
 import moveon.controllers.MixedController;
 import moveon.controllers.NormalController;
 import moveon.controllers.VTLPlusController;
+import moveon.simulation.Lights.Color;
 
 /**
  * Represents the intersection in the model
@@ -16,6 +17,8 @@ import moveon.controllers.VTLPlusController;
 @Invariant({ "(currentMode == 0 && hasNonVTLSum == 2) || " + // Normal has non-VTL in both directions
 		"(currentMode == 1 && hasNonVTLSum == 0) || " + // VTL as no non-VTL cars
 		"(currentMode == 2 && hasNonVTLSum == 1)" // MIXED has one direction with non-VTL 
+		// Theres a  more complex invariant that should show that you can be in MIXED with conflicting non-VTL cars
+		// as long as its in the process of switching to a state with a RED light.
 })
 public class Intersection implements Tickable {
 
@@ -66,6 +69,9 @@ public class Intersection implements Tickable {
 	 */
 	public void setMode(Mode m, int tick) {
 		if (this.mode != m) {
+			if (this.mode != null) {
+				this.mode.c.stop(tick);
+			}
 			this.mode = m;
 			mode.c.init(tick);
 		}
@@ -82,7 +88,11 @@ public class Intersection implements Tickable {
 		hasNonVTLSum = hasNSNonVTLCars + hasEWNonVTLCars;
 
 		if ((Direction.N.hasNonVTLCars() || Direction.S.hasNonVTLCars()) && (Direction.W.hasNonVTLCars() || Direction.E.hasNonVTLCars())) {
-			setMode(Mode.NORMAL, ticks);
+			if (Direction.N.lights.currentColor == Color.R || Direction.E.lights.currentColor == Color.R) {
+				setMode(Mode.NORMAL, ticks);
+			} else {
+				setMode(Mode.MIXED, ticks);
+			}
 		} else if (!(Direction.N.hasNonVTLCars() || Direction.S.hasNonVTLCars() || Direction.W.hasNonVTLCars() || Direction.E.hasNonVTLCars())) {
 			setMode(Mode.VTLPLUS, ticks);
 		} else {

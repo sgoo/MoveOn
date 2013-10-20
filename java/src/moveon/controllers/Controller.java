@@ -96,4 +96,7 @@ public abstract class Controller {
 	public String toString() {
 		return "";
 	}
+
+	public void stop(int currentTick) {
+	}
 }

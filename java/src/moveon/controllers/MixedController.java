@@ -29,6 +29,6 @@ public class MixedController extends Controller {
 
 	@Override
 	public void init(int currentTick) {
-
+		
 	}
 }
