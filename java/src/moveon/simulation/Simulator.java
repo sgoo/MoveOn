@@ -37,6 +37,9 @@ public class Simulator {
 	private boolean generateRandomNormalCars;
 	private boolean generateRandomVTLCars;
 	private boolean generateRandomPeople;
+	private boolean generateRandomPedestrians;
+
+	public int tick;
 
 	public static final int SIM_LENGTH = 4000;
 
@@ -46,7 +49,8 @@ public class Simulator {
 	 * @param args
 	 * @throws CarFileFormatException
 	 */
-	public static void main(String[] args) throws CarFileFormatException, Exception {
+	public static void main(String[] args) throws CarFileFormatException,
+			Exception {
 		Simulator simulator = new Simulator();
 		// simulator.initialize(TESTFOLDER + "Test1");
 		simulator.initialize();
@@ -78,7 +82,7 @@ public class Simulator {
 	}
 
 	public void initialize() {
-		
+
 		addVTLCar(10, Direction.N);
 		addVTLCar(16, Direction.N);
 		addVTLCar(18, Direction.S);
@@ -86,7 +90,7 @@ public class Simulator {
 		addVTLCar(25, Direction.W);
 		addVTLCar(25, Direction.N);
 		addVTLCar(30, Direction.E);
-		
+
 	}
 
 	/**
@@ -95,9 +99,10 @@ public class Simulator {
 	 * @param filename
 	 * @throws CarFileFormatException
 	 */
-	/*public void initialize(String filename) throws IOException, CarFileFormatException {
-		readCarsFromFile(filename);
-	}*/
+	/*
+	 * public void initialize(String filename) throws IOException,
+	 * CarFileFormatException { readCarsFromFile(filename); }
+	 */
 
 	public void addCar(int dist, Direction d) {
 		Car c = new Car(dist, d);
@@ -113,12 +118,13 @@ public class Simulator {
 
 	public void simulate() {
 
-		for (int i = 0; i < SIM_LENGTH || cars.size() != 0; i++) {
-			if (i > SIM_LENGTH) {
+		for (tick = 0; tick < SIM_LENGTH || cars.size() != 0; tick++) {
+			if (tick > SIM_LENGTH) {
 				generateRandomCars = false;
 			}
 			try {
 				setTickTimeMillis(100);
+
 				Thread.sleep(getTickTimeMillis());
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -127,7 +133,7 @@ public class Simulator {
 				continue;
 			}
 
-			intersection.tick(i);
+			intersection.tick(tick);
 			StringBuilder sb = new StringBuilder();
 
 			sb.append(intersection.mode + "  ");
@@ -136,14 +142,14 @@ public class Simulator {
 			sb.append(Direction.E.pedsWaiting + " ");
 			sb.append(Direction.W.pedsWaiting + "   ");
 
-			sb.append(Direction.N.isPedsCrossing(i) + " ");
-			sb.append(Direction.S.isPedsCrossing(i) + " ");
-			sb.append(Direction.E.isPedsCrossing(i) + " ");
-			sb.append(Direction.W.isPedsCrossing(i) + "\n");
+			sb.append(Direction.N.isPedsCrossing(tick) + " ");
+			sb.append(Direction.S.isPedsCrossing(tick) + " ");
+			sb.append(Direction.E.isPedsCrossing(tick) + " ");
+			sb.append(Direction.W.isPedsCrossing(tick) + "\n");
 
 			// tick all cars, and let us know what each is up to.
 			for (int j = 0; j < cars.size(); j++) {
-				if (!cars.get(j).tick(i)) {
+				if (!cars.get(j).tick(tick)) {
 					cars.remove(j);
 					j--;
 				}
@@ -173,13 +179,15 @@ public class Simulator {
 						} else {
 							addCar(Intersection.VTL_SPAN, randomDirection);
 						}
-					} else if (generateRandomNormalCars && !generateRandomVTLCars) {
+					} else if (generateRandomNormalCars
+							&& !generateRandomVTLCars) {
 						addCar(Intersection.VTL_SPAN, randomDirection);
-					} else if (!generateRandomNormalCars && generateRandomVTLCars) {
+					} else if (!generateRandomNormalCars
+							&& generateRandomVTLCars) {
 						addVTLCar(Intersection.VTL_SPAN, randomDirection);
 					}
 				}
-				if (generateRandomPeople && Math.random() > 0.99) {
+				if (generateRandomPeople && Math.random() > 0.97) {
 					double d = Math.random();
 					if (d < 0.25) {
 						Direction.N.addPed();
@@ -245,28 +253,19 @@ public class Simulator {
 	 * @return
 	 * @throws CarFileFormatException
 	 */
-	/*private void readCarsFromFile(String fileName) throws IOException, CarFileFormatException {
-		Path path = Paths.get(fileName);
-		BufferedReader reader = Files.newBufferedReader(path, ENCODING);
-		// line format TIME DIRECTION CAR_TYPE
-		String line = null;
-		while ((line = reader.readLine()) != null) {
-			String[] parts = line.split(",");
-			if (parts.length != 3) {
-				throw new CarFileFormatException();
-			}
-			int dist = Integer.parseInt(parts[0]);
-			Direction direction = Direction.getDirFromStr(parts[1]);
-			if (direction == null) {
-				throw new CarFileFormatException();
-			}
-			if (parts[2].equals(VTL)) {
-				addVTLCar(dist, direction);
-			} else if (parts[2].equals(NORMAL)) {
-				addCar(dist, direction);
-			}
-		}
-	}*/
+	/*
+	 * private void readCarsFromFile(String fileName) throws IOException,
+	 * CarFileFormatException { Path path = Paths.get(fileName); BufferedReader
+	 * reader = Files.newBufferedReader(path, ENCODING); // line format TIME
+	 * DIRECTION CAR_TYPE String line = null; while ((line = reader.readLine())
+	 * != null) { String[] parts = line.split(","); if (parts.length != 3) {
+	 * throw new CarFileFormatException(); } int dist =
+	 * Integer.parseInt(parts[0]); Direction direction =
+	 * Direction.getDirFromStr(parts[1]); if (direction == null) { throw new
+	 * CarFileFormatException(); } if (parts[2].equals(VTL)) { addVTLCar(dist,
+	 * direction); } else if (parts[2].equals(NORMAL)) { addCar(dist,
+	 * direction); } } }
+	 */
 
 	public void toggleRandom() {
 		generateRandomCars = !generateRandomCars;

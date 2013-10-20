@@ -19,14 +19,14 @@ import moveon.simulation.Intersection;
 import moveon.simulation.SimulationListener;
 import moveon.simulation.Simulator;
 
-public class KeyInput extends JPanel implements ActionListener, KeyEventDispatcher, SimulationListener {
+public class KeyInput extends JPanel implements ActionListener,
+		KeyEventDispatcher, SimulationListener {
 
 	private static final long serialVersionUID = 1L;
-	private static final String CAR_TYPE_LBL = "";
+	private String generateTypeLabel = "NORMAL";
 
 	private Simulator simulator;
 
-	private boolean isVtlCar = false;
 	JButton NButton;
 	JButton SButton;
 	JButton EButton;
@@ -37,79 +37,79 @@ public class KeyInput extends JPanel implements ActionListener, KeyEventDispatch
 	private JCheckBox toggleRandom;
 	private JCheckBox toggleVTLCars;
 	private JCheckBox toggleNormalCars;
-	
-	
+	private JCheckBox togglePedestrians;
 	
 	
 	public KeyInput(Simulator simulator) {
 		this.simulator = simulator;
-		
+
 		// set layout
 		this.setLayout(new BorderLayout());
-		this.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+		this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-		
 		// Left buttons
-		JPanel LeftPanel = new JPanel(new GridLayout(2,3)); 
-		
-		
+		JPanel LeftPanel = new JPanel(new GridLayout(2, 3));
+
 		NButton = new JButton("North");
 		NButton.addActionListener(this);
 		LeftPanel.add(new JPanel());
 		LeftPanel.add(NButton);
-		
+
 		WButton = new JButton("West");
 		WButton.addActionListener(this);
 		LeftPanel.add(new JPanel());
 		LeftPanel.add(WButton);
-		
+
 		SButton = new JButton("South");
 		SButton.addActionListener(this);
 		LeftPanel.add(SButton);
-		
+
 		EButton = new JButton("East");
 		EButton.addActionListener(this);
 		LeftPanel.add(EButton);
-		
-		LeftPanel.setBorder(BorderFactory.createEmptyBorder(0,10,0,10));
-		this.add(LeftPanel,BorderLayout.LINE_START);
-		
+
+		LeftPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+		this.add(LeftPanel, BorderLayout.LINE_START);
+
 		// Middle Buttons
-		JPanel midPanel = new JPanel(new GridLayout(1,2));
-		
+		JPanel midPanel = new JPanel(new GridLayout(2, 1));
+
 		pauseButton = new JButton("Pause");
 		pauseButton.addActionListener(this);
 		midPanel.add(pauseButton);
-		
-		carTypeButton = new JButton(CAR_TYPE_LBL + Simulator.NORMAL);
+
+		carTypeButton = new JButton(generateTypeLabel);
 		carTypeButton.addActionListener(this);
 		midPanel.add(carTypeButton);
-		
-		midPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+
+		midPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		this.add(midPanel, BorderLayout.CENTER);
-		
+
 		// Right Checkboxes
-		JPanel rightPanel = new JPanel(new GridLayout(3,1));
-		
+		JPanel rightPanel = new JPanel(new GridLayout(3, 1));
+
 		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 		toggleRandom = new JCheckBox("Generate cars randomly", true);
 		toggleVTLCars = new JCheckBox("Generate VTL cars", true);
 		toggleNormalCars = new JCheckBox("Generate normal cars", true);
+		togglePedestrians = new JCheckBox("Generate pedestrians", true);
 
 		toggleRandom.addActionListener(this);
 		toggleVTLCars.addActionListener(this);
 		toggleNormalCars.addActionListener(this);
+		togglePedestrians.addActionListener(this);
 		rightPanel.add(toggleRandom);
 		rightPanel.add(toggleVTLCars);
 		rightPanel.add(toggleNormalCars);
+		rightPanel.add(togglePedestrians);
 		
 		this.add(rightPanel, BorderLayout.LINE_END);
-		
+
 		// handles key presses
-		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		KeyboardFocusManager manager = KeyboardFocusManager
+				.getCurrentKeyboardFocusManager();
 		manager.addKeyEventDispatcher(this);
 	}
-
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -131,6 +131,8 @@ public class KeyInput extends JPanel implements ActionListener, KeyEventDispatch
 			simulator.toggleRandomNormalCars();
 		} else if (e.getSource() == toggleVTLCars) {
 			simulator.toggleRandomVTLCars();
+		}else if(e.getSource() == togglePedestrians){
+			simulator.setGenerateRandomPeople(togglePedestrians.isSelected());
 		}
 	}
 
@@ -163,15 +165,10 @@ public class KeyInput extends JPanel implements ActionListener, KeyEventDispatch
 		if (d == null) {
 			return false;
 		}
-		if (Character.isUpperCase(e.getKeyChar())) {
-			isVtlCar = true;
-			carTypeButton.setText(Simulator.VTL);
-			addCar(100, d);
-		} else {
-			isVtlCar = false;
-			carTypeButton.setText(Simulator.NORMAL);
-			addCar(100, d);
-		}
+
+		carTypeButton.setText(Simulator.VTL);
+		addCar(100, d);
+
 		return false;
 	}
 
@@ -185,19 +182,25 @@ public class KeyInput extends JPanel implements ActionListener, KeyEventDispatch
 	}
 
 	private void changeCarType() {
-		isVtlCar = !isVtlCar;
-		if (isVtlCar) {
+		if (generateTypeLabel.equals("NORMAL")) {
 			carTypeButton.setText(Simulator.VTL);
+			generateTypeLabel = "VTL";
+		} else if (generateTypeLabel.equals("VTL")) {
+			carTypeButton.setText("PEDESTRIANS");
+			generateTypeLabel = "PEDESTRIANS";
 		} else {
 			carTypeButton.setText(Simulator.NORMAL);
+			generateTypeLabel = "NORMAL";
 		}
 	}
 
 	private void addCar(int dist, Direction d) {
-		if (isVtlCar) {
+		if (generateTypeLabel.equals("VTL")) {
 			simulator.addVTLCar(dist, d);
-		} else {
+		} else if(generateTypeLabel.equals("NORMAL")){
 			simulator.addCar(dist, d);
+		} else {
+			d.addPed();
 		}
 	}
 
