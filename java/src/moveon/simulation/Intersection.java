@@ -19,7 +19,7 @@ import moveon.controllers.VTLPlusController;
 })
 public class Intersection implements Tickable {
 
-	public final static int VTL_SPAN = 256;
+	public final static int VTL_SPAN = 32;
 	public final static int INTERSECTION_SPAN = 8;
 	public final static int ORANGE_TIME = Car.CAR_LENGTH + INTERSECTION_SPAN;
 	public final static int GREEN_TIME = 30;

@@ -30,7 +30,7 @@ public class GuiController extends JFrame {
 		
 		// add main canvas (nice gui)
 		JPanel gui = new NiceGui(simulator);
-		gui.setPreferredSize(new Dimension(400, 500));
+		gui.setPreferredSize(new Dimension(576, 576));
 		this.add(gui, BorderLayout.CENTER);
 		
 		
