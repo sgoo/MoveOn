@@ -72,7 +72,7 @@ public class KeyInput extends JPanel implements ActionListener,
 		this.add(LeftPanel, BorderLayout.LINE_START);
 
 		// Middle Buttons
-		JPanel midPanel = new JPanel(new GridLayout(1, 2));
+		JPanel midPanel = new JPanel(new GridLayout(2, 1));
 
 		pauseButton = new JButton("Pause");
 		pauseButton.addActionListener(this);
@@ -82,7 +82,7 @@ public class KeyInput extends JPanel implements ActionListener,
 		carTypeButton.addActionListener(this);
 		midPanel.add(carTypeButton);
 
-		midPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		midPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		this.add(midPanel, BorderLayout.CENTER);
 
 		// Right Checkboxes
