@@ -21,6 +21,8 @@ public enum Direction {
 		E.lights = W.lights = new Lights(Lights.Color.G);
 	}
 
+	public static final int PED_CORSSING_TIME = 15;
+
 	// A set of traffic lights
 	public Lights lights;
 
@@ -30,6 +32,10 @@ public enum Direction {
 	private Direction() {
 		cars = new ArrayList<Car>();
 	}
+
+	public boolean pedsWaiting = false;
+
+	public int pedsCrossing = -1;
 
 	/**
 	 * Adds a Car to this Directions cars. Cars are either waiting or proceeding
@@ -175,4 +181,26 @@ public enum Direction {
 		return new Direction[] {N, S, E, W};
 	}
 	
+	public void addPed() {
+		pedsWaiting = true;
+	}
+
+	public boolean hasPeds(int tick) {
+		return pedsWaiting || isPedsCrossing(tick);
+	}
+
+	public boolean isPedsCrossing(int tick) {
+		if (pedsCrossing + PED_CORSSING_TIME < tick) {
+			pedsCrossing = -1;
+		}
+		return pedsCrossing != -1;
+	}
+
+	public void startCrossing(int tick) {
+		if (pedsWaiting) {
+			pedsCrossing = tick;
+			pedsWaiting = false;
+		}
+	}
+
 }
