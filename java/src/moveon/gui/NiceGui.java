@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import moveon.cars.Car;
 import moveon.simulation.Direction;
 import moveon.simulation.Intersection;
+import moveon.simulation.Lights.Color;
 import moveon.simulation.SimulationListener;
 import moveon.simulation.Simulator;
 
@@ -43,7 +44,8 @@ public class NiceGui extends JPanel implements SimulationListener {
 
 	BufferedImage backgroundImage;
 	ArrayList<BufferedImage> carImages = new ArrayList<BufferedImage>();
-
+	Map<Color, BufferedImage> lightImages = new HashMap<Color, BufferedImage>();
+	
 	/**
 	 * 
 	 */
@@ -60,11 +62,18 @@ public class NiceGui extends JPanel implements SimulationListener {
 
 	private void initImages() {
 		try {
+			// background image
 			backgroundImage = ImageIO.read(new File("res/background.png"));
 			
+			// cars
 			for(int i = 0 ; i < CARS_IMAGE_COUNT; i++) {
 				carImages.add(ImageIO.read(new File("res/Cars/" + (i+1) + ".png")));
 			}
+			
+			// lights
+			lightImages.put(Color.R, ImageIO.read(new File("res/Lights/R.png")));
+			lightImages.put(Color.O, ImageIO.read(new File("res/Lights/O.png")));
+			lightImages.put(Color.G, ImageIO.read(new File("res/Lights/G.png")));
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -115,7 +124,9 @@ public class NiceGui extends JPanel implements SimulationListener {
 
 			// LIGHTS
 			for(Direction d : Direction.getDirections()) {
-				
+				BufferedImage lightImage = copyImage(lightImages.get(d.lights.currentColor));
+				lightImage = rotateImage(lightImage, d, true, false);
+				g.drawImage(lightImage, 288-64, 288-116, null);
 			}
 			
 			
@@ -168,10 +179,9 @@ public class NiceGui extends JPanel implements SimulationListener {
 		if (!carMap.containsKey(car)) {
 			BufferedImage image = copyImage(carImages
 					.get((int) (Math.random() * carImages.size())));
-			image = rotateImage(image, car.direction);
+			image = rotateImage(image, car.direction, false, false);
 			carMap.put(car, image);
 		}
-
 		
 		return carMap.get(car);
 	}
@@ -183,7 +193,7 @@ public class NiceGui extends JPanel implements SimulationListener {
 		return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
 	}
 
-	private BufferedImage rotateImage(BufferedImage image, Direction direction) {
+	private BufferedImage rotateImage(BufferedImage image, Direction direction, boolean top, boolean left) {
 		double radians = 0;
 		switch (direction) {
 		case E:
@@ -196,7 +206,8 @@ public class NiceGui extends JPanel implements SimulationListener {
 		}
 
 		AffineTransform transform = new AffineTransform();
-		transform.rotate(radians, image.getWidth(), image.getHeight());
+		transform.rotate(radians, (left?1:image.getWidth()), (top?1:image.getHeight()));
+		
 		AffineTransformOp op = new AffineTransformOp(transform,
 				AffineTransformOp.TYPE_BILINEAR);
 		return op.filter(image, null);
