@@ -45,14 +45,13 @@ public class VTLPlusController extends Controller {
 				allGreen();
 			} else if (closestN.getDistance() < closestE.getDistance()) {
 				nsGreenEWRed();
-				closestE.setLeader(true);
-				closestN.setLeader(false);
+				setLeader(closestE);
 			} else if (closestN.getDistance() == closestE.getDistance()) {
 				if (!closestN.isLeader() && !closestE.isLeader()) {
 					if (ticks % 2 == 0) {
-						closestN.setLeader(true);
+						setLeader(closestN);
 					} else {
-						closestE.setLeader(true);
+						setLeader(closestE);
 					}
 				}
 				if (closestN.isLeader()) {
@@ -61,8 +60,7 @@ public class VTLPlusController extends Controller {
 					nsGreenEWRed();
 				}
 			} else {
-				closestE.setLeader(false);
-				closestN.setLeader(true);
+				setLeader(closestN);
 				nsRedEWGreen();
 			}
 		}
@@ -73,8 +71,26 @@ public class VTLPlusController extends Controller {
 		return null;
 	}
 
+	private VTLCar leader = null;
+
+	public void setLeader(VTLCar c) {
+		if (leader != null) {
+			leader.setLeader(false);
+		}
+		leader = c;
+		leader.setLeader(true);
+	}
+
 	@Override
 	public void init(int currentTick) {
 
+	}
+
+	@Override
+	public void stop(int currentTick) {
+		if (leader != null) {
+			leader.setLeader(false);
+		}
+		leader = null;
 	}
 }
