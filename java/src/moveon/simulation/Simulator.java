@@ -28,6 +28,7 @@ public class Simulator {
 	// private static final String TESTFOLDER = "TestFiles" + File.separator;
 
 	public ArrayList<Car> cars;
+	public ArrayList<Car> leavingCars;
 	public Intersection intersection;
 	private boolean pause = false;
 	private int tickTimeMillis;
@@ -37,7 +38,6 @@ public class Simulator {
 	private boolean generateRandomNormalCars;
 	private boolean generateRandomVTLCars;
 	private boolean generateRandomPeople;
-	private boolean generateRandomPedestrians;
 
 	public int tick;
 
@@ -63,6 +63,7 @@ public class Simulator {
 
 	public Simulator(boolean hasConsole) {
 		cars = new ArrayList<Car>();
+		leavingCars = new ArrayList<Car>();
 		intersection = new Intersection();
 		// gui = new KeyInput(this);
 
@@ -124,7 +125,6 @@ public class Simulator {
 			}
 			try {
 				setTickTimeMillis(100);
-
 				Thread.sleep(getTickTimeMillis());
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -150,10 +150,18 @@ public class Simulator {
 			// tick all cars, and let us know what each is up to.
 			for (int j = 0; j < cars.size(); j++) {
 				if (!cars.get(j).tick(tick)) {
-					cars.remove(j);
+					leavingCars.add(cars.remove(j));
 					j--;
 				}
 			}
+			
+			for (int j = 0; j < leavingCars.size(); j++) {
+				if (!leavingCars.get(j).tick(tick)) {
+					leavingCars.remove(j);
+					j--;
+				}
+			}
+			
 			if (generateRandomCars) {
 				// 75% of the time add a new car
 				if (Math.random() < 0.15) {
