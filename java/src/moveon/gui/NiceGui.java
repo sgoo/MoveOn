@@ -40,9 +40,11 @@ public class NiceGui extends JPanel implements SimulationListener {
 	public static final int FRAME_SIZE = 72;
 	
 	public static final int CARS_IMAGE_COUNT = 13;
+	public static final int VTL_CARS_IMAGE_COUNT = 1;
 
 	BufferedImage backgroundImage;
 	ArrayList<BufferedImage> carImages = new ArrayList<BufferedImage>();
+	ArrayList<BufferedImage> vtlCarImages = new ArrayList<BufferedImage>();
 	Map<String, BufferedImage> lightImages = new HashMap<String, BufferedImage>();
 	
 	/**
@@ -67,6 +69,11 @@ public class NiceGui extends JPanel implements SimulationListener {
 			// cars
 			for(int i = 0 ; i < CARS_IMAGE_COUNT; i++) {
 				carImages.add(ImageIO.read(new File("res/Cars/" + (i+1) + ".png")));
+			}
+			
+			// vtl cars
+			for(int i = 0 ; i < VTL_CARS_IMAGE_COUNT; i++) {
+				vtlCarImages.add(ImageIO.read(new File("res/VTLCars/" + (i+1) + ".png")));
 			}
 			
 			// lights
@@ -120,14 +127,18 @@ public class NiceGui extends JPanel implements SimulationListener {
 	public class RenderThread extends Thread {
 		public void run() {
 
-			// BACKGROUND IMAGE
+			// ==================================================
+			//  BACKGROUND IMAGE
+			// ==================================================
 			BufferedImage img = new BufferedImage(NiceGui.FRAME_SIZE
 					* NiceGui.PIX_PER_TICK, NiceGui.FRAME_SIZE
 					* NiceGui.PIX_PER_TICK, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g = img.createGraphics();
 			g.drawImage(backgroundImage, 0, 0, null);
 
-			// TRAFFIC LIGHTS
+			// ==================================================
+			//  TRAFFIC LIGHTS
+			// ==================================================
 			BufferedImage imageNS = null;
 			switch(Direction.N.lights.currentColor) {
 			case R:
@@ -156,7 +167,9 @@ public class NiceGui extends JPanel implements SimulationListener {
 			}
 			g.drawImage(imageEW, 288-imageEW.getWidth()/2, 288-imageEW.getHeight()/2, null);
 		
-			// PEDESTRIAN LIGHTS
+			// ==================================================
+			//  PEDESTRIANS LIGHTS
+			// ==================================================
 			BufferedImage imagePedEW = null;
 			System.out.println(sim.tick);
 			if(Direction.E.hasPeds(sim.tick) || Direction.W.hasPeds(sim.tick)){
@@ -183,9 +196,10 @@ public class NiceGui extends JPanel implements SimulationListener {
 				imagePedNS = lightImages.get("PED_NS_NULL");
 			}
 			g.drawImage(imagePedNS, 288-imagePedNS.getWidth()/2, 288-imagePedNS.getHeight()/2, null);
-
 			
-			// CARS
+			// ==================================================
+			//  CARS AND VTL CARS
+			// ==================================================
 			for (Car c : sim.cars) {
 				int carSize = Car.CAR_LENGTH * GUI_M_LENGTH;
 				switch (c.direction) {
