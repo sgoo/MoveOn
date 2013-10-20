@@ -1,8 +1,5 @@
 package moveon.simulation;
 
-import gov.nasa.jpf.annotation.FilterField;
-import gov.nasa.jpf.annotation.Invariant;
-
 //import java.io.BufferedReader;
 //import java.io.File;
 //import java.io.IOException;
@@ -30,7 +27,6 @@ public class Simulator {
 	public static final String NORMAL = "NORMAL";
 	// private static final String TESTFOLDER = "TestFiles" + File.separator;
 
-	@FilterField
 	public ArrayList<Car> cars;
 	public Intersection intersection;
 	private boolean pause = false;

@@ -1,101 +1,96 @@
 package moveon.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
-import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 
 import moveon.simulation.Direction;
 import moveon.simulation.SimulationListener;
 import moveon.simulation.Simulator;
 
-public class KeyInput extends JFrame implements ActionListener, KeyEventDispatcher, SimulationListener {
+public class KeyInput extends JPanel implements ActionListener, KeyEventDispatcher, SimulationListener {
 
 	private static final long serialVersionUID = 1L;
 	private static final String CAR_TYPE_LBL = "";
 
-	private Simulator s;
+	private Simulator simulator;
 
 	private boolean isVtlCar = false;
-
-	public KeyInput(Simulator s) {
-		super("Car Creator");
-		this.s = s;
-		init();
-	}
-
-	LayoutManager layout;
 	JButton NButton;
 	JButton SButton;
 	JButton EButton;
 	JButton WButton;
 	JButton carTypeButton;
 	JButton pauseButton;
-	JTextArea display;
+
 	private JCheckBox toggleRandom;
 	private JCheckBox toggleVTLCars;
 	private JCheckBox toggleNormalCars;
+	
+	
+	
+	
+	public KeyInput(Simulator simulator) {
+		this.simulator = simulator;
+		
+		// set layout
+		this.setLayout(new BorderLayout());
+		this.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 
-	private void init() {
-		layout = new BorderLayout();
-
-		JPanel controls = new JPanel(new GridLayout(4, 3));
-
-		display = new JTextArea(5, 115);
-		display.setFont(new Font("Courier", Font.PLAIN, 12));
-
+		
+		// Left buttons
+		JPanel LeftPanel = new JPanel(new GridLayout(2,3)); 
+		
+		
 		NButton = new JButton("North");
 		NButton.addActionListener(this);
-		SButton = new JButton("South");
-		SButton.addActionListener(this);
-		EButton = new JButton("East");
-		EButton.addActionListener(this);
+		LeftPanel.add(new JPanel());
+		LeftPanel.add(NButton);
+		
 		WButton = new JButton("West");
 		WButton.addActionListener(this);
+		LeftPanel.add(new JPanel());
+		LeftPanel.add(WButton);
+		
+		SButton = new JButton("South");
+		SButton.addActionListener(this);
+		LeftPanel.add(SButton);
+		
+		EButton = new JButton("East");
+		EButton.addActionListener(this);
+		LeftPanel.add(EButton);
+		
+		LeftPanel.setBorder(BorderFactory.createEmptyBorder(0,10,0,10));
+		this.add(LeftPanel,BorderLayout.LINE_START);
+		
+		// Middle Buttons
+		JPanel midPanel = new JPanel(new GridLayout(1,2));
+		
 		pauseButton = new JButton("Pause");
 		pauseButton.addActionListener(this);
+		midPanel.add(pauseButton);
+		
 		carTypeButton = new JButton(CAR_TYPE_LBL + Simulator.NORMAL);
 		carTypeButton.addActionListener(this);
-		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-		manager.addKeyEventDispatcher(this);
-
-		setLayout(layout);
-
-		// Controls Top row
-		controls.add(new JLabel());
-		controls.add(NButton, BorderLayout.PAGE_START);
-		controls.add(new JLabel());
-
-		// Controls second row
-		controls.add(WButton, BorderLayout.LINE_START);
-		controls.add(new JLabel());
-		controls.add(EButton, BorderLayout.LINE_END);
-
-		// Controls third Row
-		controls.add(new JLabel());
-		controls.add(SButton, BorderLayout.PAGE_END);
-		controls.add(new JLabel());
-
-		// Controls bottom row
-		controls.add(carTypeButton);
-		controls.add(pauseButton, BorderLayout.CENTER);
-
-		// Checkboxes
-		JPanel checkboxPanel = new JPanel();
-		checkboxPanel.setLayout(new BoxLayout(checkboxPanel, BoxLayout.Y_AXIS));
+		midPanel.add(carTypeButton);
+		
+		midPanel.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+		this.add(midPanel, BorderLayout.CENTER);
+		
+		// Right Checkboxes
+		JPanel rightPanel = new JPanel(new GridLayout(3,1));
+		
+		rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
 		toggleRandom = new JCheckBox("Generate cars randomly", true);
 		toggleVTLCars = new JCheckBox("Generate VTL cars", true);
 		toggleNormalCars = new JCheckBox("Generate normal cars", true);
@@ -103,22 +98,17 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 		toggleRandom.addActionListener(this);
 		toggleVTLCars.addActionListener(this);
 		toggleNormalCars.addActionListener(this);
-		checkboxPanel.add(toggleRandom);
-		checkboxPanel.add(toggleVTLCars);
-		checkboxPanel.add(toggleNormalCars);
-
-		controls.add(checkboxPanel);
-
-		add(controls, BorderLayout.LINE_START);
-		add(display, BorderLayout.CENTER);
-
-		// sizes the window correctly
-		pack();
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		rightPanel.add(toggleRandom);
+		rightPanel.add(toggleVTLCars);
+		rightPanel.add(toggleNormalCars);
 		
-		setVisible(true);
-
+		this.add(rightPanel, BorderLayout.LINE_END);
+		
+		// handles key presses
+		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		manager.addKeyEventDispatcher(this);
 	}
+
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -135,11 +125,11 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 		} else if (e.getSource() == carTypeButton) {
 			changeCarType();
 		} else if (e.getSource() == toggleRandom) {
-			s.toggleRandom();
+			simulator.toggleRandom();
 		} else if (e.getSource() == toggleNormalCars) {
-			s.toggleRandomNormalCars();
+			simulator.toggleRandomNormalCars();
 		} else if (e.getSource() == toggleVTLCars) {
-			s.toggleRandomVTLCars();
+			simulator.toggleRandomVTLCars();
 		}
 	}
 
@@ -185,8 +175,8 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 	}
 
 	private void changePause() {
-		s.playPause();
-		if (s.isPaused()) {
+		simulator.playPause();
+		if (simulator.isPaused()) {
 			pauseButton.setText("Unpause");
 		} else {
 			pauseButton.setText("Pause");
@@ -204,15 +194,14 @@ public class KeyInput extends JFrame implements ActionListener, KeyEventDispatch
 
 	private void addCar(int dist, Direction d) {
 		if (isVtlCar) {
-			s.addVTLCar(dist, d);
+			simulator.addVTLCar(dist, d);
 		} else {
-			s.addCar(dist, d);
+			simulator.addCar(dist, d);
 		}
 	}
 
 	@Override
 	public void simulationUpdated(String simulationState) {
-		display.setText(simulationState);
 
 	}
 
