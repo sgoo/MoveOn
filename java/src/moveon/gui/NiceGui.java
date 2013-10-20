@@ -234,42 +234,49 @@ public class NiceGui extends JPanel implements SimulationListener {
 			// CARS AND VTL CARS
 			// ==================================================
 			for (Car c : sim.cars) {
-				int x = 0, y = 0;
+				drawCar(g, c);
+			}
 
-				int adjustedDistanceFromIntersection = c.distanceFromIntersection;
-				if (adjustedDistanceFromIntersection >= 0)
-					adjustedDistanceFromIntersection += 1;
-
-				switch (c.direction) {
-				case N:
-					x = Intersection.VTL_SPAN * PIX_PER_TICK;
-					y = (Intersection.VTL_SPAN - 8 - adjustedDistanceFromIntersection) * PIX_PER_TICK;
-					break;
-
-				case S:
-					x = Intersection.VTL_SPAN * PIX_PER_TICK;
-					y = (Intersection.VTL_SPAN + 8 + adjustedDistanceFromIntersection) * PIX_PER_TICK;
-					break;
-
-				case E:
-					x = (Intersection.VTL_SPAN + 8 + adjustedDistanceFromIntersection) * PIX_PER_TICK;
-					y = Intersection.VTL_SPAN * PIX_PER_TICK;
-					break;
-
-				case W:
-					x = (Intersection.VTL_SPAN - 8 - adjustedDistanceFromIntersection) * PIX_PER_TICK;
-					y = Intersection.VTL_SPAN * PIX_PER_TICK;
-					break;
-
-				}
-
-				g.drawImage(getCarImage(c), x, y, null);
-
+			for (Car c : sim.leavingCars) {
+				drawCar(g, c);
 			}
 
 			currentImage = img;
 			repaint();
 
+		}
+
+		private void drawCar(Graphics2D g, Car c) {
+			int x = 0, y = 0;
+
+			int adjustedDistanceFromIntersection = c.distanceFromIntersection;
+			if (adjustedDistanceFromIntersection >= 0)
+				adjustedDistanceFromIntersection += 1;
+
+			switch (c.direction) {
+			case N:
+				x = Intersection.VTL_SPAN * PIX_PER_TICK;
+				y = (Intersection.VTL_SPAN - 8 - adjustedDistanceFromIntersection) * PIX_PER_TICK;
+				break;
+
+			case S:
+				x = Intersection.VTL_SPAN * PIX_PER_TICK;
+				y = (Intersection.VTL_SPAN + 8 + adjustedDistanceFromIntersection) * PIX_PER_TICK;
+				break;
+
+			case E:
+				x = (Intersection.VTL_SPAN + 8 + adjustedDistanceFromIntersection) * PIX_PER_TICK;
+				y = Intersection.VTL_SPAN * PIX_PER_TICK;
+				break;
+
+			case W:
+				x = (Intersection.VTL_SPAN - 8 - adjustedDistanceFromIntersection) * PIX_PER_TICK;
+				y = Intersection.VTL_SPAN * PIX_PER_TICK;
+				break;
+
+			}
+
+			g.drawImage(getCarImage(c), x, y, null);
 		}
 	}
 
