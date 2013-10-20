@@ -78,15 +78,15 @@ public class Simulator {
 	}
 
 	public void initialize() {
-		/*
+		
 		addVTLCar(10, Direction.N);
 		addVTLCar(16, Direction.N);
-		addVTLCar(31, Direction.S);
-		addVTLCar(31, Direction.E);
-		addVTLCar(40, Direction.W);
-		addVTLCar(60, Direction.N);
-		addVTLCar(64, Direction.E);
-		*/
+		addVTLCar(18, Direction.S);
+		addVTLCar(18, Direction.E);
+		addVTLCar(25, Direction.W);
+		addVTLCar(25, Direction.N);
+		addVTLCar(30, Direction.E);
+		
 	}
 
 	/**

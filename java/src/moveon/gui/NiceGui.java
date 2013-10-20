@@ -2,15 +2,23 @@ package moveon.gui;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import moveon.cars.Car;
+import moveon.simulation.Direction;
 import moveon.simulation.Intersection;
 import moveon.simulation.SimulationListener;
 import moveon.simulation.Simulator;
@@ -28,11 +36,14 @@ public class NiceGui extends JPanel implements SimulationListener {
 	public static final int GUI_M_LENGTH = 3;
 
 	public static final int PIX_PER_TICK = 8;
-	
+
 	public static final int FRAME_SIZE = 72;
 	
+	public static final int CARS_IMAGE_COUNT = 13;
+
 	BufferedImage backgroundImage;
-	
+	ArrayList<BufferedImage> carImages = new ArrayList<BufferedImage>();
+
 	/**
 	 * 
 	 */
@@ -43,13 +54,18 @@ public class NiceGui extends JPanel implements SimulationListener {
 		this.sim = sim;
 		sim.addSimListener(this);
 		setSize(700, 700);
-		
+
 		initImages();
 	}
-	
+
 	private void initImages() {
 		try {
 			backgroundImage = ImageIO.read(new File("res/background.png"));
+			
+			for(int i = 0 ; i < CARS_IMAGE_COUNT; i++) {
+				carImages.add(ImageIO.read(new File("res/Cars/" + (i+1) + ".png")));
+			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -57,7 +73,6 @@ public class NiceGui extends JPanel implements SimulationListener {
 
 	@Override
 	public void simulationUpdated(String simulationState) {
-		System.out.println("got update!");
 		new RenderThread().start();
 	}
 
@@ -90,35 +105,45 @@ public class NiceGui extends JPanel implements SimulationListener {
 
 	public class RenderThread extends Thread {
 		public void run() {
-			
-			//int size = (2 * (Intersection.VTL_SPAN + Car.CAR_LENGTH) + Car.CAR_LENGTH) * GUI_M_LENGTH;
-			
-			BufferedImage img = new BufferedImage(NiceGui.FRAME_SIZE * NiceGui.PIX_PER_TICK, NiceGui.FRAME_SIZE * NiceGui.PIX_PER_TICK, BufferedImage.TYPE_INT_ARGB);
+
+			BufferedImage img = new BufferedImage(NiceGui.FRAME_SIZE
+					* NiceGui.PIX_PER_TICK, NiceGui.FRAME_SIZE
+					* NiceGui.PIX_PER_TICK, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g = img.createGraphics();
-			
-			//g.setColor(Color.BLACK);
-			//g.fillRect(0, 0, size, size);
-			//g.setColor(Color.RED);
 			g.drawImage(backgroundImage, 0, 0, null);
-			
+
 			for (Car c : sim.cars) {
 				int carSize = Car.CAR_LENGTH * GUI_M_LENGTH;
 				switch (c.direction) {
 				case N:
-					// System.out.format("%d %d %d %d\n", Intersection.VTL_SPAN * GUI_M_LENGTH, (Intersection.VTL_SPAN - c.distanceFromIntersection)
+					// System.out.format("%d %d %d %d\n", Intersection.VTL_SPAN
+					// * GUI_M_LENGTH, (Intersection.VTL_SPAN -
+					// c.distanceFromIntersection)
 					// * GUI_M_LENGTH, carSize, carSize);
-					g.fillRect(Intersection.VTL_SPAN * GUI_M_LENGTH, (Intersection.VTL_SPAN - c.distanceFromIntersection) * GUI_M_LENGTH, carSize, carSize);
+					g.drawImage(
+							getCarImage(c),
+							Intersection.VTL_SPAN + 4,
+							(Intersection.VTL_SPAN - c.distanceFromIntersection * PIX_PER_TICK), null);
 					break;
+					/*
 				case S:
-					g.fillRect(Intersection.VTL_SPAN * GUI_M_LENGTH,
-							(Intersection.VTL_SPAN + (Intersection.INTERSECTION_SPAN * Car.CAR_LENGTH) + c.distanceFromIntersection) * GUI_M_LENGTH, carSize,
-							carSize);
+					g.drawImage(
+							getCarImage(c),
+							Intersection.VTL_SPAN * GUI_M_LENGTH,
+							(Intersection.VTL_SPAN
+									+ (Intersection.INTERSECTION_SPAN * Car.CAR_LENGTH) + c.distanceFromIntersection)
+									* GUI_M_LENGTH, null);
 					break;
 				case E:
-					g.fillRect(Intersection.VTL_SPAN * GUI_M_LENGTH, (Intersection.VTL_SPAN - c.distanceFromIntersection) * GUI_M_LENGTH, carSize, carSize);
+					g.drawImage(
+							getCarImage(c),
+							Intersection.VTL_SPAN * GUI_M_LENGTH,
+							(Intersection.VTL_SPAN - c.distanceFromIntersection)
+									* GUI_M_LENGTH, null);
 					break;
 				case W:
 					break;
+					*/
 				}
 			}
 			currentImage = img;
@@ -126,4 +151,45 @@ public class NiceGui extends JPanel implements SimulationListener {
 
 		}
 	}
+
+	private Map<Car, BufferedImage> carMap = new HashMap<Car, BufferedImage>();
+
+	private BufferedImage getCarImage(Car car) {
+		if (!carMap.containsKey(car)) {
+			BufferedImage image = copyImage(carImages
+					.get((int) (Math.random() * carImages.size())));
+			image = rotateImage(image, car.direction);
+			carMap.put(car, image);
+		}
+
+		
+		return carMap.get(car);
+	}
+
+	private BufferedImage copyImage(BufferedImage bi) {
+		ColorModel cm = bi.getColorModel();
+		boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+		WritableRaster raster = bi.copyData(null);
+		return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+	}
+
+	private BufferedImage rotateImage(BufferedImage image, Direction direction) {
+		double radians = 0;
+		switch (direction) {
+		case E:
+			radians += Math.PI / 2.0d;
+		case N:
+			radians += Math.PI / 2.0d;
+		case W:
+			radians += Math.PI / 2.0d;
+		case S:
+		}
+
+		AffineTransform transform = new AffineTransform();
+		transform.rotate(radians, image.getWidth(), image.getHeight());
+		AffineTransformOp op = new AffineTransformOp(transform,
+				AffineTransformOp.TYPE_BILINEAR);
+		return op.filter(image, null);
+	}
+
 }
