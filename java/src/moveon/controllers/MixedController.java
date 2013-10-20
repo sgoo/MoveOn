@@ -17,7 +17,7 @@ public class MixedController extends Controller {
 	@Override
 	public Mode tick(int ticks) {
 
-		if (Direction.N.hasNonVTLCars() || Direction.S.hasNonVTLCars()) {
+		if (Direction.N.hasNonVTLCars() || Direction.S.hasNonVTLCars() || Direction.N.pedsWaiting || Direction.S.pedsWaiting) {
 			nsGreenEWRed();
 		} else {
 			nsRedEWGreen();
@@ -29,6 +29,6 @@ public class MixedController extends Controller {
 
 	@Override
 	public void init(int currentTick) {
-		
+
 	}
 }

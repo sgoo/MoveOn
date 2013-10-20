@@ -36,6 +36,7 @@ public class Simulator {
 	// private KeyInput gui;
 	private boolean generateRandomNormalCars;
 	private boolean generateRandomVTLCars;
+	private boolean generateRandomPeople;
 
 	public static final int SIM_LENGTH = 4000;
 
@@ -64,6 +65,7 @@ public class Simulator {
 		generateRandomCars = true;
 		generateRandomVTLCars = true;
 		generateRandomNormalCars = true;
+		generateRandomPeople = true;
 
 		simListeners = new ArrayList<SimulationListener>();
 		// simListeners.add(gui);
@@ -126,7 +128,16 @@ public class Simulator {
 			intersection.tick(i);
 			StringBuilder sb = new StringBuilder();
 
-			sb.append(intersection.mode + "\n");
+			sb.append(intersection.mode + "  ");
+			sb.append(Direction.N.pedsWaiting + " ");
+			sb.append(Direction.S.pedsWaiting + " ");
+			sb.append(Direction.E.pedsWaiting + " ");
+			sb.append(Direction.W.pedsWaiting + "   ");
+
+			sb.append(Direction.N.isPedsCrossing(i) + " ");
+			sb.append(Direction.S.isPedsCrossing(i) + " ");
+			sb.append(Direction.E.isPedsCrossing(i) + " ");
+			sb.append(Direction.W.isPedsCrossing(i) + "\n");
 
 			// tick all cars, and let us know what each is up to.
 			for (int j = 0; j < cars.size(); j++) {
@@ -164,6 +175,18 @@ public class Simulator {
 						addCar(100, randomDirection);
 					} else if (!generateRandomNormalCars && generateRandomVTLCars) {
 						addVTLCar(100, randomDirection);
+					}
+				}
+				if (generateRandomPeople && Math.random() > 0.99) {
+					double d = Math.random();
+					if (d < 0.25) {
+						Direction.N.addPed();
+					} else if (d < 0.5) {
+						Direction.S.addPed();
+					} else if (d < 0.75) {
+						Direction.E.addPed();
+					} else {
+						Direction.W.addPed();
 					}
 				}
 			}
@@ -204,8 +227,17 @@ public class Simulator {
 		this.generateRandomCars = generateRandomCars;
 	}
 
+	public boolean isGenerateRandomPeople() {
+		return generateRandomPeople;
+	}
+
+	public void setGenerateRandomPeople(boolean generateRandomPeople) {
+		this.generateRandomPeople = generateRandomPeople;
+	}
+
 	/**
-	 * Read a file and add the cars represented in it Format is: TIME(int),DIRECTION(N,S,E,W),CAR_TYPE(VTL,NORMAL)
+	 * Read a file and add the cars represented in it Format is:
+	 * TIME(int),DIRECTION(N,S,E,W),CAR_TYPE(VTL,NORMAL)
 	 * 
 	 * @param fileName
 	 * @return

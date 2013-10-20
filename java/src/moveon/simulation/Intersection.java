@@ -87,7 +87,8 @@ public class Intersection implements Tickable {
 		hasEWVTLCars = (Direction.E.hasVTLCars() || Direction.W.hasVTLCars()) ? 1 : 0;
 		hasNonVTLSum = hasNSNonVTLCars + hasEWNonVTLCars;
 
-		if ((Direction.N.hasNonVTLCars() || Direction.S.hasNonVTLCars()) && (Direction.W.hasNonVTLCars() || Direction.E.hasNonVTLCars())) {
+		if (((Direction.N.hasNonVTLCars() || Direction.S.hasNonVTLCars()) && (Direction.W.hasNonVTLCars() || Direction.E.hasNonVTLCars())) //
+				|| (Direction.N.hasPeds(ticks) || Direction.S.hasPeds(ticks) || Direction.E.hasPeds(ticks) || Direction.W.hasPeds(ticks))) {
 			if (Direction.N.lights.currentColor == Color.R || Direction.E.lights.currentColor == Color.R) {
 				setMode(Mode.NORMAL, ticks);
 			} else {

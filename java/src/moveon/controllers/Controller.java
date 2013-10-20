@@ -42,7 +42,8 @@ public abstract class Controller {
 		desiredState[1] = Color.G;
 	}
 
-	protected void progressLights(int tickNumber) {
+	protected boolean progressLights(int tickNumber) {
+		boolean output = false;
 		if (Direction.N.lights.currentColor != desiredState[0]) {
 			switch (Direction.N.lights.currentColor) {
 			case R:
@@ -56,12 +57,14 @@ public abstract class Controller {
 			case G:
 				Direction.N.lights.switchColor();
 				lastLightChange = tickNumber;
+				output = true;
 				break;
 			case O:
 				// If the lights are orange continue to attempt to change them
 				// to red
 				if (tickNumber - lastLightChange > Intersection.ORANGE_TIME) {
 					Direction.N.lights.switchColor();
+					output = true;
 				}
 				break;
 			}
@@ -80,16 +83,19 @@ public abstract class Controller {
 			case G:
 				Direction.E.lights.switchColor();
 				lastLightChange = tickNumber;
+				output = true;
 				break;
 			case O:
 				// If the lights are orange continue to attempt to change them
 				// to red
 				if (tickNumber - lastLightChange > Intersection.ORANGE_TIME) {
 					Direction.E.lights.switchColor();
+					output = true;
 				}
 				break;
 			}
 		}
+		return output;
 	}
 
 	@Override
