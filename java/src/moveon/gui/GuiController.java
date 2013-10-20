@@ -21,7 +21,7 @@ public class GuiController extends JFrame {
 	}
 
 	
-	private Simulator simulator;	
+	private Simulator simulator;
 	private boolean isVtlCar = false;
 	
 	public GuiController(Simulator simulator) {
