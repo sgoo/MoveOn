@@ -13,7 +13,11 @@ import moveon.simulation.Intersection.Mode;
  * 
  */
 public class VTLPlusController extends Controller {
-	//TODO change lights aleast every 30 seconds
+
+	public static final int MAX_LEADER_TIME = 40;
+
+	int lastLeaderChange = 0;
+	VTLCar bannedFromLeader = null;
 
 	public VTLPlusController() {
 	}
@@ -43,25 +47,48 @@ public class VTLPlusController extends Controller {
 
 			if (Math.abs(closestN.getDistance() - closestE.getDistance()) > (Car.CAR_LENGTH + Intersection.INTERSECTION_SPAN)) {
 				allGreen();
-			} else if (closestN.getDistance() < closestE.getDistance()) {
-				nsGreenEWRed();
-				setLeader(closestE);
-			} else if (closestN.getDistance() == closestE.getDistance()) {
-				if (!closestN.isLeader() && !closestE.isLeader()) {
-					if (ticks % 2 == 0) {
-						setLeader(closestN);
-					} else {
+			} else {
+				if (closestN.isLeader()) {
+					if (lastLeaderChange + MAX_LEADER_TIME < ticks) {
+						// need to switch leader
+						nsGreenEWRed();
+						lastLeaderChange = ticks;
 						setLeader(closestE);
 					}
-				}
-				if (closestN.isLeader()) {
-					nsRedEWGreen();
 				} else if (closestE.isLeader()) {
+					if (lastLeaderChange + MAX_LEADER_TIME < ticks) {
+						// need to switch leader
+						nsRedEWGreen();
+						lastLeaderChange = ticks;
+						setLeader(closestN);
+					}
+				} else if ((bannedFromLeader == closestN && closestE.isLeader()) || (bannedFromLeader == closestE && closestN.isLeader())) {
+					// do nothing
+				} else if (closestN.getDistance() < closestE.getDistance()) {
 					nsGreenEWRed();
+					lastLeaderChange = ticks;
+					setLeader(closestE);
+				} else if (closestE.getDistance() < closestN.getDistance()) {
+					setLeader(closestN);
+					nsRedEWGreen();
+					lastLeaderChange = ticks;
+				} else if (closestN.getDistance() == closestE.getDistance()) {
+					if (!closestN.isLeader() && !closestE.isLeader()) {
+						if (ticks % 2 == 0) {
+							lastLeaderChange = ticks;
+							setLeader(closestN);
+						} else {
+							lastLeaderChange = ticks;
+							setLeader(closestE);
+						}
+					}
+					if (closestN.isLeader()) {
+						nsRedEWGreen();
+					} else if (closestE.isLeader()) {
+						nsGreenEWRed();
+					}
+				} else {
 				}
-			} else {
-				setLeader(closestN);
-				nsRedEWGreen();
 			}
 		}
 
@@ -74,8 +101,15 @@ public class VTLPlusController extends Controller {
 	private VTLCar leader = null;
 
 	public void setLeader(VTLCar c) {
+		System.out.println("Setting leader");
+		try {
+			throw new Exception();
+		} catch (Exception e) {
+			System.out.println(e.getStackTrace()[1]);
+		}
 		if (leader != null) {
 			leader.setLeader(false);
+			bannedFromLeader = leader;
 		}
 		leader = c;
 		leader.setLeader(true);
@@ -92,5 +126,10 @@ public class VTLPlusController extends Controller {
 			leader.setLeader(false);
 		}
 		leader = null;
+	}
+
+	@Override
+	public String toString() {
+		return " " + lastLeaderChange;
 	}
 }

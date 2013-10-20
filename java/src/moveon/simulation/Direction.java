@@ -107,7 +107,7 @@ public enum Direction {
 	 */
 	public VTLCar getClosestVTLCar() {
 		for (Car car : cars) {
-			if (car instanceof VTLCar) {
+			if (car.distanceFromIntersection >= 0 && car instanceof VTLCar) {
 				return (VTLCar) car;
 			}
 		}
@@ -178,9 +178,9 @@ public enum Direction {
 	}
 
 	public static Direction[] getDirections() {
-		return new Direction[] {N, S, E, W};
+		return new Direction[] { N, S, E, W };
 	}
-	
+
 	public void addPed() {
 		pedsWaiting = true;
 	}
