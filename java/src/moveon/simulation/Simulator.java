@@ -118,7 +118,7 @@ public class Simulator {
 				generateRandomCars = false;
 			}
 			try {
-				setTickTimeMillis(250);
+				setTickTimeMillis(100);
 				Thread.sleep(getTickTimeMillis());
 			} catch (InterruptedException e) {
 				e.printStackTrace();
