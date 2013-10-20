@@ -28,7 +28,7 @@ public class GuiController extends JFrame {
 		super("VTL Interface");
 		this.simulator = simulator;
 		
-		// add main canvas
+		// add main canvas (nice gui)
 		JPanel gui = new NiceGui(simulator);
 		gui.setPreferredSize(new Dimension(400, 500));
 		this.add(gui, BorderLayout.CENTER);

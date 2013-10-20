@@ -17,7 +17,7 @@ public class Car implements Tickable {
 	/**
 	 * Car length Unit: m
 	 */
-	public static final int CAR_LENGTH = 5;
+	public static final int CAR_LENGTH = 4;
 
 	/**
 	 * Car speed Unit: m/s
