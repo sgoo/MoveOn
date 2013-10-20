@@ -76,6 +76,7 @@ public class Simulator {
 	}
 
 	public void initialize() {
+		/*
 		addVTLCar(10, Direction.N);
 		addVTLCar(16, Direction.N);
 		addVTLCar(31, Direction.S);
@@ -83,6 +84,7 @@ public class Simulator {
 		addVTLCar(40, Direction.W);
 		addVTLCar(60, Direction.N);
 		addVTLCar(64, Direction.E);
+		*/
 	}
 
 	/**
@@ -156,14 +158,14 @@ public class Simulator {
 					// Randomly choose VTL or Non-VTL
 					if (generateRandomNormalCars && generateRandomVTLCars) {
 						if (Math.random() < 0.5) {
-							addVTLCar(100, randomDirection);
+							addVTLCar(Intersection.VTL_SPAN, randomDirection);
 						} else {
-							addCar(100, randomDirection);
+							addCar(Intersection.VTL_SPAN, randomDirection);
 						}
 					} else if (generateRandomNormalCars && !generateRandomVTLCars) {
-						addCar(100, randomDirection);
+						addCar(Intersection.VTL_SPAN, randomDirection);
 					} else if (!generateRandomNormalCars && generateRandomVTLCars) {
-						addVTLCar(100, randomDirection);
+						addVTLCar(Intersection.VTL_SPAN, randomDirection);
 					}
 				}
 			}
