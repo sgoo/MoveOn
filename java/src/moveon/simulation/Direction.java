@@ -107,7 +107,7 @@ public enum Direction {
 	 */
 	public VTLCar getClosestVTLCar() {
 		for (Car car : cars) {
-			if (car.distanceFromIntersection >= 0 && car instanceof VTLCar) {
+			if (car.distanceFromIntersection >= -(Intersection.INTERSECTION_SPAN + 1) && car instanceof VTLCar) {
 				return (VTLCar) car;
 			}
 		}
