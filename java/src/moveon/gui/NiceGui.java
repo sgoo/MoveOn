@@ -44,7 +44,7 @@ public class NiceGui extends JPanel implements SimulationListener {
 
 	BufferedImage backgroundImage;
 	ArrayList<BufferedImage> carImages = new ArrayList<BufferedImage>();
-	Map<Color, BufferedImage> lightImages = new HashMap<Color, BufferedImage>();
+	Map<String, BufferedImage> lightImages = new HashMap<String, BufferedImage>();
 	
 	/**
 	 * 
@@ -71,9 +71,14 @@ public class NiceGui extends JPanel implements SimulationListener {
 			}
 			
 			// lights
-			lightImages.put(Color.R, ImageIO.read(new File("res/Lights/R.png")));
-			lightImages.put(Color.O, ImageIO.read(new File("res/Lights/O.png")));
-			lightImages.put(Color.G, ImageIO.read(new File("res/Lights/G.png")));
+			lightImages.put("EW_G", ImageIO.read(new File("res/Lights/EW_R.png")));
+			lightImages.put("EW_O", ImageIO.read(new File("res/Lights/EW_O.png")));
+			lightImages.put("EW_R", ImageIO.read(new File("res/Lights/EW_G.png")));
+			
+			lightImages.put("NS_G", ImageIO.read(new File("res/Lights/NS_R.png")));
+			lightImages.put("NS_O", ImageIO.read(new File("res/Lights/NS_O.png")));
+			lightImages.put("NS_R", ImageIO.read(new File("res/Lights/NS_G.png")));
+			
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -123,12 +128,35 @@ public class NiceGui extends JPanel implements SimulationListener {
 			g.drawImage(backgroundImage, 0, 0, null);
 
 			// LIGHTS
-			for(Direction d : Direction.getDirections()) {
-				BufferedImage lightImage = copyImage(lightImages.get(d.lights.currentColor));
-				lightImage = rotateImage(lightImage, d, true, false);
-				g.drawImage(lightImage, 288-64, 288-116, null);
+			BufferedImage imageNS = null;
+			switch(Direction.N.lights.currentColor) {
+			case R:
+				imageNS = lightImages.get("NS_R");
+				break;
+			case O:
+				imageNS = lightImages.get("NS_O");
+				break;
+			case G:
+				imageNS = lightImages.get("NS_G");
+				break;
 			}
+			g.drawImage(imageNS, 288-imageNS.getWidth()/2, 288-imageNS.getHeight()/2, null);
 			
+			BufferedImage imageEW = null;
+			switch(Direction.E.lights.currentColor) {
+			case R:
+				imageEW = lightImages.get("EW_R");
+				break;
+			case O:
+				imageEW = lightImages.get("EW_O");
+				break;
+			case G:
+				imageEW = lightImages.get("EW_G");
+				break;
+			}
+			g.drawImage(imageEW, 288-imageEW.getWidth()/2, 288-imageEW.getHeight()/2, null);
+		
+
 			
 			// CARS
 			for (Car c : sim.cars) {
@@ -179,7 +207,7 @@ public class NiceGui extends JPanel implements SimulationListener {
 		if (!carMap.containsKey(car)) {
 			BufferedImage image = copyImage(carImages
 					.get((int) (Math.random() * carImages.size())));
-			image = rotateImage(image, car.direction, false, false);
+			image = rotateImage(image, car.direction, image.getWidth(), image.getHeight());
 			carMap.put(car, image);
 		}
 		
@@ -193,7 +221,7 @@ public class NiceGui extends JPanel implements SimulationListener {
 		return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
 	}
 
-	private BufferedImage rotateImage(BufferedImage image, Direction direction, boolean top, boolean left) {
+	private BufferedImage rotateImage(BufferedImage image, Direction direction, int anchorX,  int anchorY) {
 		double radians = 0;
 		switch (direction) {
 		case E:
@@ -206,7 +234,7 @@ public class NiceGui extends JPanel implements SimulationListener {
 		}
 
 		AffineTransform transform = new AffineTransform();
-		transform.rotate(radians, (left?1:image.getWidth()), (top?1:image.getHeight()));
+		transform.rotate(radians, anchorX, anchorY);
 		
 		AffineTransformOp op = new AffineTransformOp(transform,
 				AffineTransformOp.TYPE_BILINEAR);
