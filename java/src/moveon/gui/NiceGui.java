@@ -106,12 +106,20 @@ public class NiceGui extends JPanel implements SimulationListener {
 	public class RenderThread extends Thread {
 		public void run() {
 
+			// BACKGROUND IMAGE
 			BufferedImage img = new BufferedImage(NiceGui.FRAME_SIZE
 					* NiceGui.PIX_PER_TICK, NiceGui.FRAME_SIZE
 					* NiceGui.PIX_PER_TICK, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g = img.createGraphics();
 			g.drawImage(backgroundImage, 0, 0, null);
 
+			// LIGHTS
+			for(Direction d : Direction.getDirections()) {
+				
+			}
+			
+			
+			// CARS
 			for (Car c : sim.cars) {
 				int carSize = Car.CAR_LENGTH * GUI_M_LENGTH;
 				switch (c.direction) {
@@ -145,6 +153,9 @@ public class NiceGui extends JPanel implements SimulationListener {
 					
 				}
 			}
+			
+			
+			
 			currentImage = img;
 			repaint();
 
