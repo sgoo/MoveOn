@@ -20,7 +20,6 @@ import javax.swing.JPanel;
 import moveon.cars.Car;
 import moveon.simulation.Direction;
 import moveon.simulation.Intersection;
-import moveon.simulation.Lights.Color;
 import moveon.simulation.SimulationListener;
 import moveon.simulation.Simulator;
 
@@ -71,13 +70,13 @@ public class NiceGui extends JPanel implements SimulationListener {
 			}
 			
 			// lights
-			lightImages.put("EW_G", ImageIO.read(new File("res/Lights/EW_R.png")));
+			lightImages.put("EW_G", ImageIO.read(new File("res/Lights/EW_G.png")));
 			lightImages.put("EW_O", ImageIO.read(new File("res/Lights/EW_O.png")));
-			lightImages.put("EW_R", ImageIO.read(new File("res/Lights/EW_G.png")));
+			lightImages.put("EW_R", ImageIO.read(new File("res/Lights/EW_R.png")));
 			
-			lightImages.put("NS_G", ImageIO.read(new File("res/Lights/NS_R.png")));
+			lightImages.put("NS_G", ImageIO.read(new File("res/Lights/NS_G.png")));
 			lightImages.put("NS_O", ImageIO.read(new File("res/Lights/NS_O.png")));
-			lightImages.put("NS_R", ImageIO.read(new File("res/Lights/NS_G.png")));
+			lightImages.put("NS_R", ImageIO.read(new File("res/Lights/NS_R.png")));
 			
 			
 		} catch (IOException e) {
