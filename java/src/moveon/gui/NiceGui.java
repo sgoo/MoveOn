@@ -122,10 +122,10 @@ public class NiceGui extends JPanel implements SimulationListener {
 					// * GUI_M_LENGTH, carSize, carSize);
 					g.drawImage(
 							getCarImage(c),
-							Intersection.VTL_SPAN * GUI_M_LENGTH,
-							(Intersection.VTL_SPAN - c.distanceFromIntersection)
-									* GUI_M_LENGTH, null);
+							Intersection.VTL_SPAN + 4,
+							(Intersection.VTL_SPAN - c.distanceFromIntersection * PIX_PER_TICK), null);
 					break;
+					/*
 				case S:
 					g.drawImage(
 							getCarImage(c),
@@ -143,6 +143,7 @@ public class NiceGui extends JPanel implements SimulationListener {
 					break;
 				case W:
 					break;
+					*/
 				}
 			}
 			currentImage = img;
