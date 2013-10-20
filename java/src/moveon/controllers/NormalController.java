@@ -56,7 +56,7 @@ public class NormalController extends Controller {
 
 	@Override
 	public Mode tick(int ticks) {
-		if (nextChangeCounter == ticks) {
+		if (nextChangeCounter <= ticks) {
 			if (Direction.N.lights.isGreen()) {
 				nsRedEWGreen();
 			} else {

@@ -182,7 +182,7 @@ public class KeyInput extends JPanel implements ActionListener, KeyEventDispatch
 		}
 
 		carTypeButton.setText(Simulator.VTL);
-		addCar(100, d);
+		addCar(Intersection.VTL_SPAN, d);
 
 		return false;
 	}
