@@ -4,6 +4,7 @@ import gov.nasa.jpf.annotation.Invariant;
 import moveon.simulation.Direction;
 import moveon.simulation.Intersection;
 import moveon.simulation.Intersection.Mode;
+import moveon.simulation.Lights.Color;
 
 /**
  * Controller used when only non vtl cars are present
@@ -44,6 +45,13 @@ public class NormalController extends Controller {
 		running = 1;
 
 		nextChangeCounter = currentTick + Intersection.GREEN_TIME + Intersection.ORANGE_TIME;
+		if (Direction.N.lights.currentColor == Color.G) {
+			Direction.N.startCrossing(currentTick);
+			Direction.S.startCrossing(currentTick);
+		} else if (Direction.E.lights.currentColor == Color.G) {
+			Direction.E.startCrossing(currentTick);
+			Direction.W.startCrossing(currentTick);
+		}
 	}
 
 	@Override
@@ -56,7 +64,16 @@ public class NormalController extends Controller {
 			}
 			nextChangeCounter = ticks + Intersection.GREEN_TIME + Intersection.ORANGE_TIME;
 		}
-		progressLights(ticks);
+		if (progressLights(ticks)) {
+			if (Direction.N.lights.currentColor == Color.G) {
+				Direction.N.startCrossing(ticks);
+				Direction.S.startCrossing(ticks);
+			} else if (Direction.E.lights.currentColor == Color.G) {
+				Direction.E.startCrossing(ticks);
+				Direction.W.startCrossing(ticks);
+			}
+
+		}
 
 		// for testing
 		NColor = Direction.N.lights.currentColor.i;
