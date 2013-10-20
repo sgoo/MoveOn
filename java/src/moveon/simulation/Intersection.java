@@ -14,9 +14,9 @@ import moveon.simulation.Lights.Color;
  * @author Jourdan, Scott, Roy, Mike
  * 
  */
-@Invariant({ "(currentMode == 0 && hasNonVTLSum == 2) || " + // Normal has non-VTL in both directions
-		"(currentMode == 1 && hasNonVTLSum == 0) || " + // VTL as no non-VTL cars
-		"(currentMode == 2 && hasNonVTLSum == 1)" // MIXED has one direction with non-VTL 
+@Invariant({ "(currentMode == 0 && (hasNonVTLSum == 2 || hasPeds == 1)) || " + // Normal has non-VTL in both directions
+		"(currentMode == 1 && hasNonVTLSum == 0 && hasPeds == 0) || " + // VTL as no non-VTL cars
+		"(currentMode == 2 && (hasNonVTLSum == 1 || hasPeds == 1))" // MIXED has one direction with non-VTL 
 		// Theres a  more complex invariant that should show that you can be in MIXED with conflicting non-VTL cars
 		// as long as its in the process of switching to a state with a RED light.
 })
@@ -34,6 +34,7 @@ public class Intersection implements Tickable {
 	int hasNSNonVTLCars = 0;
 	int hasEWNonVTLCars = 0;
 	int hasNonVTLSum = 0;
+	int hasPeds = 0;
 
 	/**
 	 * Representation of which mode or state this intersection is in.
@@ -86,6 +87,7 @@ public class Intersection implements Tickable {
 		hasNSVTLCars = (Direction.N.hasVTLCars() || Direction.S.hasVTLCars()) ? 1 : 0;
 		hasEWVTLCars = (Direction.E.hasVTLCars() || Direction.W.hasVTLCars()) ? 1 : 0;
 		hasNonVTLSum = hasNSNonVTLCars + hasEWNonVTLCars;
+		hasPeds = (Direction.N.hasPeds(ticks) || Direction.S.hasPeds(ticks) || Direction.E.hasPeds(ticks) || Direction.W.hasPeds(ticks)) ? 1 : 0;
 
 		if (((Direction.N.hasNonVTLCars() || Direction.S.hasNonVTLCars()) && (Direction.W.hasNonVTLCars() || Direction.E.hasNonVTLCars())) //
 				|| (Direction.N.hasPeds(ticks) || Direction.S.hasPeds(ticks) || Direction.E.hasPeds(ticks) || Direction.W.hasPeds(ticks))) {
@@ -103,5 +105,4 @@ public class Intersection implements Tickable {
 		mode.c.tick(ticks);
 		return true;
 	}
-
 }
