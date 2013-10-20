@@ -15,6 +15,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
 import moveon.simulation.Direction;
+import moveon.simulation.Intersection;
 import moveon.simulation.SimulationListener;
 import moveon.simulation.Simulator;
 
@@ -113,13 +114,13 @@ public class KeyInput extends JPanel implements ActionListener, KeyEventDispatch
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() == NButton) {
-			addCar(100, Direction.N);
+			addCar(Intersection.VTL_SPAN, Direction.N);
 		} else if (e.getSource() == SButton) {
-			addCar(100, Direction.S);
+			addCar(Intersection.VTL_SPAN, Direction.S);
 		} else if (e.getSource() == EButton) {
-			addCar(100, Direction.E);
+			addCar(Intersection.VTL_SPAN, Direction.E);
 		} else if (e.getSource() == WButton) {
-			addCar(100, Direction.W);
+			addCar(Intersection.VTL_SPAN, Direction.W);
 		} else if (e.getSource() == pauseButton) {
 			changePause();
 		} else if (e.getSource() == carTypeButton) {

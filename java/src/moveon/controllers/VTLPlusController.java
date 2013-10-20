@@ -3,6 +3,7 @@ package moveon.controllers;
 import moveon.cars.Car;
 import moveon.cars.VTLCar;
 import moveon.simulation.Direction;
+import moveon.simulation.Intersection;
 import moveon.simulation.Intersection.Mode;
 
 /**
@@ -40,7 +41,7 @@ public class VTLPlusController extends Controller {
 				closestE = closestW;
 			}
 
-			if (Math.abs(closestN.getDistance() - closestE.getDistance()) > Car.CAR_LENGTH) {
+			if (Math.abs(closestN.getDistance() - closestE.getDistance()) > (Car.CAR_LENGTH + Intersection.INTERSECTION_SPAN)) {
 				allGreen();
 			} else if (closestN.getDistance() < closestE.getDistance()) {
 				nsGreenEWRed();
