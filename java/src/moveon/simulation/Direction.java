@@ -171,4 +171,8 @@ public enum Direction {
 		return sb.toString();
 	}
 
+	public static Direction[] getDirections() {
+		return new Direction[] {N, S, E, W};
+	}
+	
 }
