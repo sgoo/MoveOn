@@ -70,14 +70,15 @@ public class NiceGui extends JPanel implements SimulationListener {
 			}
 			
 			// lights
-			lightImages.put("EW_G", ImageIO.read(new File("res/Lights/EW_G.png")));
-			lightImages.put("EW_O", ImageIO.read(new File("res/Lights/EW_O.png")));
-			lightImages.put("EW_R", ImageIO.read(new File("res/Lights/EW_R.png")));
+			String[] lightNames = new String[] {
+					"EW_G", "EW_O", "EW_R", "NS_G", "NS_O", "NS_R",
+					"PED_EW_G", "PED_EW_R", "PED_EW_NULL", "PED_NS_G", "PED_NS_R", "PED_NS_NULL"
+			};
+			for(String lightName : lightNames) {
+				lightImages.put(lightName, ImageIO.read(new File("res/Lights/"+lightName+".png")));
+			}
 			
-			lightImages.put("NS_G", ImageIO.read(new File("res/Lights/NS_G.png")));
-			lightImages.put("NS_O", ImageIO.read(new File("res/Lights/NS_O.png")));
-			lightImages.put("NS_R", ImageIO.read(new File("res/Lights/NS_R.png")));
-			
+
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -126,7 +127,7 @@ public class NiceGui extends JPanel implements SimulationListener {
 			Graphics2D g = img.createGraphics();
 			g.drawImage(backgroundImage, 0, 0, null);
 
-			// LIGHTS
+			// TRAFFIC LIGHTS
 			BufferedImage imageNS = null;
 			switch(Direction.N.lights.currentColor) {
 			case R:
@@ -155,6 +156,33 @@ public class NiceGui extends JPanel implements SimulationListener {
 			}
 			g.drawImage(imageEW, 288-imageEW.getWidth()/2, 288-imageEW.getHeight()/2, null);
 		
+			// PEDESTRIAN LIGHTS
+			BufferedImage imagePedEW = null;
+			System.out.println(sim.tick);
+			if(Direction.E.hasPeds(sim.tick) || Direction.W.hasPeds(sim.tick)){
+				if(Direction.E.isPedsCrossing(sim.tick) || Direction.W.isPedsCrossing(sim.tick)){
+					imagePedEW = lightImages.get("PED_EW_G");
+				}else{
+					imagePedEW = lightImages.get("PED_EW_R");
+				}
+			}else{
+				imagePedEW = lightImages.get("PED_EW_NULL");
+			}
+			g.drawImage(imagePedEW, 288-imagePedEW.getWidth()/2, 288-imagePedEW.getHeight()/2, null);
+			
+			
+			BufferedImage imagePedNS = null;
+			System.out.println(sim.tick);
+			if(Direction.N.hasPeds(sim.tick) || Direction.S.hasPeds(sim.tick)){
+				if(Direction.N.isPedsCrossing(sim.tick) || Direction.S.isPedsCrossing(sim.tick)){
+					imagePedNS = lightImages.get("PED_NS_G");
+				}else{
+					imagePedNS = lightImages.get("PED_NS_R");
+				}
+			}else{
+				imagePedNS = lightImages.get("PED_NS_NULL");
+			}
+			g.drawImage(imagePedNS, 288-imagePedNS.getWidth()/2, 288-imagePedNS.getHeight()/2, null);
 
 			
 			// CARS
@@ -162,7 +190,6 @@ public class NiceGui extends JPanel implements SimulationListener {
 				int carSize = Car.CAR_LENGTH * GUI_M_LENGTH;
 				switch (c.direction) {
 				case N:
-
 					g.drawImage(
 							getCarImage(c),
 							Intersection.VTL_SPAN * PIX_PER_TICK,
