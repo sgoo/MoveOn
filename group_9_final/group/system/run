@@ -1,2 +1,2 @@
-java -classpath bin/:../jpf/jpf-aprop/build/jpf-aprop-annotations.jar moveon.gui.GuiController
+/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home/bin/java -classpath bin/:../jpf/jpf-aprop/build/jpf-aprop-annotations.jar moveon.gui.GuiController
 
