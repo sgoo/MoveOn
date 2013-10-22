@@ -3,7 +3,9 @@
 # unix shell script to run jpf
 #
 
-JPF_HOME=`dirname "$0"`/..
+JPF_HOME=/home/scott/jpf/jpf-core
+
+#JPF_HOME=`dirname "$0"`/..
 
 if test -z "$JVM_FLAGS"; then
   JVM_FLAGS="-Xmx1024m -ea"
