@@ -53,14 +53,45 @@ public class VTLPlusController extends Controller {
 						// need to switch leader
 						nsGreenEWRed();
 						lastLeaderChange = ticks;
-						setLeader(closestE);
+						VTLCar c1 = Direction.E.getClosestVTLCar2();
+						VTLCar c2 = Direction.W.getClosestVTLCar2();
+						if (c1 == null) {
+							closestE = c2;
+						} else if (c2 == null) {
+							closestE = c1;
+						} else if (c1.getDistance() < c2.getDistance()) {
+							closestE = c1;
+						} else {
+							closestE = c2;
+						}
+						if (closestE == null) {
+							closestN.setLeader(false);
+						} else {
+							setLeader(closestE);
+						}
 					}
 				} else if (closestE.isLeader()) {
 					if (lastLeaderChange + MAX_LEADER_TIME < ticks) {
 						// need to switch leader
 						nsRedEWGreen();
 						lastLeaderChange = ticks;
-						setLeader(closestN);
+
+						VTLCar c1 = Direction.N.getClosestVTLCar2();
+						VTLCar c2 = Direction.S.getClosestVTLCar2();
+						if (c1 == null) {
+							closestN = c2;
+						} else if (c2 == null) {
+							closestN = c1;
+						} else if (c1.getDistance() < c2.getDistance()) {
+							closestN = c1;
+						} else {
+							closestN = c2;
+						}
+						if (closestN == null) {
+							closestE.setLeader(false);
+						} else {
+							setLeader(closestN);
+						}
 					}
 				} else if ((bannedFromLeader == closestN && closestE.isLeader()) || (bannedFromLeader == closestE && closestN.isLeader())) {
 					// do nothing

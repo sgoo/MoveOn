@@ -113,6 +113,20 @@ public enum Direction {
 		}
 		return null;
 	}
+	
+	/**
+	 * Get the closest VTL car to the crossing
+	 * 
+	 * @return A VTL Car or null if there are none
+	 */
+	public VTLCar getClosestVTLCar2() {
+		for (Car car : cars) {
+			if (car.distanceFromIntersection >= 0 && car instanceof VTLCar) {
+				return (VTLCar) car;
+			}
+		}
+		return null;
+	}
 
 	/**
 	 * Static method to get the direction for a given string e.g. north, North,

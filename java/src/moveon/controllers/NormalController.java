@@ -13,7 +13,7 @@ import moveon.simulation.Lights.Color;
  */
 
 // !N.Red -> E.Red
-// (!N.Red && E.Red) || !(!N.Red)
+// !(!N.Red) || (!N.Red && E.Red)
 
 // !E.Red -> N.Red
 // (!E.Red && N.Red) || !(!E.Red)
