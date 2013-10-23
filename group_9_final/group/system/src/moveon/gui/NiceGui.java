@@ -30,37 +30,56 @@ import moveon.simulation.Simulator;
  * renders of the intersection into Bufferers. These are then rendered onto the
  * screen via a posted runnable
  * 
- * @author Scott
+ * Hard coded numbers used in this class refer to the number of pixels along X & Y
+ * 0,0 is the top left corner of the panel.
+ * 
+ *   0        X
+ *  0+---------
+ *   |
+ *   |
+ *   |
+ *   |
+ *  Y|
+ * 
+ * @author Scott Goodhew, Roy Lin, Jourdan Harvey, Mike Little
  * 
  */
-
 public class NiceGui extends JPanel implements SimulationListener {
+
+	//Constants defining th GUI
 	public static final int GUI_M_LENGTH = 3;
 
+	// Pixels per tick meter
 	public static final int PIX_PER_TICK = 8;
 
 	public static final int FRAME_SIZE = 72;
 
+	// The total number of car images and vtl images available respectively
 	public static final int CARS_IMAGE_COUNT = 11;
 	public static final int VTL_CARS_IMAGE_COUNT = 11;
 
+	// Background image
 	BufferedImage backgroundImage;
+	// Image to represent a pedestrian
 	BufferedImage pedImage;
 	ArrayList<BufferedImage> carImages = new ArrayList<BufferedImage>();
 	ArrayList<BufferedImage> vtlCarImages = new ArrayList<BufferedImage>();
 	Map<String, BufferedImage> lightImages = new HashMap<String, BufferedImage>();
 
 	/**
-	 * 
+	 * SrialVersionUID
 	 */
 	private static final long serialVersionUID = -4825117902654245497L;
+	// Instance of the simulator
 	private Simulator sim;
 
+	// Gui Constructor
 	public NiceGui(Simulator sim) {
 		this.sim = sim;
+		// add this GUI as a listener to the simulator
 		sim.addSimListener(this);
 		setSize(700, 700);
-
+		// Initialize reused images
 		initImages();
 	}
 
@@ -81,8 +100,10 @@ public class NiceGui extends JPanel implements SimulationListener {
 			}
 
 			// lights
+			// Names of each light
 			String[] lightNames = new String[] { "EW_G", "EW_O", "EW_R", "NS_G", "NS_O", "NS_R", "PED_EW_G", "PED_EW_R", "PED_EW_NULL", "PED_NS_G", "PED_NS_R",
 					"PED_NS_NULL" };
+			// add the lights to a Map for retrieval
 			for (String lightName : lightNames) {
 				lightImages.put(lightName, ImageIO.read(new File("res/Lights/" + lightName + ".png")));
 			}
@@ -92,11 +113,15 @@ public class NiceGui extends JPanel implements SimulationListener {
 		}
 	}
 
+	/**
+	 * Create a new thread to process each update
+	 */
 	@Override
 	public void simulationUpdated(String simulationState) {
 		new RenderThread().start();
 	}
 
+	
 	public static void main(String[] args) {
 		Simulator sim = new Simulator(true);
 		final JFrame window = new JFrame("Test");
@@ -350,6 +375,11 @@ public class NiceGui extends JPanel implements SimulationListener {
 
 	}
 
+	/**
+	 * Duplicate a given image and return the copy
+	 * @param bi
+	 * @return
+	 */
 	private BufferedImage copyImage(BufferedImage bi) {
 		ColorModel cm = bi.getColorModel();
 		boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
@@ -357,6 +387,14 @@ public class NiceGui extends JPanel implements SimulationListener {
 		return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
 	}
 
+	/**
+	 * Rotate a given image, and return the rotated version of the image
+	 * @param image
+	 * @param direction
+	 * @param anchorX
+	 * @param anchorY
+	 * @return
+	 */
 	private BufferedImage rotateImage(BufferedImage image, Direction direction, int anchorX, int anchorY) {
 
 		AffineTransform transform = getAffineTransform(direction, anchorX, anchorY);
@@ -366,6 +404,16 @@ public class NiceGui extends JPanel implements SimulationListener {
 		return op.filter(image, null);
 	}
 
+	/**
+	 * get the affineTransform represenation of a transformation
+	 * This allows us to move and rotate and hence reuse certain images,
+	 * 
+	 * E.g. traffic light images
+	 * @param direction
+	 * @param anchorX
+	 * @param anchorY
+	 * @return
+	 */
 	private AffineTransform getAffineTransform(Direction direction, int anchorX, int anchorY) {
 		double radians = 0;
 		switch (direction) {
@@ -383,5 +431,4 @@ public class NiceGui extends JPanel implements SimulationListener {
 
 		return transform;
 	}
-
 }
