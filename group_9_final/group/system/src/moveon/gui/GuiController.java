@@ -13,6 +13,11 @@ public class GuiController extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private static final String CAR_TYPE_LBL = "";
 
+	/**
+	 * Run method Create the simulator and the GUI and run it.
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		Simulator simulator = new Simulator();
 		GuiController guiController = new GuiController(simulator);
@@ -20,25 +25,22 @@ public class GuiController extends JFrame {
 		simulator.simulate();
 	}
 
-	
 	private Simulator simulator;
 	private boolean isVtlCar = false;
-	
+
 	public GuiController(Simulator simulator) {
 		super("VTL Interface");
 		this.simulator = simulator;
-		
+
 		// add main canvas (nice gui)
 		JPanel gui = new NiceGui(simulator);
 		gui.setPreferredSize(new Dimension(576, 576));
 		this.add(gui, BorderLayout.CENTER);
-		
-		
+
 		// add key input
 		JPanel keyInput = new KeyInput(this.simulator);
 		this.add(keyInput, BorderLayout.PAGE_END);
-		
-		
+
 		// sizes the window correctly
 		pack();
 		setLayout(new BorderLayout());
@@ -47,7 +49,5 @@ public class GuiController extends JFrame {
 		setLocation(50, 50);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
-
-
 
 }

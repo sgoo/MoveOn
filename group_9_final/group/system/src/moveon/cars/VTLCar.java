@@ -14,7 +14,7 @@ public class VTLCar extends Car {
 
 	private boolean leader;
 
-	// added for JPF
+	// used by JPF
 	private int beenLeader = 0;
 
 	public VTLCar(int dist, Direction direction) {
@@ -49,6 +49,10 @@ public class VTLCar extends Car {
 		beenLeader = 0;
 	}
 
+	/**
+	 * What to do each tick In this case we just increase the ammount of time
+	 * that this car has been leader, if it is leader.
+	 */
 	@Override
 	public boolean tick(int ticks) {
 		if (leader)
@@ -56,6 +60,9 @@ public class VTLCar extends Car {
 		return super.tick(ticks);
 	}
 
+	/**
+	 * Get a string representation to be used in command line output
+	 */
 	@Override
 	public String toString() {
 		String car = super.toString();

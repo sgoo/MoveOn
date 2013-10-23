@@ -41,7 +41,7 @@ public class Simulator {
 
 	public int tick;
 
-	public static final int SIM_LENGTH = 4000;
+	public static final int SIM_LENGTH = 16000;
 
 	/**
 	 * Main method to run the simulation
