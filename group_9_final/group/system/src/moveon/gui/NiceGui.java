@@ -30,6 +30,17 @@ import moveon.simulation.Simulator;
  * renders of the intersection into Bufferers. These are then rendered onto the
  * screen via a posted runnable
  * 
+ * Hard coded numbers used in this class refer to the number of pixels along X & Y
+ * 0,0 is the top left corner of the panel.
+ * 
+ *   0        X
+ *  0+---------
+ *   |
+ *   |
+ *   |
+ *   |
+ *  Y|
+ * 
  * @author Scott Goodhew, Roy Lin, Jourdan Harvey, Mike Little
  * 
  */
@@ -364,6 +375,11 @@ public class NiceGui extends JPanel implements SimulationListener {
 
 	}
 
+	/**
+	 * Duplicate a given image and return the copy
+	 * @param bi
+	 * @return
+	 */
 	private BufferedImage copyImage(BufferedImage bi) {
 		ColorModel cm = bi.getColorModel();
 		boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
@@ -371,6 +387,14 @@ public class NiceGui extends JPanel implements SimulationListener {
 		return new BufferedImage(cm, raster, isAlphaPremultiplied, null);
 	}
 
+	/**
+	 * Rotate a given image, and return the rotated version of the image
+	 * @param image
+	 * @param direction
+	 * @param anchorX
+	 * @param anchorY
+	 * @return
+	 */
 	private BufferedImage rotateImage(BufferedImage image, Direction direction, int anchorX, int anchorY) {
 
 		AffineTransform transform = getAffineTransform(direction, anchorX, anchorY);
@@ -380,6 +404,16 @@ public class NiceGui extends JPanel implements SimulationListener {
 		return op.filter(image, null);
 	}
 
+	/**
+	 * get the affineTransform represenation of a transformation
+	 * This allows us to move and rotate and hence reuse certain images,
+	 * 
+	 * E.g. traffic light images
+	 * @param direction
+	 * @param anchorX
+	 * @param anchorY
+	 * @return
+	 */
 	private AffineTransform getAffineTransform(Direction direction, int anchorX, int anchorY) {
 		double radians = 0;
 		switch (direction) {
@@ -397,5 +431,4 @@ public class NiceGui extends JPanel implements SimulationListener {
 
 		return transform;
 	}
-
 }
