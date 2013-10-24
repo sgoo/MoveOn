@@ -28,7 +28,7 @@ public class Intersection implements Tickable {
 	public final static int ORANGE_TIME = Car.CAR_LENGTH + INTERSECTION_SPAN;
 	public final static int GREEN_TIME = 30;
 
-	// for JPF
+	// Variables so that we can verify using JPF
 	int currentMode;
 	int hasNSVTLCars = 0;
 	int hasEWVTLCars = 0;
@@ -38,18 +38,27 @@ public class Intersection implements Tickable {
 	int hasPeds = 0;
 
 	/**
-	 * Representation of which mode or state this intersection is in.
+	 * Representation of which mode (state) this intersection is in.
 	 */
 	public enum Mode {
 		NORMAL(new NormalController(), 0), VTLPLUS(new VTLPlusController(), 1), MIXED(new MixedController(), 2);
 		private final Controller c;
 		private int i;
-
+		
+		/**
+		 * Construct the mode with a controller
+		 * and an integer for use by JPF
+		 * @param c
+		 * @param i
+		 */
 		Mode(Controller c, int i) {
 			this.c = c;
 			this.i = i;
 		}
 
+		/**
+		 * Get a string representation of the mode
+		 */
 		@Override
 		public String toString() {
 			return super.toString() + c.toString();
@@ -80,9 +89,12 @@ public class Intersection implements Tickable {
 		currentMode = mode.i;
 	}
 
+	/** 
+	 * How this class should perform on a tick
+	 */
 	@Override
 	public boolean tick(int ticks) {
-
+		// Represent these fields as integers for JPF
 		hasNSNonVTLCars = (Direction.N.hasNonVTLCars() || Direction.S.hasNonVTLCars()) ? 1 : 0;
 		hasEWNonVTLCars = (Direction.E.hasNonVTLCars() || Direction.W.hasNonVTLCars()) ? 1 : 0;
 		hasNSVTLCars = (Direction.N.hasVTLCars() || Direction.S.hasVTLCars()) ? 1 : 0;
@@ -90,13 +102,16 @@ public class Intersection implements Tickable {
 		hasNonVTLSum = hasNSNonVTLCars + hasEWNonVTLCars;
 		hasPeds = (Direction.N.hasPeds(ticks) || Direction.S.hasPeds(ticks) || Direction.E.hasPeds(ticks) || Direction.W.hasPeds(ticks)) ? 1 : 0;
 
+		// Check which types of cars are present at which parts of the intersection
 		if (((Direction.N.hasNonVTLCars() || Direction.S.hasNonVTLCars()) && (Direction.W.hasNonVTLCars() || Direction.E.hasNonVTLCars())) //
 				|| (Direction.N.hasPeds(ticks) || Direction.S.hasPeds(ticks) || Direction.E.hasPeds(ticks) || Direction.W.hasPeds(ticks))) {
+			// If there are only normal cars present and there is going to be a conflict set the mode to Normal, otherwise mixed
 			if (Direction.N.lights.currentColor == Color.R || Direction.E.lights.currentColor == Color.R) {
 				setMode(Mode.NORMAL, ticks);
 			} else {
 				setMode(Mode.MIXED, ticks);
 			}
+		// If there are only VTL cars present set the mode to VTLPlus, otherwise mixed
 		} else if (!(Direction.N.hasNonVTLCars() || Direction.S.hasNonVTLCars() || Direction.W.hasNonVTLCars() || Direction.E.hasNonVTLCars())) {
 			setMode(Mode.VTLPLUS, ticks);
 		} else {
