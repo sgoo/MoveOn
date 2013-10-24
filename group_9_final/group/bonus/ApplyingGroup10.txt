@@ -1,2 +1,8 @@
-We used the techniques shown in group 10's presentation as the only verification in our system after we could not get the jpf-ltl plugin to function.
+The verification done in our system is based on what group 10 presented.
+While we don't have explicit Pack and Unpack instructions, when the code is run with the verifier explicit Invariants are checked before and after each method call.
+These allow us to ensure that the system is always in a consistent state.
+
+
+
+While this isn't proper static analysis it was the only type of analysis we could get going with JPF.
 
