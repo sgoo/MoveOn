@@ -8,46 +8,66 @@ import javax.swing.JPanel;
 
 import moveon.simulation.Simulator;
 
+/**
+ * The class to run to display the Visualisation of the Simulation.
+ * 
+ * @author rlin050
+ */
 public class GuiController extends JFrame {
 
+	/**
+	 * Serial ID for the class
+	 */
 	private static final long serialVersionUID = 1L;
-	private static final String CAR_TYPE_LBL = "";
 
+	/**
+	 * Screen size of visualisation in pixels
+	 */
+	private static final int SIMULATION_SCREEN_SIZE = 576;
+	
+	/**
+	 * The simulator for the visualisation
+	 */
+	private Simulator simulator;
+
+	/**
+	 * The main class to be executed
+	 * 
+	 * @param args command line arguments
+	 */
 	public static void main(String[] args) {
 		Simulator simulator = new Simulator();
-		GuiController guiController = new GuiController(simulator);
+		new GuiController(simulator);
 		simulator.initialize();
 		simulator.simulate();
 	}
 
-	
-	private Simulator simulator;
-	private boolean isVtlCar = false;
-	
+	/**
+	 * Constructor
+	 * 
+	 * @param simulator
+	 */
 	public GuiController(Simulator simulator) {
+		
+		// Title for the JFrame
 		super("VTL Interface");
+		
 		this.simulator = simulator;
-		
-		// add main canvas (nice gui)
+
+		// Main visualisation interface
 		JPanel gui = new NiceGui(simulator);
-		gui.setPreferredSize(new Dimension(576, 576));
+		gui.setPreferredSize(new Dimension(SIMULATION_SCREEN_SIZE, SIMULATION_SCREEN_SIZE));
 		this.add(gui, BorderLayout.CENTER);
-		
-		
-		// add key input
+
+		// Key input interface
 		JPanel keyInput = new KeyInput(this.simulator);
 		this.add(keyInput, BorderLayout.PAGE_END);
-		
-		
-		// sizes the window correctly
+
+		// Adjusting the window
 		pack();
 		setLayout(new BorderLayout());
-		setPreferredSize(new Dimension(250, 80));
 		setVisible(true);
-		setLocation(50, 50);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
-
-
 
 }
