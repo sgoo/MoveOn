@@ -1,6 +1,5 @@
 package moveon.cars;
 
-import gov.nasa.jpf.annotation.Invariant;
 import moveon.simulation.Direction;
 import moveon.simulation.Intersection;
 import moveon.simulation.Tickable;
@@ -103,16 +102,14 @@ public class Car implements Tickable {
 			if (distanceFromIntersection < 0) {
 				distanceFromIntersection = 0;
 			}
-		} else if (distanceFromIntersection == 0 && direction.lights.isGreen()
-				|| leftIntersection == 1) {
+		} else if (distanceFromIntersection == 0 && direction.lights.isGreen() || leftIntersection == 1) {
 			// we have moved into the intersection or we are leaving the
 			// intersection
 			distanceFromIntersection -= SPEED;
 			// If the light is green go to crossing state
 		} else if (distanceFromIntersection < 0) {
 
-			if (distanceFromIntersection < -(CAR_LENGTH
-					+ Intersection.INTERSECTION_SPAN - 2)) {
+			if (distanceFromIntersection < -(CAR_LENGTH + Intersection.INTERSECTION_SPAN - 2)) {
 				// We have finished moving through the intersection so remove
 				// the car from the direction and return false so that the car
 				// is removed from the system
