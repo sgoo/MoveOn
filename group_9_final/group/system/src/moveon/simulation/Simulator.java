@@ -1,13 +1,5 @@
 package moveon.simulation;
 
-//import java.io.BufferedReader;
-//import java.io.File;
-//import java.io.IOException;
-//import java.nio.charset.Charset;
-//import java.nio.charset.StandardCharsets;
-//import java.nio.file.Files;
-//import java.nio.file.Path;
-//import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import moveon.cars.Car;
@@ -22,10 +14,8 @@ import moveon.exceptions.CarFileFormatException;
  */
 public class Simulator {
 
-	// private static final Charset ENCODING = StandardCharsets.UTF_8;
 	public static final String VTL = "VTL";
 	public static final String NORMAL = "NORMAL";
-	// private static final String TESTFOLDER = "TestFiles" + File.separator;
 
 	public ArrayList<Car> cars;
 	public ArrayList<Car> leavingCars;
@@ -34,13 +24,14 @@ public class Simulator {
 	private int tickTimeMillis;
 	private boolean generateRandomCars;
 	private ArrayList<SimulationListener> simListeners;
-	// private KeyInput gui;
 	private boolean generateRandomNormalCars;
 	private boolean generateRandomVTLCars;
 	private boolean generateRandomPeople;
 
 	public int tick;
 
+	// Specify a number of Ticks that the simulator will run for.
+	// This allows JPF to finish
 	public static final int SIM_LENGTH = 4000;
 
 	/**
@@ -52,7 +43,6 @@ public class Simulator {
 	public static void main(String[] args) throws CarFileFormatException,
 			Exception {
 		Simulator simulator = new Simulator();
-		// simulator.initialize(TESTFOLDER + "Test1");
 		simulator.initialize();
 		simulator.simulate();
 	}
@@ -65,7 +55,6 @@ public class Simulator {
 		cars = new ArrayList<Car>();
 		leavingCars = new ArrayList<Car>();
 		intersection = new Intersection();
-		// gui = new KeyInput(this);
 
 		generateRandomCars = true;
 		generateRandomVTLCars = true;
@@ -73,7 +62,6 @@ public class Simulator {
 		generateRandomPeople = true;
 
 		simListeners = new ArrayList<SimulationListener>();
-		// simListeners.add(gui);
 		if (hasConsole)
 			simListeners.add(new SimulationConsoleOutputer());
 	}
@@ -100,11 +88,6 @@ public class Simulator {
 	 * @param filename
 	 * @throws CarFileFormatException
 	 */
-	/*
-	 * public void initialize(String filename) throws IOException,
-	 * CarFileFormatException { readCarsFromFile(filename); }
-	 */
-
 	public void addCar(int dist, Direction d) {
 		Car c = new Car(dist, d);
 		d.addCar(c);
@@ -177,7 +160,6 @@ public class Simulator {
 					} else if (randomChoice >= 0.5 && randomChoice < 0.75) {
 						randomDirection = Direction.E;
 					} else {
-						/* (randomChoice >= 0.75 && randomChoice < 1.0) */
 						randomDirection = Direction.W;
 					}
 					// Randomly choose VTL or Non-VTL
@@ -252,28 +234,6 @@ public class Simulator {
 	public void setGenerateRandomPeople(boolean generateRandomPeople) {
 		this.generateRandomPeople = generateRandomPeople;
 	}
-
-	/**
-	 * Read a file and add the cars represented in it Format is:
-	 * TIME(int),DIRECTION(N,S,E,W),CAR_TYPE(VTL,NORMAL)
-	 * 
-	 * @param fileName
-	 * @return
-	 * @throws CarFileFormatException
-	 */
-	/*
-	 * private void readCarsFromFile(String fileName) throws IOException,
-	 * CarFileFormatException { Path path = Paths.get(fileName); BufferedReader
-	 * reader = Files.newBufferedReader(path, ENCODING); // line format TIME
-	 * DIRECTION CAR_TYPE String line = null; while ((line = reader.readLine())
-	 * != null) { String[] parts = line.split(","); if (parts.length != 3) {
-	 * throw new CarFileFormatException(); } int dist =
-	 * Integer.parseInt(parts[0]); Direction direction =
-	 * Direction.getDirFromStr(parts[1]); if (direction == null) { throw new
-	 * CarFileFormatException(); } if (parts[2].equals(VTL)) { addVTLCar(dist,
-	 * direction); } else if (parts[2].equals(NORMAL)) { addCar(dist,
-	 * direction); } } }
-	 */
 
 	public void toggleRandom() {
 		generateRandomCars = !generateRandomCars;
