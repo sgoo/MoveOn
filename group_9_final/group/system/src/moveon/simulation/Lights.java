@@ -14,6 +14,14 @@ public class Lights {
 		currentColor = start;
 	}
 
+	/**
+	 * Colors of the lights
+	 * G = Green
+	 * O = Orange
+	 * R = Red
+	 * @author Scott & JD
+	 *
+	 */
 	public enum Color {
 		G(0), O(1), R(2);
 		public int i;
@@ -40,6 +48,10 @@ public class Lights {
 		return currentColor.toString();
 	}
 
+	/**
+	 * Boolean to represent whether or not the light is green
+	 * @return
+	 */
 	public boolean isGreen() {
 		return currentColor == Color.G;
 	}

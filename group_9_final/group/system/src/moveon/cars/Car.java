@@ -39,7 +39,7 @@ public class Car implements Tickable {
 	// for JPF
 	int lightColor;
 
-	private int leftIntersection=0;
+	private int leftIntersection = 0;
 
 	/**
 	 * Constructor Increment the car count and set this to this cars id
@@ -53,6 +53,11 @@ public class Car implements Tickable {
 		carId = CAR_COUNT++;
 	}
 
+	/**
+	 * Get the ID for this car
+	 * 
+	 * @return ID
+	 */
 	public int getCarId() {
 		return carId;
 	}
@@ -65,6 +70,9 @@ public class Car implements Tickable {
 		return result;
 	}
 
+	/**
+	 * Implementation of equals so we can compare cars.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -86,9 +94,12 @@ public class Car implements Tickable {
 	 */
 	@Override
 	public boolean tick(int ticks) {
+		// check that we are not at the intersection and that we can advance,
+		// i.e. there is no car infront
 		if (distanceFromIntersection > 0 && direction.canAdvance(this)) {
 			// start moving toward the intersection if we can
 			distanceFromIntersection -= SPEED;
+			// If we decrease too much return to 0
 			if (distanceFromIntersection < 0) {
 				distanceFromIntersection = 0;
 			}
@@ -113,14 +124,22 @@ public class Car implements Tickable {
 				distanceFromIntersection -= SPEED;
 			}
 		}
+		// check if the car has left the other side of the intersection
+		// This is necessary to keep the GUI optimally visually stimulating
 		if (leftIntersection == 1 && distanceFromIntersection < -100) {
 			return false;
 		}
-
+		// Get the light colour of the intersection and store it in the
+		// lightColour field
+		// This is need for verification with JPF
 		lightColor = direction.lights.currentColor.i;
 		return true;
 	}
 
+	/**
+	 * Create a string representation of a car which is necessary for command
+	 * line output
+	 */
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
