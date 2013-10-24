@@ -1,0 +1,14 @@
+Unfortunately we weren't able to apply the techniques in “Predicate abstraction for software verification” to our system. The purpose of the paper is to demonstrate automated generation of loop invariants from pre and postconditions of methods.
+
+Our system had only one loop that modified anything and it was trivial:
+
+for (tick = 0; tick < SIM_LENGTH || cars.size() != 0; tick++) {
+...
+Thread.sleep(tickTimeMillis);
+...
+}
+
+This was in our simulator class and essentially drives the system. 
+It runs the simulation until SIM_LENGTH is reached and then processes the remaining cars at the intersection.
+
+The only property on this loop that we’d be interested in verifying is that it eventually terminates. The generated loop invariants that are described  cannot express temporal properties. 
