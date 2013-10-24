@@ -107,13 +107,14 @@ public enum Direction {
 	 */
 	public VTLCar getClosestVTLCar() {
 		for (Car car : cars) {
-			if (car.distanceFromIntersection >= -(Intersection.INTERSECTION_SPAN + 1) && car instanceof VTLCar) {
+			if (car.distanceFromIntersection >= -(Intersection.INTERSECTION_SPAN + 1)
+					&& car instanceof VTLCar) {
 				return (VTLCar) car;
 			}
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Get the closest VTL car to the crossing
 	 * 
@@ -151,6 +152,12 @@ public enum Direction {
 		return null;
 	}
 
+	/**
+	 * Create a string representation of the cars on this direction Iterate
+	 * through each car and add an arrow representing it to be its distance away
+	 * from the 'intersection' The intersection is conceptually on the left side
+	 * of the screen This is outdated by the graphical GUI
+	 */
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -159,8 +166,10 @@ public enum Direction {
 		Car car;
 		int soFar = 0;
 
-		for (; cars.size() > carsPrinted && (car = cars.get(carsPrinted)).distanceFromIntersection < 0; carsPrinted++) {
-			String carOut = car.getCarId() + "-" + (-car.distanceFromIntersection);
+		for (; cars.size() > carsPrinted
+				&& (car = cars.get(carsPrinted)).distanceFromIntersection < 0; carsPrinted++) {
+			String carOut = car.getCarId() + "-"
+					+ (-car.distanceFromIntersection);
 			sb.append(carOut);
 			soFar += Car.CAR_LENGTH;
 			for (int i = carOut.length(); i < Car.CAR_LENGTH; i++) {
@@ -191,18 +200,40 @@ public enum Direction {
 		return sb.toString();
 	}
 
+	/**
+	 * Get an array of directions
+	 * 
+	 * @return
+	 */
 	public static Direction[] getDirections() {
 		return new Direction[] { N, S, E, W };
 	}
 
+	/**
+	 * Add a pedestrian We only represent pedestrians as being present or not
+	 * present So we just add a current pedestrian to this direction
+	 */
 	public void addPed() {
 		pedsWaiting = true;
 	}
 
+	/**
+	 * Check for pedestrians Check whether there are pedestrians waiting to
+	 * cross or currently crossing
+	 * 
+	 * @param tick
+	 * @return
+	 */
 	public boolean hasPeds(int tick) {
 		return pedsWaiting || isPedsCrossing(tick);
 	}
 
+	/**
+	 * Check whether pedestrians are currently crossing
+	 * 
+	 * @param tick
+	 * @return
+	 */
 	public boolean isPedsCrossing(int tick) {
 		if (pedsCrossing + PED_CORSSING_TIME < tick) {
 			pedsCrossing = -1;
@@ -210,11 +241,14 @@ public enum Direction {
 		return pedsCrossing != -1;
 	}
 
+	/**
+	 * Tell waiting pedestrians to begin crossing
+	 * @param tick
+	 */
 	public void startCrossing(int tick) {
 		if (pedsWaiting) {
 			pedsCrossing = tick;
 			pedsWaiting = false;
 		}
 	}
-
 }
