@@ -94,7 +94,7 @@ public class Car implements Tickable {
 	 */
 	@Override
 	public boolean tick(int ticks) {
-		// check that we are not at the intersection and taht we can advance,
+		// check that we are not at the intersection and that we can advance,
 		// i.e. there is no car infront
 		if (distanceFromIntersection > 0 && direction.canAdvance(this)) {
 			// start moving toward the intersection if we can
