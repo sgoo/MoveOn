@@ -1,0 +1,10 @@
+The easiest way we found to use JPF was not to follow the standard install instructions.
+
+We setup JPF by adding the core library and the aprop plugin to eclipse as Java projects that use the ant build system.
+This way we could link our code base against them and eclipse would understand the annotations we were using.
+We then ran it by creating a new eclipse build target that linked our project, jpf-core and jpf-aporp together. However the main class was gov.nasa.jpf.JPF rather than something from our project.
+We also had to create a .jpf file that was passed as the only argument to the program.
+The MoveOn.jpf file specifies what class to test and what parts of JPF to load to test it with.
+
+
+
