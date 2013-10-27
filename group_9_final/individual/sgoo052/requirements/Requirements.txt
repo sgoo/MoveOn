@@ -1,0 +1,22 @@
+General requirements:
+
+	Only cars from one direction set can be in the intersection at any one time.
+
+Normal mode based requirements:
+
+	Must have normal cars in conflicting directions.
+
+	Must have a Red light in one direction.
+
+	
+
+Mixed Mode Requirements
+	
+	Have normal cars in non-conflicting directions
+
+VLT Mode Requirements
+	
+	Must have no normal cars.
+
+
+
