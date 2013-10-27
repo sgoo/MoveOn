@@ -1,22 +1,26 @@
 General requirements:
 
 	Only cars from one direction set can be in the intersection at any one time.
+	A (exists (Car c : NS.cars) c.inIntersection) -> (not exists (Car c : EW.cars) c.inIntersection)
 
 Normal mode based requirements:
 
 	Must have normal cars in conflicting directions.
+	A Mode == Normal -> (exists (Car c : NS.cars) c.isNormal) && (exists (Car c : EW.cars) c.isNormal)
 
 	Must have a Red light in one direction.
-
+	A Mode == Normal -> ((EW.Light == Red || NS.Light == Red) && !(EW.Light == Red && NS.Light == Red))
 	
 
 Mixed Mode Requirements
 	
 	Have normal cars in non-conflicting directions
+	A Mode == Mixed -> (exists (Car c : NS.cars) c.isNormal) -> (not exists (Car c : EW.cars) c.isNormal) || (exists (Car c : EW.cars) c.isNormal) -> (not exists (Car c : NS.cars) c.isNormal)
 
 VLT Mode Requirements
 	
 	Must have no normal cars.
+	A Mode == VTL -> (not exists (Car c : NS.cars) c.isNormal) && (not exists (Car c : EW.cars) c.isNormal)
 
 
 
