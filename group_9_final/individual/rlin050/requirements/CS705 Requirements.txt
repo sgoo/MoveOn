@@ -1,0 +1,91 @@
+====================================================================================================
+VTL+ System Requirements
+Team: MoveOn - Group: 9 - Name: Roy Lin (rlin050)
+====================================================================================================
+
+=============================================
+========== FUNCTIONAL REQUIREMENTS ==========
+=============================================
+
+
+There should be no pedestrians crossing when the pedestrian lights are red.
+ > TYPE: 		SAFETY
+ > CTL: 		N/A
+ > JPF-APROP: 	N/A
+
+
+The pedestrian lights are never green when the traffic lights in the same direction is not red.
+ > TYPE: 		SAFETY
+ > CTL: 		AG( (pedestrians_crossing_EW -> !cars_crossing_EW) && (pedestrians_crossing_NS -> !cars_crossing_NS) )
+ > JPF-APROP: 	Unrepresentable
+
+
+Pedestrian lights should eventually turn green when there are pedestrian waiting to cross.
+ > TYPE: 		LIVENESS
+ > CTL: 		AG(pedestrians_waiting -> AF(pedestrians_crossing))
+ > JPF-APROP: 	Unrepresentable
+
+
+There should never be two lights (in the same direction) that have a different colour.
+ > TYPE: 		SAFETY
+ > CTL: 		N/A
+ > JPF-APROP: 	N/A
+
+
+If the system is in VTL mode, there must be no non-VTL cars within the VTL span.
+ > TYPE: 		SAFETY
+ > CTL: 		AG((system_mode == vtl) -> (number_of_normal_cars_in_span == 0))
+ > JPF-APROP: 	@Invariant(" (currentMode == 1 && hasNonVTLSum == 0 && hasPeds == 0) ")
+
+
+There should not be any cars crossing North-South while there are cars crossing East-West and vice versa
+ > TYPE: 		SAFETY
+ > CTL: 		AG(cars_crossing_ns -> !cars_crossing_ew)
+ > JPF-APROP: 	N/A
+
+
+No cars should be leader for more than 30 seconds.
+ > TYPE: 		FAIRNESS
+ > CTL: 		AG(leader_time <= 30)
+ > JPF-APROP: 	@Invariant( "beenLeader <= 30" )
+
+
+All cars should eventually go through the intersection.
+ > TYPE: 		LIVENESS
+ > CTL: 		AG(car_approaching_intersection -> AF(car_crossing_intersection))
+ > JPF-APROP: 	Unrepresentable
+
+
+All pedestrians should eventually be able to cross.
+ > TYPE: 		LIVENESS
+ > CTL: 		AG(pedestrians_waiting -> AF(pedestrians_crossing))
+ > JPF-APROP: 	Unrepresentable
+
+
+In normal mode, cars should never be crossing when traffic lights for the other direction is not red.
+ > TYPE: 		SAFETY
+ > CTL: 		AG(system_mode == normal && ( car_crossing_ns -> !light_red_ns && car_crossing_ns -> !light_red_ew ) )
+ > JPF-APROP: 	@Invariant(" currentMode == 0 && distanceFromIntersection >= 0 || lightColor != 2 ")
+
+
+Number of cars in the VTL span must not be negative
+ > TYPE:		N/A
+ > CTL: 		AG(number_of_cars >= 0)  
+ > CTL: 		@Invariant(" (numCars >= 0) ")
+
+
+=================================================
+========== NON-FUNCTIONAL REQUIREMENTS ==========
+=================================================
+
+ > The system should be easily adaptable for intersections other than four roads. (Modifiability)
+ 
+ > The system should not fail if loops are faulty and do not detect cars (Robustness)
+ 
+ > The system should cater for cars travelling at a variety of speeds (flexibility)
+ 
+ > The system should cater for a variety of cars with different length (flexibility)
+ 
+ > The pedestrian lights should be green long enough to allow pedestrians to cross over safely (safety)
+ 
+ > Yellow traffic lights should be orange long enough to allow cars to cross over safely (safety)
