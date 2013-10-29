@@ -1,26 +1,49 @@
 General requirements:
 
 	Only cars from one direction set can be in the intersection at any one time.
-	A (exists (Car c : NS.cars) c.inIntersection) -> (not exists (Car c : EW.cars) c.inIntersection)
+	AG((exists (Car c : NS.cars) c.inIntersection) -> (not exists (Car c : EW.cars) c.inIntersection))
+	Cannot check with jpf-aprop
+
+
+	Cars should only be in the intersection if the light is not Red
+	AG(forall(Car c) c.inIntersection -> c.Direction.Light != Red)
+	@Invariant("(distanceFromIntersection >= 0 || lightColor != 2) || leftIntersection == 1")
+
+	Any car that enters the intersection must make it through the intersection.
+	AF( forall(Car c) c.throughIntersection)
+	@Invariant("")
 
 Normal mode based requirements:
 
 	Must have normal cars in conflicting directions.
-	A Mode == Normal -> (exists (Car c : NS.cars) c.isNormal) && (exists (Car c : EW.cars) c.isNormal)
+	AG(Mode == Normal -> (exists (Car c : NS.cars) c.isNormal) && (exists (Car c : EW.cars) c.isNormal))
+	@Invariant("(distanceFromIntersection >= 0 || lightColor != 2) || leftIntersection == 1")
 
 	Must have a Red light in one direction.
-	A Mode == Normal -> ((EW.Light == Red || NS.Light == Red) && !(EW.Light == Red && NS.Light == Red))
-	
+	AG(Mode == Normal -> ((EW.Light == Red || NS.Light == Red) && !(EW.Light == Red && NS.Light == Red)))
+	@Invariant("((NColor == 2) || (NColor != 2 && EColor == 2))")
+
 
 Mixed Mode Requirements
 	
 	Have normal cars in non-conflicting directions
-	A Mode == Mixed -> (exists (Car c : NS.cars) c.isNormal) -> (not exists (Car c : EW.cars) c.isNormal) || (exists (Car c : EW.cars) c.isNormal) -> (not exists (Car c : NS.cars) c.isNormal)
+	AG(Mode == Mixed -> (exists (Car c : NS.cars) c.isNormal) -> (not exists (Car c : EW.cars) c.isNormal) || (exists (Car c : EW.cars) c.isNormal) -> (not exists (Car c : NS.cars) c.isNormal))
+	@Invariant("(currentMode == 0 && (hasNonVTLSum == 2 || hasPeds == 1)) || (currentMode == 1 && hasNonVTLSum == 0 && hasPeds == 0) || (currentMode == 2)")
+
 
 VLT Mode Requirements
 	
 	Must have no normal cars.
-	A Mode == VTL -> (not exists (Car c : NS.cars) c.isNormal) && (not exists (Car c : EW.cars) c.isNormal)
+	AG(Mode == VTL -> (not exists (Car c : NS.cars) c.isNormal) && (not exists (Car c : EW.cars) c.isNormal))
+	Cannot check with jpf-aprop
 
+	Cars should not be leader for more than 30 seconds
+	@Invariant("beenLeader <= 30")
+	Cannot check with jpf-aprop
 
+Pedestrian Requirements
+	
+	EW Peds can only cross when NS lights are Red, and vice-versa.
+	AG((EW.peds == crossing -> NS.Light == Red) && (NS.peds == crossing -> EW.Light == Red))
+	Cannot check with jpf-aprop
 
