@@ -1,0 +1,71 @@
+====================================================================================================
+Requirements chosen for verification stage
+Group 9 - Team MoveOn - Scott Goodhew, Jourdan Harvey, Mike Little and Roy Lin
+====================================================================================================
+
+
+No normal cars in VTL Mode, safety.
+ > TYPE: 		SAFETY
+ > CTL: 		AG((mode == VTL) -> (count_normal_cars == 0))
+ > JPF-APROP: 	@Invariant(“(currentMode == 1 && hasNonVTLSum == 0 && hasPeds == 0)”)
+
+
+Must have at least one non-VTL car to be in Mixed mode.
+ > TYPE: 		N/A
+ > CTL: 		AG((mode == MIXED) -> (count_normal_cars >= 1))
+ > JPF-APROP: 	Unrepresentable
+
+
+Must have conflicting directions of non-VTL cars, or have pedestrians to be in Normal Mode.
+ > TYPE: 		N/A
+ > CTL: 		AG((mode == NORMAL) -> ((count_normal_cars_NS >= 1 && count_normal_cars_EW)) || peds_waiting)
+ > JPF-APROP: 	@Invariant(“(currentMode == 0 && (hasNonVTLSum == 2 || hasPeds == 1))”)
+
+
+No cars crossing NS while cars crossing EW.
+ > TYPE: 		SAFETY
+ > CTL: 		AG(cars_crossing_NS -> !cars_crossing_EW)
+ > JPF-APROP: 	Unrepresentable
+
+
+No car is leader for more than 30s, Non functional requirement.
+ > TYPE: 		FAIRNESS/LIVENESS
+ > CTL: 		AG(time_as_leader <= 30)
+ > JPF-APROP: 	@Invariant( "beenLeader <= 30" )
+
+
+The time taken to cross the intersection should be shorter than the orange light time.
+ > TYPE: 		SAFETY
+ > CTL: 		AG(car_crossing_NS -> !light_red_NS && car_crossing_EW -> !light_red_EW)
+ > JPF-APROP: 	Unrepresentable
+
+
+All cars should eventually go through the intersection.
+ > TYPE: 		LIVENESS
+ > CTL: 		AG(car_approaching_intersection -> AF(car_crossing_intersection))
+ > JPF-APROP: 	Unrepresentable
+
+
+In normal mode, should always have a red light.
+ > TYPE: 		SAFETY
+ > CTL: 		AG((mode == NORMAL) -> light_red_NS || light_red_EW)
+ > JPF-APROP: 	@Invariant( "((NColor == 2) || (NColor != 2 && EColor == 2))" )
+
+
+Cars should only be crossing the intersection if the light is not red.
+ > TYPE: 		SAFETY
+ > CTL: 		AG(car_crossing_NS -> !light_red_NS && car_crossing_EW -> !light_red_EW)
+ > JPF-APROP: 	@Invariant( "distanceFromIntersection >= 0 || lightColor != 2" )
+
+
+Pedestrians should always cross in the end.
+ > TYPE: 		LIVENESS
+ > CTL: 		AG(pedestrians_waiting -> AF(pedestrians_crossing))
+ > JPF-APROP: 	Unrepresentable
+
+
+The time that pedestrians have to cross should be shorter than the time that the direction is green for.
+ > TYPE: 		LIVENESS
+ > CTL: 		AG(ped_time_to_cross < green_phase_length)
+ > JPF-APROP: 	Unrepresentable
+

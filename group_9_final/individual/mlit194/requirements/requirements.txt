@@ -1,0 +1,43 @@
+Requirements
+============
+
+1. No normal cars in VTL Mode, safety.
+2. Must have at least one non-VTL car to be in Mixed mode (this isn’t strictly true as we cannot go into Normal until we have set one of the lights to Red so sometimes this property fails, also with peds come we go to Mixed on our way to )
+3. Must have conflicting directions of non-VTL cars, or have pedestrians to be in Normal Mode
+4. No cars crossing NS while cars crossing EW
+5. No car is leader for more than 30s, Non functional requirement.
+6. The time taken to cross the intersection should be shorter than the orange light time
+7. All cars should eventually go through the intersection (cannot do in jpf-aprop), liveness. 
+8. In normal mode, should always have a red light, safety.
+9. Cars should only be crossing the intersection if the light is not red, safety. 
+10. Pedestrians should always cross in the end.
+11. The time that pedestrians have to cross should be shorter than the time that the direction is green for.
+
+
+CTL
+=======
+1 AG((mode == VTL) -> (count_normal_cars == 0))
+2 AG((mode == MIXED) -> (count_normal_cars >= 1))
+3 AG((mode == NORMAL) -> ((count_normal_cars_NS >= 1 && count_normal_cars_EW)) || peds_waiting)
+4 AG(cars_crossing_NS -> !cars_crossing_EW)
+5 AG(time_as_leader <= 30)
+6 AG(car_crossing_NS -> !light_red_NS && car_crossing_EW -> !light_red_EW)
+7 AG(car_approaching_intersection -> AF(car_crossing_intersection))
+8 AG((mode == NORMAL) -> light_red_NS || light_red_EW)
+9 AG(car_crossing_NS -> !light_red_NS && car_crossing_EW -> !light_red_EW)
+10 AG(pedestrians_waiting -> AF(pedestrians_crossing))
+11 AG(ped_time_to_cross < green_phase_length)
+
+jpf-aprop
+==========
+1 @Invariant(“(currentMode == 1 && hasNonVTLSum == 0 && hasPeds == 0)”)
+2 unrepresentable
+3 @Invariant(“(currentMode == 0 && (hasNonVTLSum == 2 || hasPeds == 1))”)
+4 unrepresentable
+5 @Invariant( "beenLeader <= 30" )
+6 unrepresentable
+7 unrepresentable
+8 @Invariant( "((NColor == 2) || (NColor != 2 && EColor == 2))" )
+9 @Invariant( "distanceFromIntersection >= 0 || lightColor != 2" )
+10 unrepresentable
+11 unrepresentable
